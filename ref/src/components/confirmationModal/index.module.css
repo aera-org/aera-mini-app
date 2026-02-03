@@ -1,0 +1,51 @@
+.modalContent {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 20px;
+  padding: 20px;
+  text-align: center;
+}
+
+.message {
+  margin: 10px 0;
+  line-height: 1.4;
+}
+
+.buttonsContainer {
+  display: flex;
+  gap: 15px;
+  width: 100%;
+  justify-content: center;
+  margin-top: 10px;
+}
+
+.cancelBtn,
+.confirmBtn {
+  flex: 1;
+  max-width: 120px;
+  padding: 12px 20px;
+  border-radius: 8px;
+  border: 1px solid white;
+  cursor: pointer;
+  font-weight: 600;
+  font-size: 14px;
+  transition: all 0.2s ease;
+  color: white !important;
+}
+
+.cancelBtn {
+  color: white;
+}
+
+.cancelBtn:hover {
+  background-color: #5f6470;
+}
+
+.confirmBtn {
+  color: white;
+}
+
+.confirmBtn:hover {
+  background-color: #2563eb;
+}

@@ -1,0 +1,71 @@
+.span {
+  font-family: Yaldevi;
+  font-weight: 500;
+  font-size: 16px;
+  line-height: 21.06px;
+  letter-spacing: 0;
+}
+
+.small {
+  font-family: TitanOne;
+  font-weight: 400;
+  font-size: 12px;
+  line-height: 13.74px;
+  letter-spacing: 0;
+  text-align: center;
+}
+
+.h1 {
+  font-family: TitanOne;
+  font-size: 32px;
+  line-height: 36.64px;
+  letter-spacing: 0;
+  color: white;
+}
+.h2 {
+  font-family: TitanOne;
+  font-size: 24px;
+  line-height: 27.48px;
+  letter-spacing: 0;
+}
+.h3,
+.h4,
+.h5 {
+  font-family: TitanOne;
+  font-weight: 400;
+  font-size: 10px;
+  line-height: 13.16px;
+  letter-spacing: 0;
+}
+
+.white {
+  color: #fff;
+}
+
+.black {
+  color: #000;
+}
+
+.error {
+  color: red;
+}
+
+.ellipsis {
+  text-overflow: ellipsis;
+  overflow: hidden;
+  white-space: nowrap;
+  display: block;
+}
+
+.upperCase {
+  text-transform: uppercase;
+}
+
+.center {
+  text-align: center;
+  display: block;
+}
+
+.nowrap {
+  white-space: nowrap;
+}

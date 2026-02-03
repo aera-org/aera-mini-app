@@ -1,0 +1,332 @@
+.page {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-6);
+}
+
+.header {
+  display: flex;
+  align-items: flex-start;
+  justify-content: space-between;
+  gap: var(--space-4);
+  flex-wrap: wrap;
+}
+
+.titleBlock {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-2);
+}
+
+.titleRow {
+  display: flex;
+  align-items: center;
+  gap: var(--space-3);
+  flex-wrap: wrap;
+}
+
+.emoji {
+  font-size: 22px;
+  line-height: 1;
+  margin-right: var(--space-2);
+}
+
+.actions {
+  display: flex;
+  align-items: center;
+  gap: var(--space-2);
+  flex-wrap: wrap;
+}
+
+.section {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-4);
+}
+
+.sectionHeader {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: var(--space-3);
+  flex-wrap: wrap;
+}
+
+.sectionEdit {
+  opacity: 0;
+  transition: opacity var(--transition);
+}
+
+.section:hover .sectionEdit,
+.section:focus-within .sectionEdit {
+  opacity: 1;
+}
+
+.scenarioTabs {
+  overflow-x: auto;
+}
+
+.detailsCard {
+  border: 1px solid hsl(var(--border));
+  border-radius: var(--radius-base);
+  padding: var(--space-4);
+  background: var(--color-surface);
+}
+
+.detailsHeader {
+  display: flex;
+  align-items: baseline;
+  justify-content: space-between;
+  gap: var(--space-3);
+  flex-wrap: wrap;
+  padding-bottom: var(--space-3);
+  border-bottom: 1px solid hsl(var(--border));
+  margin-bottom: var(--space-3);
+}
+
+.detailsActions {
+  display: flex;
+  align-items: center;
+  gap: var(--space-2);
+  flex-wrap: wrap;
+}
+
+.detailsTitle {
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+}
+
+.detailBlock {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-1);
+}
+
+.statusField {
+  width: max-content;
+}
+
+.multiline {
+  white-space: pre-wrap;
+}
+
+.phaseGrid {
+  margin-top: var(--space-2);
+}
+
+.phaseCard {
+  border: 1px solid hsl(var(--border));
+  border-radius: var(--radius-sm);
+  padding: var(--space-3);
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-3);
+  background: hsl(var(--bg));
+}
+
+.phaseHeader {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: var(--space-2);
+}
+
+.phaseEdit {
+  opacity: 0;
+  transition: opacity var(--transition);
+}
+
+.phaseCard:hover .phaseEdit,
+.phaseCard:focus-within .phaseEdit {
+  opacity: 1;
+}
+
+.phaseTitle {
+  font-weight: 600;
+}
+
+.modal {
+  width: min(700px, 70vw);
+  max-height: 90vh;
+  overflow-y: auto;
+}
+
+.phaseSection {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-2);
+}
+
+.scenesTitle {
+  margin: 0;
+}
+
+.scenesHeader {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: var(--space-3);
+  flex-wrap: wrap;
+  margin-top: var(--space-4);
+  margin-bottom: var(--space-4);
+}
+
+.sceneImage {
+  width: 140px;
+  height: 88px;
+  object-fit: cover;
+  border-radius: var(--radius-sm);
+  border: 1px solid hsl(var(--border));
+  margin-top: var(--space-1);
+}
+
+.sceneCard {
+  border: 1px solid hsl(var(--border));
+  border-radius: var(--radius-base);
+  background: var(--color-surface);
+  padding: var(--space-4);
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-4);
+}
+
+.sceneHeader {
+  display: flex;
+  align-items: center;
+  gap: var(--space-3);
+}
+
+.sceneHeaderRow {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: var(--space-2);
+}
+
+.sceneTitleBlock {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-2);
+}
+
+.sceneOrderRow {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: var(--space-3);
+  padding: var(--space-2) 0;
+  border-bottom: 1px solid hsl(var(--border));
+}
+
+.sceneOrderInfo {
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+}
+
+.sceneOrderActions {
+  display: flex;
+  align-items: center;
+  gap: var(--space-2);
+}
+
+.sceneImagePlaceholder {
+  width: 140px;
+  height: 88px;
+  border-radius: var(--radius-sm);
+  border: 1px dashed hsl(var(--border));
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: hsl(var(--bg));
+}
+
+.sceneImageField {
+  display: flex;
+  align-items: flex-end;
+  gap: var(--space-4);
+}
+
+.sceneRow {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-1);
+}
+
+.sceneEdit {
+  opacity: 0;
+  transition: opacity var(--transition);
+}
+
+.sceneCard:hover .sceneEdit,
+.sceneCard:focus-within .sceneEdit {
+  opacity: 1;
+}
+
+.sceneLabel {
+  letter-spacing: var(--ls-wide);
+}
+
+.modalActions {
+  display: flex;
+  justify-content: flex-end;
+  gap: var(--space-2);
+}
+
+.loraTrigger {
+  width: 100%;
+}
+
+.loraMenu {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-2);
+  min-width: 280px;
+}
+
+.loraMenuList {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-1);
+  max-height: 240px;
+  overflow-y: auto;
+}
+
+.loraOptionButton {
+  text-align: left;
+  border: 1px solid transparent;
+  border-radius: var(--radius-sm);
+  padding: var(--space-2);
+  background: transparent;
+  font-family: var(--font-ui);
+  font-size: var(--text-sm);
+  color: hsl(var(--fg));
+  cursor: pointer;
+}
+
+.loraOptionButton:hover {
+  background: hsl(var(--bg));
+}
+
+.loraOptionActive {
+  border-color: hsl(var(--border));
+  background: hsl(var(--accent-muted));
+}
+
+.loraOptionName {
+  display: block;
+  font-size: var(--text-sm);
+}
+
+.loraOptionMeta {
+  display: block;
+  font-size: var(--text-xs);
+  color: hsl(var(--fg-muted));
+}
+
+.state {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-3);
+}

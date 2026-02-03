@@ -1,0 +1,45 @@
+{
+  "name": "aera-mini-app",
+  "version": "0.1.0",
+  "private": true,
+  "type": "module",
+  "scripts": {
+    "dev": "vite",
+    "build": "tsc && vite build",
+    "preview": "vite preview",
+    "lint": "eslint . --ext ts,tsx --report-unused-disable-directives --max-warnings 0"
+  },
+  "dependencies": {
+    "@ton/core": "^0.60.1",
+    "@ton/crypto": "^3.3.0",
+    "@tonconnect/ui-react": "^2.0.11",
+    "@twa-dev/sdk": "^8.0.2",
+    "axios": "^1.7.9",
+    "classnames": "^2.5.1",
+    "crypto-js": "^4.2.0",
+    "hls.js": "^1.6.0",
+    "i18next": "^24.2.2",
+    "react": "^18.2.0",
+    "react-dom": "^18.2.0",
+    "react-ga4": "^2.1.0",
+    "react-i18next": "^15.4.0",
+    "react-media-recorder": "^1.7.2",
+    "react-player": "^2.16.0",
+    "react-router-dom": "^6.20.1",
+    "swiper": "^11.2.2",
+  },
+  "devDependencies": {
+    "@types/crypto-js": "^4.2.2",
+    "@types/node": "^24.0.14",
+    "@types/react": "^18.2.45",
+    "@types/react-dom": "^18.2.18",
+    "@typescript-eslint/eslint-plugin": "^6.21.0",
+    "@typescript-eslint/parser": "^6.21.0",
+    "@vitejs/plugin-react": "^4.2.1",
+    "eslint": "^8.56.0",
+    "eslint-plugin-react-hooks": "^4.6.0",
+    "eslint-plugin-react-refresh": "^0.4.5",
+    "typescript": "^5.2.2",
+    "vite": "^5.1.0"
+  }
+}

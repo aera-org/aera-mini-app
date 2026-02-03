@@ -1,0 +1,58 @@
+.container {
+  width: 100%;
+  padding: 0 16px;
+  transition: 0.5s;
+}
+
+.info {
+  width: 100%;
+  gap: 10px;
+  border-radius: 20px;
+  border-width: 1px;
+  padding: 24px 16px;
+  margin-top: 16px;
+  background: rgba(128, 128, 128, 0.3);
+  border: 1px solid;
+  border-image-source: linear-gradient(
+    156.52deg,
+    rgba(255, 255, 255, 0.4) 2.12%,
+    rgba(255, 255, 255, 0.0001) 39%,
+    rgba(255, 255, 255, 0.0001) 54.33%,
+    rgba(255, 255, 255, 0.1) 93.02%
+  );
+  backdrop-filter: blur(5px);
+  text-align: center;
+}
+
+.textWrap {
+  position: relative;
+}
+.image {
+  width: 215px;
+  height: 215px;
+  display: block;
+  position: absolute;
+  bottom: 40px;
+  left: 50%;
+  transform: translateX(-50%);
+}
+
+.btn {
+  position: relative;
+}
+
+.controlsWrap {
+  width: 100%;
+  height: 50%;
+  position: absolute;
+  z-index: 5;
+  display: flex;
+  height: 80vh;
+  width: 100vw;
+  top: 200px;
+}
+
+.controlsBtn {
+  width: 50%;
+  height: 100%;
+}

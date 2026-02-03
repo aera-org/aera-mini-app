@@ -1,0 +1,52 @@
+.button {
+  display: inline-block;
+  cursor: pointer;
+  border: 0;
+  border-radius: 10px;
+  font-weight: 700;
+  text-align: center;
+  line-height: 1;
+  min-height: 40px;
+  padding: 0px 10px;
+}
+
+.circle {
+  background-color: transparent;
+  color: rgb(167, 160, 160);
+  border-radius: 50%;
+  padding: 0px;
+  height: 40px;
+  width: 40px;
+}
+.small {
+  font-size: 12px;
+}
+.medium {
+  font-size: 14px;
+  min-height: 45px;
+}
+.large {
+  font-size: 16px;
+  min-height: 50px;
+}
+.text {
+  width: fit-content;
+  border: none;
+}
+.primary {
+  background-color: gray;
+  color: black;
+}
+
+.secondary {
+  background-color: rgb(103, 97, 97);
+  color: black;
+}
+.secondary.text {
+  background-color: transparent;
+  color: black;
+}
+.button img {
+  width: 100%;
+  height: 100%;
+}

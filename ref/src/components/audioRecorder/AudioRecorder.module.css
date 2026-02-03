@@ -1,0 +1,270 @@
+.audioRecorder {
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background: rgba(0, 0, 0, 0.8);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  z-index: 1000;
+  backdrop-filter: blur(10px);
+}
+
+.voiceBtn {
+  position: absolute;
+  top: 50%;
+  transform: translateY(-50%);
+  right: 8px;
+  background: transparent;
+  border: none;
+  border-radius: 50%;
+  width: 40px;
+  height: 40px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: white;
+  cursor: pointer;
+  transition: all 0.3s ease;
+}
+
+.voiceBtn:hover {
+  background: transparent;
+}
+
+.recordingContainer {
+  background: #222a36;
+  border-radius: 24px;
+  padding: 24px;
+  display: flex;
+  flex-direction: column;
+  gap: 20px;
+  border: 1px solid rgba(255, 255, 255, 0.2);
+  max-width: 400px;
+  width: 90%;
+  min-height: 300px;
+}
+
+.header {
+  background: #ff1493;
+  border-radius: 12px;
+  padding: 16px;
+  text-align: center;
+}
+
+.status {
+  margin: 0;
+  color: white;
+  font-family: 'TitanOne', sans-serif;
+  font-size: 18px;
+  text-transform: capitalize;
+}
+
+.audioPlayer {
+  background: #1a1a1a;
+  border-radius: 12px;
+  padding: 16px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.audioPlayer audio {
+  width: 100%;
+  height: 40px;
+}
+
+.audioInfo {
+  margin-top: 12px;
+  text-align: center;
+  color: #ffffff;
+  font-size: 14px;
+}
+
+.audioInfo p {
+  margin: 4px 0;
+  opacity: 0.8;
+}
+
+.audioControls {
+  display: flex;
+  gap: 12px;
+  justify-content: center;
+  margin: 16px 0;
+}
+
+.audioButton {
+  padding: 12px 20px;
+  border: none;
+  border-radius: 20px;
+  cursor: pointer;
+  font-family: 'Yaldevi', sans-serif;
+  font-weight: 500;
+  font-size: 14px;
+  transition: all 0.3s ease;
+  min-width: 80px;
+}
+
+.playButton {
+  background: #42b72a;
+  color: white;
+}
+
+.playButton:hover {
+  background: #3aa023;
+  transform: scale(1.05);
+}
+
+.pauseButton {
+  background: #ff9800;
+  color: white;
+}
+
+.pauseButton:hover {
+  background: #f57c00;
+  transform: scale(1.05);
+}
+
+.controls {
+  display: flex;
+  flex-direction: column;
+  gap: 20px;
+  align-items: center;
+}
+
+.timer {
+  text-align: center;
+}
+
+.timeDisplay {
+  font-size: 48px;
+  font-weight: bold;
+  font-family: 'TitanOne', sans-serif;
+  color: white;
+}
+
+.buttons {
+  display: flex;
+  gap: 12px;
+  width: 100%;
+  justify-content: center;
+}
+
+.recordButton {
+  width: 50px;
+  height: 50px;
+  border: none;
+  border-radius: 50%;
+  background: #42b72a;
+  color: white;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 20px;
+  transition: all 0.3s ease;
+  position: relative;
+  outline: none;
+}
+
+.recordButton:hover {
+  background: #3aa023;
+  transform: scale(1.05);
+}
+
+.recordButton:disabled {
+  opacity: 0.5;
+  cursor: not-allowed;
+}
+
+.recordButton.recording {
+  background: #f44336;
+  animation: pulse 1s infinite;
+}
+
+.micIcon {
+  font-size: 24px;
+}
+
+.recordingState {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 4px;
+  opacity: 0;
+  position: absolute;
+  transition: opacity 0.3s ease-in-out;
+  left: 8px;
+}
+.recordingState.recording {
+  opacity: 1;
+}
+
+.recordingTime {
+  font-size: 12px;
+  font-weight: bold;
+  color: white;
+  font-family: 'TitanOne', sans-serif;
+}
+
+.stopButton {
+  background: #df3636;
+  color: white;
+}
+
+.stopButton:hover {
+  background: #c62828;
+  transform: scale(1.05);
+}
+
+.sendButton {
+  background: #ff1493;
+  color: white;
+}
+
+.sendButton:hover {
+  background: #e91e63;
+  transform: scale(1.05);
+}
+
+.retryButton {
+  background: transparent;
+  border: 1px solid rgba(255, 255, 255, 0.3);
+  color: white;
+}
+
+.retryButton:hover {
+  background: rgba(255, 255, 255, 0.1);
+  transform: scale(1.05);
+}
+
+.cancelButton {
+  background: transparent;
+  border: 1px solid rgba(255, 255, 255, 0.3);
+  color: white;
+  padding: 12px 24px;
+  border-radius: 20px;
+  cursor: pointer;
+  font-family: 'Yaldevi', sans-serif;
+  transition: all 0.3s ease;
+  margin-top: 10px;
+}
+
+.cancelButton:hover {
+  background: rgba(255, 255, 255, 0.1);
+  transform: scale(1.05);
+}
+
+@keyframes pulse {
+  0% {
+    transform: scale(1);
+  }
+  50% {
+    transform: scale(1.1);
+  }
+  100% {
+    transform: scale(1);
+  }
+}

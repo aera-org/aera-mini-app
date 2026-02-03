@@ -1,0 +1,173 @@
+.container {
+  opacity: 1;
+  width: 100%;
+  height: 100%;
+  position: relative;
+  padding: 85px 16px 20px;
+  transition: 0.5s;
+  max-height: calc(100vh - 88px);
+  overflow-y: scroll;
+}
+
+.cardsLists {
+  height: calc(100% - 0px);
+  padding-bottom: 90px;
+  overflow-y: scroll;
+}
+
+.filterBag {
+  position: absolute;
+  width: calc(100vw - 32px);
+  top: 0;
+}
+
+.similarBag {
+  margin-bottom: 0;
+}
+
+.emptyBag {
+  text-align: center;
+}
+
+.cardsGrid {
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  gap: 16px;
+  padding: 16px 0;
+  margin-bottom: 20px;
+}
+
+.bagCard {
+  background: rgba(77, 77, 77, 0.3);
+  backdrop-filter: blur(10px);
+  border-radius: 20px;
+  border: 1.4px solid rgba(255, 255, 255, 0.4);
+  overflow: hidden;
+  cursor: pointer;
+  height: 268px;
+  transition: transform 0.2s ease, box-shadow 0.2s ease;
+  position: relative;
+}
+
+.bagCard.currentGirl {
+  cursor: default;
+}
+
+.bagCard.loading {
+  cursor: not-allowed;
+  opacity: 0.7;
+}
+
+.bagCard:hover .cardImage {
+  transform: scale(1.05);
+}
+
+.cardImageContainer {
+  position: relative;
+  width: 100%;
+  height: 100%;
+  overflow: hidden;
+}
+
+.cardImage {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  transition: transform 0.3s ease;
+}
+
+.activeBadge {
+  position: absolute;
+  top: 8px;
+  right: 8px;
+  border: 1.4px solid #ffffff52;
+  background: var(
+    --Background-Idle,
+    linear-gradient(
+      0deg,
+      rgba(94, 94, 94, 0.18) 0%,
+      rgba(94, 94, 94, 0.18) 100%
+    ),
+    rgba(255, 255, 255, 0.18)
+  );
+  background-blend-mode: color-dodge, normal;
+  color: white;
+  width: 24px;
+  height: 24px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 14px;
+  font-weight: bold;
+  width: 46px;
+  padding: 2px 12px;
+  border-radius: 30px;
+}
+.activeBadge img {
+  width: 100%;
+  height: 100%;
+}
+
+.cardName {
+  position: absolute;
+  height: 26px;
+  bottom: 6px;
+  width: calc(100% - 12px);
+  left: 50%;
+  transform: translateX(-50%);
+  padding: 6px;
+  text-align: center;
+  color: white;
+  font-size: 14px;
+  font-weight: 500;
+  backdrop-filter: blur(10px);
+  background-blend-mode: color-dodge;
+  background: rgba(94, 94, 94, 0.18);
+  border-radius: 30px;
+  font-family: Yaldevi;
+  font-weight: 700;
+  font-style: normal;
+  font-size: 12px;
+  line-height: 100%;
+  letter-spacing: 0%;
+  text-align: center;
+  vertical-align: middle;
+}
+
+.errorMessage {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  height: 200px;
+  color: #ff6b6b;
+  font-size: 16px;
+  text-align: center;
+  padding: 20px;
+}
+
+.loadingOverlay {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background: rgba(0, 0, 0, 0.6);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  z-index: 10;
+}
+
+.spinner {
+  width: 32px;
+  height: 32px;
+  border: 3px solid rgba(255, 255, 255, 0.3);
+  border-top: 3px solid #ffffff;
+  border-radius: 50%;
+  animation: spin 1s linear infinite;
+}
+
+@keyframes spin {
+  0% { transform: rotate(0deg); }
+  100% { transform: rotate(360deg); }
+}

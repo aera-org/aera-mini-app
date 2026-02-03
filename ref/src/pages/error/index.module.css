@@ -1,0 +1,55 @@
+@keyframes bounceRotate {
+  0% {
+    transform: translateY(0) rotate(0deg);
+  }
+  25% {
+    transform: translateY(-50px) rotate(90deg);
+  }
+  50% {
+    transform: translateY(0) rotate(180deg);
+  }
+  75% {
+    transform: translateY(-25px) rotate(270deg);
+  }
+  100% {
+    transform: translateY(0) rotate(360deg);
+  }
+}
+
+.ball {
+  width: 64px;
+  animation: bounceRotate 1s infinite;
+  animation-timing-function: ease-in-out;
+}
+
+.container {
+  background-image: url(../../assets/backgrounds/loadingBG.webp);
+  background-size: cover;
+  position: absolute;
+  z-index: 10;
+  width: 100vw;
+  height: 100vh;
+}
+
+.content {
+  display: flex;
+  justify-content: space-between;
+  flex-direction: column;
+  align-items: center;
+  height: 100%;
+  padding-bottom: 20px;
+}
+
+.loadingSection {
+  text-align: center;
+}
+
+.links {
+  display: flex;
+  gap: 48px;
+  align-items: center;
+}
+
+.links img {
+  width: 28.97px;
+}

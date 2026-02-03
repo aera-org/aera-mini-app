@@ -1,0 +1,57 @@
+.progresBar {
+  width: 100%;
+  background: #8080804d;
+  height: 28px;
+  border-radius: 12px;
+  border: 1px solid;
+  border-color: transparent;
+  outline: 2px solid #8c00ff;
+  position: relative;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.progresBarValue {
+  border-radius: 12px;
+  background: linear-gradient(291.99deg, #ff00bb 15.69%, #8c00ff 86.92%);
+  height: 100%;
+  position: absolute;
+  top: 0;
+  left: 0;
+}
+
+.progressText {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  color: white;
+  font-size: 12px;
+  font-weight: 600;
+  text-shadow: 0 0 4px rgba(0, 0, 0, 0.8);
+  z-index: 1;
+  pointer-events: none;
+}
+
+.blocksProgressBar {
+  display: flex;
+  gap: 4px;
+  width: 100%;
+  position: relative;
+  height: 4px;
+}
+
+.blocksProgressBarSegment {
+  flex: 1;
+  height: 100%;
+  background: rgba(255, 255, 255, 0.2);
+  border-radius: 2px;
+  overflow: hidden;
+}
+
+.blocksProgressBarSegment .fill {
+  height: 100%;
+  background: linear-gradient(90deg, #fff 0%, #fff 22%, #fff 100%);
+  transition: width 0.3s ease-out;
+}

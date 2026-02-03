@@ -1,0 +1,165 @@
+.subscriptionContainer {
+  display: flex;
+  flex-direction: column;
+  width: 100%;
+}
+
+.subscriptionPlanSection {
+  width: 100%;
+  padding-inline: 30px;
+}
+
+.plansContainer {
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+  margin-bottom: 30px;
+  width: 100%;
+}
+
+.planCard {
+  display: flex;
+  flex-direction: column;
+  padding: 20px;
+  border: 2px solid rgba(94, 94, 94, 0.3);
+  background: rgba(255, 255, 255, 0.05);
+  border-radius: 16px;
+  cursor: pointer;
+  transition: all 0.3s ease;
+  position: relative;
+}
+
+.planCard:hover {
+  border-color: rgba(255, 255, 255, 0.5);
+  background: rgba(255, 255, 255, 0.08);
+}
+
+.planCard.selected {
+  border-color: #8B5CF6;
+  background: rgba(139, 92, 246, 0.1);
+  box-shadow: 0 0 20px rgba(139, 92, 246, 0.3);
+}
+
+.planHeader {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 12px;
+}
+
+.planPriceContainer {
+  display: flex;
+  align-items: center;
+  gap: 16px;
+}
+
+.planName {
+  color: white;
+  font-weight: 500;
+  font-size: 16px;
+}
+
+.selectionIndicator {
+  width: 24px;
+  height: 24px;
+  border-radius: 50%;
+  border: 2px solid rgba(255, 255, 255, 0.3);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  transition: all 0.3s ease;
+}
+
+.planCard.selected .selectionIndicator {
+  background: #8B5CF6;
+  border-color: #8B5CF6;
+}
+
+.checkmark {
+  color: white;
+  font-weight: bold;
+  font-size: 14px;
+}
+
+.planPrice {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.planPrice h3 {
+  color: white;
+  font-size: 18px;
+  font-weight: 500;
+}
+
+.planDuration {
+  color: rgba(255, 255, 255, 0.7);
+  font-size: 14px;
+}
+
+.features {
+  color: white;
+  text-align: center;
+  list-style-type: none;
+  margin: 0;
+  padding: 0;
+  width: 100%;
+  max-width: 400px;
+}
+
+.features .featureItem {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  padding: 8px 0;
+  border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+}
+
+.featureText {
+  font-size: 16px;
+  font-weight: 500;
+}
+
+.featureIcon {
+  width: 30px;
+  height: 30px;
+  flex-shrink: 0;
+}
+
+.features li:last-child {
+  border-bottom: none;
+}
+
+.subscribeButton {
+  width: 100%;
+  height: 56px;
+  margin-top: 20px;
+  background: linear-gradient(135deg, #8B5CF6 0%, #3B82F6 100%);
+  border: none;
+  border-radius: 16px;
+  font-weight: 600;
+}
+
+.subscribeButton:hover {
+  background: linear-gradient(135deg, #7C3AED 0%, #2563EB 100%);
+  transform: translateY(-2px);
+  box-shadow: 0 8px 25px rgba(139, 92, 246, 0.4);
+}
+
+.buttonContent {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+}
+
+.buttonContent h3 {
+  font-size: 16px;
+}
+
+.star {
+  color: white;
+  font-size: 20px;
+  margin-top: -4px;
+}

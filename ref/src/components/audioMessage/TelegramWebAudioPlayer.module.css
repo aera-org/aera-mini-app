@@ -1,0 +1,19 @@
+.playBtn {
+  border-radius: 50%;
+  border: none;
+  background-color: transparent;
+  height: 46px;
+  width: 46px;
+  padding: 0;
+}
+
+.playBtn img {
+  width: 100%;
+  height: 100%;
+}
+
+.tgWebAudioPlayer {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+}

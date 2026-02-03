@@ -1,0 +1,42 @@
+.container {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 12px;
+  padding-top: 16px;
+  justify-content: center;
+  overflow: scroll;
+  transition: 0.5s;
+  width: 100%;
+}
+
+.iconContainer {
+  width: 30%;
+  height: 130px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: space-between;
+  padding: 20px 10px 20px 10px;
+  background-color: #4d4d4d4d;
+  backdrop-filter: blur(10px);
+  border: 1.4px solid transparent;
+  border-radius: 20px;
+  backdrop-filter: blur(10px);
+  border: 1.4px solid rgba(255, 255, 255, 0.4);
+  cursor: pointer;
+}
+
+.icon {
+  width: 42px;
+  height: 42px;
+}
+
+.iconContainer span {
+  text-wrap: nowrap;
+  padding-top: 10px;
+}
+
+img.imageGuide {
+  width: 50px;
+  height: auto;
+}

@@ -1,0 +1,88 @@
+.modalContent {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  pointer-events: none;
+  opacity: 0;
+  transition: opacity 0.3s ease-in-out;
+}
+
+.modalContent.visible {
+  pointer-events: all;
+  opacity: 1;
+}
+
+.modalValue {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding-top: 50px;
+}
+
+.modalValue img {
+  width: 42px;
+}
+
+.input {
+  margin-top: 31px;
+  -webkit-appearance: none;
+  width: 252px;
+  height: 16px;
+  border-radius: 8px;
+  box-sizing: border-box;
+  background-clip: content-box;
+  border: 2px solid transparent;
+  outline: none;
+  cursor: pointer;
+}
+
+.input::-webkit-slider-runnable-track {
+  height: 10px;
+  background: transparent;
+  border-radius: 8px;
+  cursor: pointer;
+}
+
+.input::-webkit-slider-thumb {
+  -webkit-appearance: none;
+  height: 32px;
+  width: 32px;
+  margin-top: -13px;
+  border-radius: 50%;
+  cursor: pointer;
+  position: relative;
+  z-index: 2;
+}
+
+.input.pink::-webkit-slider-thumb {
+  background: linear-gradient(90deg, #8c00ff 0%, #ff00bb 100%);
+}
+
+.input.yellow::-webkit-slider-thumb {
+  background: linear-gradient(270deg, #fff700 0%, #cea000 100%);
+}
+
+.btn,
+.btnJump {
+  width: 100%;
+  height: 48px;
+  margin-top: 57px;
+  border: 1.4px solid rgba(255, 255, 255, 0.4);
+  border-radius: 30px;
+  background-color: #4d4d4d4d;
+  backdrop-filter: blur(10px);
+}
+.btnJump {
+  margin-top: 16px;
+}
+.btnSection {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  justify-content: center;
+}
+
+.btnImg {
+  width: 24px !important;
+  height: 24px !important;
+}

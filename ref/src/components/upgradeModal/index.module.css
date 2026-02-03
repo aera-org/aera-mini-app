@@ -1,0 +1,100 @@
+.modalContent {
+  max-width: 320px;
+  width: 100%;
+  text-align: center;
+  background: transparent;
+  backdrop-filter: none;
+  border: none;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 32px;
+}
+
+.imageContainer {
+  position: relative;
+}
+
+.girlImage {
+  width: 100px;
+  height: 100px;
+  border-radius: 50%;
+  object-fit: cover;
+}
+
+.title {
+  font-family: TitanOne;
+  font-weight: 400;
+  font-style: Regular;
+  font-size: 24px;
+  leading-trim: NONE;
+  line-height: 100%;
+  letter-spacing: 0%;
+  text-align: center;
+  vertical-align: middle;
+}
+
+.description,
+.terms {
+  font-family: Yaldevi;
+  font-weight: 500;
+  font-style: Medium;
+  font-size: 16px;
+  leading-trim: NONE;
+  letter-spacing: 0%;
+  text-align: center;
+  vertical-align: middle;
+  text-decoration-style: solid;
+  text-decoration-offset: 0%;
+  text-decoration-thickness: 0%;
+}
+
+.terms {
+  font-family: Yaldevi;
+  font-weight: 400;
+  font-style: Regular;
+  font-size: 16px;
+  leading-trim: NONE;
+  line-height: 100%;
+  letter-spacing: 0%;
+  text-align: center;
+  vertical-align: middle;
+  text-decoration: underline;
+  cursor: pointer;
+}
+
+.confirmBtn {
+  background: rgba(208, 208, 208, 0.1);
+  color: white;
+  border: 1.4px solid rgba(255, 255, 255, 0.32);
+  padding: 16px;
+  border-radius: 30px;
+  leading-trim: NONE;
+  line-height: 100%;
+  letter-spacing: 0%;
+  vertical-align: middle;
+  cursor: pointer;
+  margin: 0;
+  transition: all 0.3s ease;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  gap: 8px;
+}
+
+.confirmBtn h3 {
+  font-family: TitanOne;
+  cursor: pointer;
+  transition: all 0.3s ease;
+  font-weight: 400;
+  font-style: Regular;
+  font-size: 16px;
+}
+
+.btnContent {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+}

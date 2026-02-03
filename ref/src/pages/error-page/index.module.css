@@ -1,0 +1,49 @@
+.container {
+  width: 100%;
+  height: 100vh;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-direction: column;
+  max-width: 480px;
+  margin: 0 auto;
+  background-size: cover;
+  gap: 32px;
+  background: linear-gradient(180deg, #8b5cf6 0%, #ec4899 100%);
+}
+
+.content {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 24px;
+  padding: 24px;
+  text-align: center;
+}
+
+.title {
+  font-size: 48px;
+  line-height: 1.2;
+  text-transform: uppercase;
+}
+
+.description {
+  font-size: 18px;
+  opacity: 0.8;
+}
+
+.container button.button {
+  padding: 16px 32px;
+  font-size: 20px;
+  font-weight: bold;
+  background-color: white;
+  border: none;
+  border-radius: 12px;
+  cursor: pointer;
+  transition: transform 0.2s ease;
+  z-index: 5;
+}
+
+.button:hover {
+  transform: scale(1.05);
+}

@@ -1,0 +1,97 @@
+body {
+  margin: 0;
+  font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Roboto', 'Oxygen',
+    'Ubuntu', 'Cantarell', 'Fira Sans', 'Droid Sans', 'Helvetica Neue',
+    sans-serif;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+  overscroll-behavior: none;
+  background-color: black;
+  overflow-y: hidden;
+  max-height: 100vh;
+  -webkit-user-select: none;
+  -moz-user-select: none;
+  -ms-user-select: none;
+  user-select: none;
+  -webkit-user-drag: none;
+}
+
+code {
+  font-family: source-code-pro, Menlo, Monaco, Consolas, 'Courier New',
+    monospace;
+}
+
+* {
+  box-sizing: border-box;
+}
+
+*::-webkit-scrollbar {
+  display: none;
+}
+
+.swiper {
+  padding: 12px;
+  width: 100%;
+  height: 100%;
+  background-color: #4d4d4d4d;
+  backdrop-filter: blur(10px);
+  border: 1.4px solid transparent;
+  border-radius: 20px;
+  backdrop-filter: blur(10px);
+  border: 1.4px solid rgba(255, 255, 255, 0.4);
+}
+
+.swiper-slide {
+  text-align: center;
+  width: fit-content;
+  font-size: 18px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+.swiper-slide img {
+  display: block;
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}
+
+.isHidden {
+  opacity: 0;
+  transition: 0.5s;
+  pointer-events: none;
+  position: absolute;
+}
+
+
+:root {
+  touch-action: pan-x pan-y;
+  height: 100%;
+}
+
+body {
+  background-color: #ffffff;
+  overflow: hidden;
+
+  -webkit-user-select: none;
+  /* Safari */
+  -moz-user-select: none;
+  /* Firefox */
+  -ms-user-select: none;
+  /* Internet Explorer/Edge */
+  user-select: none;
+  /* Non-prefixed version, currently supported by Chrome and Opera */
+}
+
+* {
+  -webkit-tap-highlight-color: transparent;
+}
+
+img {
+  -webkit-user-drag: none;
+  -khtml-user-drag: none;
+  -moz-user-drag: none;
+  -o-user-drag: none;
+  user-drag: none;
+}

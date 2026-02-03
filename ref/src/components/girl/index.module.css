@@ -1,0 +1,26 @@
+.girlContainer {
+  touch-action: none;
+  user-select: none;
+}
+
+.particle {
+  position: fixed;
+  pointer-events: none;
+  font-size: 24px;
+  color: #ffd700;
+  font-weight: bold;
+  transform: translate(-50%, -50%);
+  animation: particleAnimation 2s ease-out forwards;
+  z-index: 1000;
+}
+
+@keyframes particleAnimation {
+  0% {
+    opacity: 1;
+    transform: translate(-50%, -50%) scale(1);
+  }
+  100% {
+    opacity: 0;
+    transform: translate(-50%, -150%) scale(1.5);
+  }
+}

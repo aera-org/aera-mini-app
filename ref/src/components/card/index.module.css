@@ -1,0 +1,74 @@
+.card {
+  background: rgba(77, 77, 77, 0.3);
+  backdrop-filter: blur(10px);
+  border-radius: 20px;
+  border: 1.4px solid rgba(255, 255, 255, 0.4);
+  padding: 6px;
+  display: flex;
+  justify-content: space-between;
+  flex-direction: column;
+
+  min-height: 180px;
+  width: 100%;
+  box-shadow: 0px 2px 4px 0px rgba(0, 0, 0, 0.1);
+  cursor: pointer;
+  transition: transform 0.2s ease, box-shadow 0.2s ease;
+}
+
+.card:hover {
+  box-shadow: 0px 4px 8px 0px rgba(0, 0, 0, 0.15);
+}
+
+.card span {
+  font-size: 12px;
+}
+.card button {
+  height: fit-content;
+  min-height: unset;
+}
+
+.giftImage {
+  width: 100%;
+  max-width: 120px;
+  margin: 0 auto;
+  object-fit: contain;
+  min-height: 108px;
+}
+.btnContainer {
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+}
+
+.star {
+  color: white;
+  font-size: 20px;
+}
+
+.btn {
+  background: rgba(255, 255, 255, 0.07);
+  background-blend-mode: color-dodge;
+  border-radius: 10px;
+  min-height: 36px;
+}
+
+.btnSection {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+  background: rgba(94, 94, 94, 0.18);
+  border-radius: 30px;
+  padding: 4px 12px;
+  height: 26px;
+}
+
+img.btnImg {
+  width: 12px;
+  height: 12px;
+}
+
+img.successIcon {
+  width: 24px;
+  height: 24px;
+}

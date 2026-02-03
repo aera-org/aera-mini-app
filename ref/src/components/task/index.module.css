@@ -1,0 +1,59 @@
+.container {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  width: 100%;
+  padding: 12px 14px;
+  margin: 0 auto;
+  background-color: #4d4d4d4d;
+  backdrop-filter: blur(10px);
+  border-radius: 20px;
+  border: 1.4px solid #ffffff1a;
+  box-shadow: 0px 2px 4px 0px rgba(0, 0, 0, 0.1);
+}
+
+.container button img {
+  height: auto;
+}
+
+.container button {
+  padding: 0;
+  min-height: 32px;
+}
+
+.description {
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+}
+
+.btnSection {
+  display: flex;
+  align-items: center;
+}
+
+.btnSection .btnImg {
+  width: 22px;
+  height: 22px;
+}
+
+.leftSection {
+  display: flex;
+  gap: 12px;
+  align-items: center;
+}
+
+.errorMessage {
+  margin-top: 8px;
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+}
+
+.description span {
+  text-align: left;
+}
+
+.marginLeft {
+  margin-left: 4px;
+}

@@ -1,0 +1,174 @@
+@keyframes fadeInUp {
+  from {
+    opacity: 0;
+    transform: translateY(10px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+.chatContainer {
+  position: absolute;
+  max-width: 100%;
+  padding: 0 12px 0;
+  display: flex;
+  max-width: 480px;
+  flex-direction: column;
+  transform: translateX(-50%);
+  transition: transform 0.7s ease;
+  left: 50%;
+  gap: 12px;
+  width: 100%;
+  z-index: 1;
+  bottom: 100px;
+}
+
+.messageBubble {
+  padding: 8px 12px;
+  border-radius: 20px;
+  max-width: 80%;
+  color: #fff;
+  font-size: 14px;
+  line-height: 1.4;
+  background: rgba(255, 255, 255, 0.15);
+  backdrop-filter: blur(8px);
+  box-shadow: 0 2px 6px rgba(0, 0, 0, 0.3);
+  border: 1.4px solid #ffffff66;
+
+  opacity: 0;
+  transform: translateY(10px);
+  animation: fadeInUp 0.5s ease forwards;
+}
+
+.userMessage {
+  align-self: flex-end;
+  background: rgba(255, 20, 147, 0.3);
+  cursor: pointer;
+}
+
+.userMessage span {
+  display: -webkit-box;
+  -webkit-box-orient: vertical;
+  -webkit-line-clamp: 2;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  max-height: 40px;
+  display: block;
+}
+
+.aiMessage {
+  align-self: flex-start;
+}
+
+.quickReplies {
+  display: flex;
+  flex-wrap: nowrap;
+  gap: 8px;
+  justify-content: flex-start;
+  overflow: scroll;
+  text-wrap: nowrap;
+}
+
+.quickReply {
+  padding: 8px 12px;
+  border: 1.4px solid #ffffff52;
+  border-radius: 20px;
+  background: rgba(255, 255, 255, 0.2);
+  color: #fff;
+  cursor: pointer;
+  font-size: 14px;
+  transition: background 0.2s;
+}
+
+.quickReply:hover {
+  background: rgba(255, 255, 255, 0.3);
+}
+
+.quickReply:disabled {
+  opacity: 0.7;
+  cursor: not-allowed;
+}
+.inputArea {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  margin-top: auto;
+  width: 100%;
+  padding: 3px 0;
+  height: 46px;
+  position: relative;
+  background: rgba(255, 255, 255, 0.15);
+  border-radius: 20px;
+  border: 1.4px solid #ffffff52;
+}
+
+.chatInput {
+  flex: 1;
+  padding: 6px 55px 6px 10px;
+  border-radius: 16px;
+  border: none;
+  background: transparent;
+  color: #fff;
+  outline: none;
+  font-size: 16px;
+  transition: background 0.2s;
+}
+
+.chatInput::placeholder {
+  color: #fff;
+}
+
+.chatInput:disabled {
+  opacity: 0.7;
+  cursor: not-allowed;
+}
+
+.sendButton {
+  width: 44px;
+  height: 44px;
+  border: none;
+  cursor: pointer;
+  font-size: 16px;
+  background: transparent;
+  position: absolute;
+  right: 12px;
+}
+
+.sendButton .sendButtonIcon {
+  width: 44px;
+  height: auto;
+}
+
+.sendArrow {
+  display: inline-block;
+  transform: translateX(0);
+}
+
+.sendButton.disabled {
+  opacity: 0.7;
+  cursor: not-allowed;
+}
+.messageWrapper {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+  padding: 12px 10px 0px 10px;
+  border-radius: 20px;
+}
+
+.hideButton {
+  background: transparent;
+  color: #fff;
+  border: none;
+  font-size: 14px;
+  cursor: pointer;
+  margin-bottom: 8px;
+  align-self: flex-end;
+  opacity: 0.7;
+  transition: opacity 0.2s;
+}
+.hideButton:hover {
+  opacity: 1;
+}

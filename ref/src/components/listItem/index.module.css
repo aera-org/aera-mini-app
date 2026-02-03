@@ -1,0 +1,76 @@
+.listItem {
+  border-radius: 20px;
+  border: 1px solid var(--Glass-Stroke, rgba(255, 255, 255, 0.4));
+  background: var(--Glass-Fill, rgba(128, 128, 128, 0.3));
+  box-shadow: 0px 2px 4px 0px rgba(0, 0, 0, 0.1);
+  backdrop-filter: blur(5px);
+  padding: 12px 14px;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  cursor: pointer;
+  transition: all 0.2s ease;
+  border-radius: 12px;
+}
+
+.listItem:hover {
+  background: var(--Glass-Fill, rgba(128, 128, 128, 0.4));
+  transform: translateY(-1px);
+}
+
+.itemInfo {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  max-width: 70%;
+  flex: 1;
+}
+
+.primaryInfo {
+  flex: 1;
+  text-overflow: ellipsis;
+  overflow: hidden;
+  white-space: nowrap;
+}
+
+.primaryInfo span {
+  white-space: nowrap;
+  color: #fff;
+  font-size: 14px;
+}
+
+.secondaryInfo {
+  flex-shrink: 0;
+}
+
+.valueSection {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  flex-shrink: 0;
+}
+
+.valueIcon {
+  width: 24px;
+  height: 24px;
+  flex-shrink: 0;
+}
+
+@media (max-width: 480px) {
+  .listItem {
+    padding: 10px 12px;
+  }
+
+  .itemInfo {
+    gap: 8px;
+  }
+
+  .valueSection {
+    gap: 6px;
+  }
+
+  .valueIcon {
+    width: 20px;
+    height: 20px;
+  }
+}

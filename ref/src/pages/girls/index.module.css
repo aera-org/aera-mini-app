@@ -1,0 +1,158 @@
+.girlsWrap {
+  background-image: url(../../assets/backgrounds/girlsBackground.webp);
+  background-position: center;
+  background-size: cover;
+  height: 100vh;
+  width: 100%;
+  padding: 0 15px 0 15px;
+  overflow-y: hidden;
+}
+
+.girlsWrap.isError {
+  padding: 0;
+}
+
+.girlsWrap .letsGoBtn button {
+  border-radius: 30px;
+  padding: 0 32px;
+  border: 1.4px solid var(--Glass-Stroke, rgba(255, 255, 255, 0.4));
+  background: var(
+    --Background-Idle,
+    linear-gradient(
+      0deg,
+      rgba(94, 94, 94, 0.18) 0%,
+      rgba(94, 94, 94, 0.18) 100%
+    ),
+    rgba(255, 255, 255, 0.18)
+  );
+  background-blend-mode: color-dodge, normal;
+}
+
+.letsGoBtn {
+  display: flex;
+  justify-content: center;
+}
+.girlsContainerWrap {
+  width: 100%;
+  overflow-x: scroll;
+}
+.girlsDescriptionWrap {
+  height: 175px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: space-around;
+}
+.girlsContainer {
+  height: calc(100vh - 185px);
+  display: flex;
+  justify-content: center;
+  flex-wrap: wrap;
+  padding-top: 70px;
+  width: fit-content;
+  gap: 12px;
+}
+
+.girlsCard {
+  display: inline-block;
+  flex: 0 0 calc(50% - 6px);
+  border-radius: 20px;
+  border: 1.4px solid var(--Glass-Stroke, rgba(255, 255, 255, 0.4));
+  box-shadow: 0px 2px 4px 0px rgba(0, 0, 0, 0.1);
+  background: var(--Glass-Fill, rgba(128, 128, 128, 0.3));
+  backdrop-filter: blur(5px);
+  border-radius: 20px;
+  text-align: center;
+  position: relative;
+  width: 160px;
+  height: 230px;
+  max-width: calc(50% - 6px);
+  margin: 0;
+  overflow: hidden;
+}
+
+.girlsCard.selected {
+  border: 1.4px solid rgba(255, 255, 255, 0.6);
+  box-shadow: 0px 2px 8px 0px rgba(255, 255, 255, 0.2);
+  background: radial-gradient(
+    50% 50% at 50% 50%,
+    #ff49f0 0%,
+    rgba(255, 73, 240, 0) 100%
+  );
+}
+
+.girlsCard img {
+  width: 100%;
+  height: 100%;
+  display: block;
+  object-fit: cover;
+}
+
+.girlsCard.selected span {
+  display: none;
+}
+
+.girlsCard span {
+  font-family: Yaldevi;
+  font-weight: 700;
+  font-style: Bold;
+  font-size: 12px;
+  leading-trim: NONE;
+  line-height: 100%;
+  letter-spacing: 0%;
+  text-align: center;
+  vertical-align: middle;
+  border-radius: 30px;
+}
+
+.girlsCard .button {
+  position: absolute;
+  height: 26px !important;
+  bottom: 2%;
+  left: 5%;
+  padding: 0;
+  min-height: unset;
+  width: 90%;
+  border-radius: 30px;
+  border: 1.4px solid #ffffff52;
+  background: var(
+    --Background-Idle,
+    linear-gradient(
+      0deg,
+      rgba(94, 94, 94, 0.18) 0%,
+      rgba(94, 94, 94, 0.18) 100%
+    ),
+    rgba(255, 255, 255, 0.18)
+  );
+  background-blend-mode: color-dodge, normal;
+}
+
+.girlsDescription {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  padding: 15px 20px;
+  border-radius: 20px;
+  border: 1.4px solid var(--Glass-Stroke, rgba(255, 255, 255, 0.4));
+  box-shadow: 0px 2px 4px 0px rgba(0, 0, 0, 0.1);
+  background: var(--Glass-Fill, rgba(128, 128, 128, 0.3));
+  max-height: 105px;
+  overflow: hidden;
+}
+
+.girlsDescription h1 {
+  margin-bottom: 5px;
+}
+
+.btn {
+  position: relative;
+}
+
+.girlText {
+  display: -webkit-box;
+  -webkit-line-clamp: 3;
+  -webkit-box-orient: vertical;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  max-height: 60px;
+}

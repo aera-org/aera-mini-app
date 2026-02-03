@@ -1,0 +1,69 @@
+.container {
+  width: 100%;
+  height: 100vh;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-direction: column;
+  max-width: 480px;
+  margin: 0 auto;
+  background-size: cover;
+  gap: 32px;
+  background-image: url(../../assets/backgrounds/loadingBG.webp);
+}
+
+.content {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 24px;
+  padding: 24px;
+  text-align: center;
+}
+
+.title {
+  font-size: 48px;
+  line-height: 1.2;
+  text-transform: uppercase;
+}
+
+.description {
+  font-size: 18px;
+  opacity: 0.8;
+  line-height: 1.4;
+}
+
+.buttons {
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+  align-items: center;
+  max-width: 280px;
+}
+
+.container button.button,
+.container button.channelButton {
+  padding: 16px 32px;
+  font-size: 20px;
+  font-weight: bold;
+  border: none;
+  border-radius: 12px;
+  cursor: pointer;
+  transition: transform 0.2s ease;
+  width: 100%;
+}
+
+.container button.button {
+  background-color: white;
+  color: #333;
+}
+
+.container button.channelButton {
+  background-color: #0088cc;
+  color: white;
+}
+
+.button:hover,
+.channelButton:hover {
+  transform: scale(1.05);
+}
