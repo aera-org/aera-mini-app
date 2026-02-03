@@ -1,10 +1,16 @@
-import { createContext, useCallback, useContext, useEffect, useState } from 'react';
+import {
+  createContext,
+  useCallback,
+  useContext,
+  useEffect,
+  useState,
+} from 'react';
 
 import { getMe } from '@/api/me';
-import type { ITgUser } from '@/common/types';
+import type { IUser } from '@/common/types';
 
 export type UserContextValue = {
-  user: ITgUser | null;
+  user: IUser | null;
   isLoading: boolean;
   error: string | null;
   refresh: () => Promise<void>;
@@ -13,7 +19,7 @@ export type UserContextValue = {
 const UserContext = createContext<UserContextValue | undefined>(undefined);
 
 export function UserProvider({ children }: { children: React.ReactNode }) {
-  const [user, setUser] = useState<ITgUser | null>(null);
+  const [user, setUser] = useState<IUser | null>(null);
   const [isLoading, setIsLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
 
