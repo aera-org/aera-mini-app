@@ -1,0 +1,51 @@
+.nav {
+  position: absolute;
+  left: 50%;
+  bottom: 26px;
+  transform: translateX(-50%);
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  gap: 32px;
+  padding: 8px 24px;
+  background: rgba(18, 18, 28, 0.6);
+  border: 1px solid rgba(255, 255, 255, 0.12);
+  border-radius: 999px;
+  backdrop-filter: blur(12px);
+  z-index: 3;
+  width: 70%;
+}
+
+.navItem {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  text-decoration: none;
+  color: inherit;
+  background: transparent;
+  border: none;
+  padding: 0;
+  cursor: pointer;
+}
+
+.navButton {
+  border: none;
+  background: transparent;
+  padding: 0;
+  width: 42px;
+  height: 42px;
+  border-radius: 10px;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.active {
+  background: rgba(255, 255, 255, 0.08);
+}
+
+.navButton img {
+  width: 32px;
+  height: 32px;
+}

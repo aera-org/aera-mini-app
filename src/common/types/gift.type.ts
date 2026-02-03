@@ -1,4 +1,4 @@
-export interface Gift {
+export interface IGift {
   id: string;
   name: string;
   priceStars: number;
