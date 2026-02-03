@@ -9,4 +9,6 @@ export interface IPlan {
   period: PlanPeriod;
   periodCount: number;
   price: number;
+  isRecommended: boolean;
+  air: number;
 }
