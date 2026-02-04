@@ -1,5 +1,5 @@
 import TelegramWebApp from '@twa-dev/sdk';
-import { useEffect, useState } from 'react';
+import { useQuery } from '@tanstack/react-query';
 
 import { getCharacters } from '@/api/characters';
 import type { ICharacter } from '@/common/types';
@@ -7,37 +7,17 @@ import { Text } from '@/components';
 
 import s from './CharactersPage.module.scss';
 
-type LoadState = 'idle' | 'loading' | 'error' | 'success';
-
 export function CharactersPage() {
-  const [state, setState] = useState<LoadState>('idle');
-  const [characters, setCharacters] = useState<ICharacter[]>([]);
-  const [error, setError] = useState<string | null>(null);
-
-  useEffect(() => {
-    let alive = true;
-
-    const fetchCharacters = async () => {
-      setState('loading');
-      setError(null);
-      try {
-        const data = await getCharacters();
-        if (!alive) return;
-        setCharacters(data.sort((a, b) => a.name.localeCompare(b.name)));
-        setState('success');
-      } catch (err) {
-        if (!alive) return;
-        setError(err instanceof Error ? err.message : 'Failed to load');
-        setState('error');
-      }
-    };
-
-    void fetchCharacters();
-
-    return () => {
-      alive = false;
-    };
-  }, []);
+  const {
+    data: characters = [],
+    isLoading,
+    isError,
+    error,
+  } = useQuery({
+    queryKey: ['characters'],
+    queryFn: getCharacters,
+    select: (data) => [...data].sort((a, b) => a.name.localeCompare(b.name)),
+  });
 
   const handleCardClick = (character: ICharacter) => {
     const botUsername = import.meta.env.VITE_BOT_USERNAME;
@@ -55,11 +35,13 @@ export function CharactersPage() {
 
   return (
     <div className={s.container}>
-      {state === 'loading' ? <Text variant="span">Loading...</Text> : null}
-      {state === 'error' ? (
-        <Text variant="span">{error || 'Failed to load characters'}</Text>
+      {isLoading ? <Text variant="span">Loading...</Text> : null}
+      {isError ? (
+        <Text variant="span">
+          {error instanceof Error ? error.message : 'Failed to load characters'}
+        </Text>
       ) : null}
-      {state === 'success' ? (
+      {!isLoading && !isError ? (
         <div className={s.grid}>
           {characters.map((character) => (
             <div

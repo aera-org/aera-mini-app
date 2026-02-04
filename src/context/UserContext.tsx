@@ -1,10 +1,5 @@
-import {
-  createContext,
-  useCallback,
-  useContext,
-  useEffect,
-  useState,
-} from 'react';
+import { useQuery } from '@tanstack/react-query';
+import { createContext, useContext } from 'react';
 
 import { getMe } from '@/api/me';
 import type { IUser } from '@/common/types';
@@ -19,30 +14,29 @@ export type UserContextValue = {
 const UserContext = createContext<UserContextValue | undefined>(undefined);
 
 export function UserProvider({ children }: { children: React.ReactNode }) {
-  const [user, setUser] = useState<IUser | null>(null);
-  const [isLoading, setIsLoading] = useState(true);
-  const [error, setError] = useState<string | null>(null);
+  const { data, isLoading, error, refetch } = useQuery({
+    queryKey: ['me'],
+    queryFn: getMe,
+  });
 
-  const refresh = useCallback(async () => {
-    setIsLoading(true);
-    setError(null);
-    try {
-      const data = await getMe();
-      setUser(data);
-    } catch (err) {
-      setUser(null);
-      setError(err instanceof Error ? err.message : 'Failed to load user');
-    } finally {
-      setIsLoading(false);
-    }
-  }, []);
-
-  useEffect(() => {
-    void refresh();
-  }, [refresh]);
+  const refresh = async () => {
+    await refetch();
+  };
 
   return (
-    <UserContext.Provider value={{ user, isLoading, error, refresh }}>
+    <UserContext.Provider
+      value={{
+        user: data ?? null,
+        isLoading,
+        error:
+          error instanceof Error
+            ? error.message
+            : error
+              ? 'Failed to load user'
+              : null,
+        refresh,
+      }}
+    >
       {children}
     </UserContext.Provider>
   );

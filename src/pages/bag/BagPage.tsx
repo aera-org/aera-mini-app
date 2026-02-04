@@ -1,7 +1,9 @@
 import TelegramWebApp from '@twa-dev/sdk';
+import { useQuery, useQueryClient } from '@tanstack/react-query';
 import { useEffect, useMemo, useState } from 'react';
 
 import { getPlans } from '@/api/plans';
+import { createPlanInvoice } from '@/api/payments';
 import airIcon from '@/assets/mini/air.png';
 import cameraIcon from '@/assets/mini/camera.png';
 import fuelIcon from '@/assets/mini/fuel.png';
@@ -11,8 +13,6 @@ import { Text } from '@/components';
 import { useUser } from '@/context/UserContext';
 
 import s from './BagPage.module.scss';
-
-type LoadState = 'idle' | 'loading' | 'error' | 'success';
 
 const periodOrder: Record<IPlan['period'], number> = {
   day: 0,
@@ -43,41 +43,47 @@ function getRemainingLabel(subscribedUntil?: string | null) {
 
 export function BagPage() {
   const { user } = useUser();
-  const [state, setState] = useState<LoadState>('idle');
-  const [plans, setPlans] = useState<IPlan[]>([]);
+  const queryClient = useQueryClient();
   const [selectedId, setSelectedId] = useState<string | null>(null);
-  const [error, setError] = useState<string | null>(null);
+
+  const {
+    data: plans = [],
+    isLoading,
+    isError,
+    error,
+  } = useQuery({
+    queryKey: ['plans'],
+    queryFn: getPlans,
+    select: (data) =>
+      [...data].sort((a, b) => {
+        const orderDiff = periodOrder[a.period] - periodOrder[b.period];
+        if (orderDiff !== 0) return orderDiff;
+        return a.periodCount - b.periodCount;
+      }),
+  });
 
   useEffect(() => {
-    let alive = true;
-
-    const fetchPlans = async () => {
-      setState('loading');
-      setError(null);
-      try {
-        const data = await getPlans();
-        if (!alive) return;
-        const sorted = [...data].sort((a, b) => {
-          const orderDiff = periodOrder[a.period] - periodOrder[b.period];
-          if (orderDiff !== 0) return orderDiff;
-          return a.periodCount - b.periodCount;
-        });
-        setPlans(sorted);
-        setSelectedId(sorted[0]?.id ?? null);
-        setState('success');
-      } catch (err) {
-        if (!alive) return;
-        setError(err instanceof Error ? err.message : 'Failed to load plans');
-        setState('error');
+    if (plans.length === 0) {
+      setSelectedId(null);
+      return;
+    }
+    setSelectedId((current) => {
+      if (current && plans.some((plan) => plan.id === current)) {
+        return current;
       }
+      return plans[0].id;
+    });
+  }, [plans]);
+
+  useEffect(() => {
+    const handler = () => {
+      queryClient.invalidateQueries({ queryKey: ['me'] });
     };
-
-    void fetchPlans();
-
+    TelegramWebApp.onEvent('invoiceClosed', handler);
     return () => {
-      alive = false;
+      TelegramWebApp.offEvent('invoiceClosed', handler);
     };
-  }, []);
+  }, [queryClient]);
 
   const selectedPlan = useMemo(
     () => plans.find((plan) => plan.id === selectedId) ?? plans[0],
@@ -98,17 +104,18 @@ export function BagPage() {
 
   const handleSubscribe = () => {
     if (!selectedPlan) return;
-    const botUsername = import.meta.env.VITE_BOT_USERNAME;
-    if (!botUsername) {
-      console.error('VITE_BOT_USERNAME is not set');
-      return;
-    }
-
-    const payload = `subscribe_${selectedPlan.id}`;
-    TelegramWebApp.openTelegramLink(
-      `https://t.me/${botUsername}?start=${encodeURIComponent(payload)}`,
-    );
-    TelegramWebApp.close();
+    void (async () => {
+      try {
+        const invoiceLink = await createPlanInvoice(selectedPlan.id);
+        TelegramWebApp.openInvoice(invoiceLink, (status) => {
+          if (status === 'paid') {
+            queryClient.invalidateQueries({ queryKey: ['me'] });
+          }
+        });
+      } catch (err) {
+        console.error(err);
+      }
+    })();
   };
 
   return (
@@ -123,12 +130,14 @@ export function BagPage() {
         <div className={s.statusDate}>{remaining.label}</div>
       </div>
 
-      {state === 'loading' ? <Text variant="span">Loading...</Text> : null}
-      {state === 'error' ? (
-        <Text variant="span">{error || 'Failed to load plans'}</Text>
+      {isLoading ? <Text variant="span">Loading...</Text> : null}
+      {isError ? (
+        <Text variant="span">
+          {error instanceof Error ? error.message : 'Failed to load plans'}
+        </Text>
       ) : null}
 
-      {state === 'success' ? (
+      {!isLoading && !isError ? (
         <>
           <div className={s.plans}>
             {plans.map((plan) => (
