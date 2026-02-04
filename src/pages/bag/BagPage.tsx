@@ -1,9 +1,9 @@
-import TelegramWebApp from '@twa-dev/sdk';
 import { useQuery, useQueryClient } from '@tanstack/react-query';
+import TelegramWebApp from '@twa-dev/sdk';
 import { useEffect, useMemo, useState } from 'react';
 
-import { getPlans } from '@/api/plans';
 import { createPlanInvoice } from '@/api/payments';
+import { getPlans } from '@/api/plans';
 import airIcon from '@/assets/mini/air.png';
 import cameraIcon from '@/assets/mini/camera.png';
 import fuelIcon from '@/assets/mini/fuel.png';
@@ -24,6 +24,10 @@ function formatPeriod(plan: IPlan) {
   return `${plan.periodCount} ${plan.period}`;
 }
 
+function pluralize(count: number, one: string, many: string) {
+  return count === 1 ? one : many;
+}
+
 function getRemainingLabel(subscribedUntil?: string | null) {
   if (!subscribedUntil) return { active: false, label: 'Free' };
   const end = Date.parse(subscribedUntil);
@@ -32,13 +36,17 @@ function getRemainingLabel(subscribedUntil?: string | null) {
   const remainingMs = end - Date.now();
   if (remainingMs <= 0) return { active: false, label: 'Free' };
 
-  const hours = Math.ceil(remainingMs / 3_600_000);
-  if (hours < 24) {
+  const remainingHours = remainingMs / 3_600_000;
+  if (remainingHours < 24) {
+    const hours = Math.max(1, Math.ceil(remainingHours));
     return { active: true, label: `${hours} hours left` };
   }
 
-  const days = Math.ceil(hours / 24);
-  return { active: true, label: `${days} days left` };
+  const days = Math.max(1, Math.floor(remainingHours / 24));
+  return {
+    active: true,
+    label: `${days} ${pluralize(days, 'day', 'days')} left`,
+  };
 }
 
 export function BagPage() {
@@ -124,7 +132,7 @@ export function BagPage() {
         <div>
           <div className={s.statusTitle}>Your plan</div>
           <div className={s.statusValue}>
-            {remaining.active ? 'Subscribed' : 'Free'}
+            {remaining.active ? 'Subscribed' : ''}
           </div>
         </div>
         <div className={s.statusDate}>{remaining.label}</div>
