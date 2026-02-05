@@ -39,7 +39,10 @@ function getRemainingLabel(subscribedUntil?: string | null) {
   const remainingHours = remainingMs / 3_600_000;
   if (remainingHours < 24) {
     const hours = Math.max(1, Math.ceil(remainingHours));
-    return { active: true, label: `${hours} hours left` };
+    return {
+      active: true,
+      label: `${hours} ${pluralize(hours, 'hour', 'hours')} left`,
+    };
   }
 
   const days = Math.max(1, Math.floor(remainingHours / 24));
@@ -138,7 +141,11 @@ export function BagPage() {
         <div className={s.statusDate}>{remaining.label}</div>
       </div>
 
-      {isLoading ? <Text variant="span">Loading...</Text> : null}
+      {isLoading ? (
+        <Text variant="span" center>
+          Loading...
+        </Text>
+      ) : null}
       {isError ? (
         <Text variant="span">
           {error instanceof Error ? error.message : 'Failed to load plans'}

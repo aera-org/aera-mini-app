@@ -1,5 +1,5 @@
-import TelegramWebApp from '@twa-dev/sdk';
 import { useQuery } from '@tanstack/react-query';
+import TelegramWebApp from '@twa-dev/sdk';
 
 import { getCharacters } from '@/api/characters';
 import type { ICharacter } from '@/common/types';
@@ -35,7 +35,11 @@ export function CharactersPage() {
 
   return (
     <div className={s.container}>
-      {isLoading ? <Text variant="span">Loading...</Text> : null}
+      {isLoading ? (
+        <Text variant="span" center>
+          Loading...
+        </Text>
+      ) : null}
       {isError ? (
         <Text variant="span">
           {error instanceof Error ? error.message : 'Failed to load characters'}

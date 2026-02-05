@@ -5,6 +5,7 @@ export { default as DollarSignIcon } from './dollar-sign.svg?react';
 export { default as ExternalLinkIcon } from './external-link.svg?react';
 export { default as GlobeIcon } from './globe.svg?react';
 export { default as ImageIcon } from './image.svg?react';
+export { default as InfoIcon } from './info.svg?react';
 export { default as LayersIcon } from './layers.svg?react';
 export { default as LogsIcon } from './logs.svg?react';
 export { default as MessageSquareQuoteIcon } from './message-square-quote.svg?react';
