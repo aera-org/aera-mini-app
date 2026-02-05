@@ -16,3 +16,14 @@ export async function getGifts(): Promise<IGift[]> {
 
   return data.data;
 }
+
+export async function buyGift(giftId: string): Promise<void> {
+  const response = await apiFetch(`/gifts/${giftId}/buy`, {
+    method: 'POST',
+  });
+
+  if (!response.ok) {
+    const text = await response.text();
+    throw new Error(text || 'Failed to buy gift');
+  }
+}

@@ -4,6 +4,7 @@ import { MiniAppLayout } from '@/layouts/MiniAppLayout';
 import { BagPage } from '@/pages/bag/BagPage';
 import { CharactersPage } from '@/pages/characters/CharactersPage';
 import { GiftsPage } from '@/pages/gifts/GiftsPage';
+import { StorePage } from '@/pages/store/StorePage';
 
 export function AppRoutes() {
   return (
@@ -13,6 +14,7 @@ export function AppRoutes() {
         <Route path="/characters" element={<CharactersPage />} />
         <Route path="/gifts" element={<GiftsPage />} />
         <Route path="/bag" element={<BagPage />} />
+        <Route path="/store" element={<StorePage />} />
       </Route>
     </Routes>
   );

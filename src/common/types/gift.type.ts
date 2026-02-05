@@ -4,4 +4,5 @@ export interface IGift {
   description: string;
   imgUrl: string;
   price: number;
+  isBought: boolean;
 }

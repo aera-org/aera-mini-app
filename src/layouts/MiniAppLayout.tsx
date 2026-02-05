@@ -13,6 +13,7 @@ const pageTitleMap: Record<string, string> = {
   '/characters': 'Characters',
   '/gifts': 'Gifts',
   '/bag': 'Bag',
+  '/store': 'Store',
 };
 
 export function MiniAppLayout() {
@@ -34,7 +35,7 @@ export function MiniAppLayout() {
           fuelIcon={fuelIcon}
           airIcon={airIcon}
           actionIcon={<PlusIcon />}
-          onActionClick={() => navigate('/bag')}
+          onActionClick={() => navigate('/store')}
         />
       }
       footer={

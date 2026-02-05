@@ -8,16 +8,16 @@ import airIcon from '@/assets/mini/air.png';
 import cameraIcon from '@/assets/mini/camera.png';
 import fuelIcon from '@/assets/mini/fuel.png';
 import heartIcon from '@/assets/mini/heart.png';
-import type { IPlan } from '@/common/types';
+import { PlanPeriod, PlanType, type IPlan } from '@/common/types';
 import { Text } from '@/components';
 import { useUser } from '@/context/UserContext';
 
 import s from './BagPage.module.scss';
 
-const periodOrder: Record<IPlan['period'], number> = {
-  day: 0,
-  month: 1,
-  year: 2,
+const periodOrder: Record<PlanPeriod, number> = {
+  [PlanPeriod.Day]: 0,
+  [PlanPeriod.Month]: 1,
+  [PlanPeriod.Year]: 2,
 };
 
 function formatPeriod(plan: IPlan) {
@@ -63,13 +63,15 @@ export function BagPage() {
     isError,
     error,
   } = useQuery({
-    queryKey: ['plans'],
-    queryFn: getPlans,
+    queryKey: ['plans', PlanType.Subscription],
+    queryFn: () => getPlans(PlanType.Subscription),
     select: (data) =>
       [...data].sort((a, b) => {
-        const orderDiff = periodOrder[a.period] - periodOrder[b.period];
+        const orderA = a.period ? periodOrder[a.period] : 0;
+        const orderB = b.period ? periodOrder[b.period] : 0;
+        const orderDiff = orderA - orderB;
         if (orderDiff !== 0) return orderDiff;
-        return a.periodCount - b.periodCount;
+        return (a.periodCount ?? 0) - (b.periodCount ?? 0);
       }),
   });
 

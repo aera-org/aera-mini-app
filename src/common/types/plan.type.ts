@@ -4,10 +4,16 @@ export enum PlanPeriod {
   Year = 'year',
 }
 
+export enum PlanType {
+  Subscription = 'subscription',
+  Air = 'air',
+}
+
 export interface IPlan {
   id: string;
-  period: PlanPeriod;
-  periodCount: number;
+  type: PlanType;
+  period?: PlanPeriod;
+  periodCount?: number;
   price: number;
   isRecommended: boolean;
   air: number;
