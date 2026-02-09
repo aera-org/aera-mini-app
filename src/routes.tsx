@@ -7,6 +7,7 @@ import { GiftsPage } from '@/pages/gifts/GiftsPage';
 import { StorePage } from '@/pages/store/StorePage';
 
 export function AppRoutes() {
+  console.log('-------', window.location.pathname);
   return (
     <Routes>
       <Route element={<MiniAppLayout />}>
