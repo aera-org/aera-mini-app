@@ -7,7 +7,13 @@ import { GiftsPage } from '@/pages/gifts/GiftsPage';
 import { StorePage } from '@/pages/store/StorePage';
 
 export function AppRoutes() {
-  console.log('-------', window.location.pathname);
+  if (window.location.pathname === '/gift') {
+    // replace with /gifts
+    // eslint-disable-next-line react-hooks/immutability
+    window.location.pathname = '/gifts';
+    return null;
+  }
+
   return (
     <Routes>
       <Route element={<MiniAppLayout />}>
