@@ -13,6 +13,7 @@ export function AppRoutes() {
       <Route element={<MiniAppLayout />}>
         <Route path="/" element={<Navigate to="/characters" replace />} />
         <Route path="/characters" element={<CharactersPage />} />
+        <Route path="/gift" element={<GiftsPage />} />
         <Route path="/gifts" element={<GiftsPage />} />
         <Route path="/bag" element={<BagPage />} />
         <Route path="/store" element={<StorePage />} />
