@@ -1,10 +1,25 @@
+import type { LaunchParams } from '@/common/types';
+
 import { apiFetch } from './client';
 
-export async function createPlanInvoice(planId: string): Promise<string> {
+export async function createPlanInvoice(
+  planId: string,
+  params?: LaunchParams
+): Promise<string> {
+  const payload: {
+    planId: string;
+    characterName?: string;
+    scenarioId?: string;
+  } = {
+    planId,
+  };
+  if (params?.characterName) payload.characterName = params.characterName;
+  if (params?.scenarioId) payload.scenarioId = params.scenarioId;
+
   const response = await apiFetch('/payments/invoice', {
     method: 'POST',
     headers: { 'Content-Type': 'application/json' },
-    body: JSON.stringify({ planId }),
+    body: JSON.stringify(payload),
   });
 
   if (!response.ok) {

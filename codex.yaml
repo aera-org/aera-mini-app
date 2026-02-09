@@ -1,5 +1,5 @@
 project:
-  name: aera-admin
+  name: aera-miniapp
   type: spa
   language: typescript
   framework: react
@@ -86,7 +86,6 @@ components_usage:
 rules:
   - avoid heavy cards/shadows
   - no gradients or bright colors
-  - admin-first layouts (tables/forms/actions)
   - use Button instead of raw button elements
   - use Typography instead of raw p/span/h1-h3 for UI text
   - use Input/Textarea/Select instead of raw form elements

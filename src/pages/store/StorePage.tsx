@@ -14,6 +14,7 @@ import air6 from '@/assets/air/air-6.png';
 import fuelIcon from '@/assets/mini/fuel.png';
 import { type IPlan, PlanType } from '@/common/types';
 import { Text } from '@/components';
+import { useLaunchParams } from '@/context/LaunchParamsContext';
 
 import s from './StorePage.module.scss';
 
@@ -22,6 +23,7 @@ const airIcons = [air1, air2, air3, air4, air5, air6];
 export function StorePage() {
   const navigate = useNavigate();
   const queryClient = useQueryClient();
+  const launchParams = useLaunchParams();
   const {
     data: plans = [],
     isLoading,
@@ -33,8 +35,6 @@ export function StorePage() {
   });
 
   const airPlans = useMemo(() => plans.slice(0, airIcons.length), [plans]);
-
-  console.log(airPlans);
 
   useEffect(() => {
     const handler = () => {
@@ -49,7 +49,7 @@ export function StorePage() {
   const handleBuy = (plan: IPlan) => {
     void (async () => {
       try {
-        const invoiceLink = await createPlanInvoice(plan.id);
+        const invoiceLink = await createPlanInvoice(plan.id, launchParams);
         TelegramWebApp.openInvoice(invoiceLink, (status) => {
           if (status === 'paid') {
             queryClient.invalidateQueries({ queryKey: ['me'] });
@@ -99,7 +99,7 @@ export function StorePage() {
                 className={s.planIcon}
                 draggable={false}
               />
-              <div className={s.planAir}>{plan.air} Air</div>
+              <div className={s.planAir}>{plan.air} air</div>
               <button
                 type="button"
                 className={s.planButton}

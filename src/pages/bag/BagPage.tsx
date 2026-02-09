@@ -10,6 +10,7 @@ import fuelIcon from '@/assets/mini/fuel.png';
 import heartIcon from '@/assets/mini/heart.png';
 import { PlanPeriod, PlanType, type IPlan } from '@/common/types';
 import { Text } from '@/components';
+import { useLaunchParams } from '@/context/LaunchParamsContext';
 import { useUser } from '@/context/UserContext';
 
 import s from './BagPage.module.scss';
@@ -54,6 +55,7 @@ function getRemainingLabel(subscribedUntil?: string | null) {
 
 export function BagPage() {
   const { user } = useUser();
+  const launchParams = useLaunchParams();
   const queryClient = useQueryClient();
   const [selectedId, setSelectedId] = useState<string | null>(null);
 
@@ -119,7 +121,10 @@ export function BagPage() {
     if (!selectedPlan) return;
     void (async () => {
       try {
-        const invoiceLink = await createPlanInvoice(selectedPlan.id);
+        const invoiceLink = await createPlanInvoice(
+          selectedPlan.id,
+          launchParams
+        );
         TelegramWebApp.openInvoice(invoiceLink, (status) => {
           if (status === 'paid') {
             queryClient.invalidateQueries({ queryKey: ['me'] });
