@@ -53,7 +53,10 @@ export function GiftsPage() {
 
   useEffect(() => {
     if (!location.hash || gifts.length === 0) return;
-    const giftId = decodeURIComponent(location.hash.replace('#', '').trim());
+    const giftId = decodeURIComponent(
+      location.hash.split('?')[0].replace('#', '').trim(),
+    );
+    console.log('giftId', giftId);
     if (!giftId) return;
     const exists = gifts.some((gift) => gift.id === giftId);
     if (!exists) return;
