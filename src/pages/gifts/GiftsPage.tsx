@@ -57,11 +57,19 @@ export function GiftsPage() {
     if (!exists) return;
 
     let timeoutId: number | undefined;
-    const highlight = () => {
+    let retryId: number | undefined;
+    const tryHighlight = (attempt: number) => {
       const element = document.querySelector(
         `[data-gift-id="${giftId}"]`,
       ) as HTMLElement | null;
-      if (!element) return;
+      if (!element) {
+        if (attempt < 3) {
+          retryId = window.setTimeout(() => {
+            tryHighlight(attempt + 1);
+          }, 120);
+        }
+        return;
+      }
       element.scrollIntoView({ behavior: 'smooth', block: 'center' });
       setHighlightedId(giftId);
       timeoutId = window.setTimeout(() => {
@@ -69,10 +77,11 @@ export function GiftsPage() {
       }, 1800);
     };
 
-    const rafId = window.requestAnimationFrame(highlight);
+    const rafId = window.requestAnimationFrame(() => tryHighlight(0));
     return () => {
       window.cancelAnimationFrame(rafId);
       if (timeoutId) window.clearTimeout(timeoutId);
+      if (retryId) window.clearTimeout(retryId);
     };
   }, [gifts, location.hash]);
 
