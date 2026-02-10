@@ -11,7 +11,7 @@ export async function getGifts(): Promise<IGift[]> {
 
   const data = (await response.json()) as IGift[] | { data: IGift[] };
   if (Array.isArray(data)) {
-    return data;
+    return data.sort((a, b) => a.name.localeCompare(b.name));
   }
 
   return data.data;
