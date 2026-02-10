@@ -49,14 +49,11 @@ export function GiftsPage() {
     })();
   };
 
-  console.log('location.hash', location.hash);
-
   useEffect(() => {
     if (!location.hash || gifts.length === 0) return;
     const giftId = decodeURIComponent(
       location.hash.split('?')[0].replace('#', '').trim(),
     );
-    console.log('giftId', giftId);
     if (!giftId) return;
     const exists = gifts.some((gift) => gift.id === giftId);
     if (!exists) return;
@@ -68,9 +65,6 @@ export function GiftsPage() {
         `[data-gift-id="${giftId}"]`,
       ) as HTMLElement | null;
       if (!element) {
-        console.info(
-          `[gifts] highlight retry ${attempt + 1}/4 for id=${giftId}`,
-        );
         if (attempt < 3) {
           retryId = window.setTimeout(() => {
             tryHighlight(attempt + 1);
@@ -78,7 +72,6 @@ export function GiftsPage() {
         }
         return;
       }
-      console.info(`[gifts] highlight success for id=${giftId}`);
       element.scrollIntoView({ behavior: 'smooth', block: 'center' });
       setHighlightedId(giftId);
       timeoutId = window.setTimeout(() => {
