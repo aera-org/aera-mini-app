@@ -63,6 +63,9 @@ export function GiftsPage() {
         `[data-gift-id="${giftId}"]`,
       ) as HTMLElement | null;
       if (!element) {
+        console.info(
+          `[gifts] highlight retry ${attempt + 1}/4 for id=${giftId}`,
+        );
         if (attempt < 3) {
           retryId = window.setTimeout(() => {
             tryHighlight(attempt + 1);
@@ -70,6 +73,7 @@ export function GiftsPage() {
         }
         return;
       }
+      console.info(`[gifts] highlight success for id=${giftId}`);
       element.scrollIntoView({ behavior: 'smooth', block: 'center' });
       setHighlightedId(giftId);
       timeoutId = window.setTimeout(() => {
