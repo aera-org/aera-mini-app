@@ -3,7 +3,6 @@ import { useEffect, useState } from 'react';
 import { useLocation, useNavigate } from 'react-router-dom';
 
 import { buyGift, getGifts } from '@/api/gifts';
-import { InfoIcon } from '@/assets/icons';
 import airIcon from '@/assets/mini/air.png';
 import type { IGift } from '@/common/types';
 import { Text } from '@/components';
@@ -16,7 +15,6 @@ export function GiftsPage() {
   const navigate = useNavigate();
   const { user } = useUser();
   const queryClient = useQueryClient();
-  const [infoOpen, setInfoOpen] = useState<Record<string, boolean>>({});
   const [buyingId, setBuyingId] = useState<string | null>(null);
   const [highlightedId, setHighlightedId] = useState<string | null>(null);
   const {
@@ -51,13 +49,6 @@ export function GiftsPage() {
     })();
   };
 
-  const toggleInfo = (giftId: IGift['id']) => {
-    setInfoOpen((prev) => ({
-      ...prev,
-      [giftId]: !prev[giftId],
-    }));
-  };
-
   useEffect(() => {
     if (!location.hash || gifts.length === 0) return;
     const giftId = decodeURIComponent(location.hash.replace('#', '').trim());
@@ -68,7 +59,7 @@ export function GiftsPage() {
     let timeoutId: number | undefined;
     const highlight = () => {
       const element = document.querySelector(
-        `[data-gift-id="${giftId}"]`
+        `[data-gift-id="${giftId}"]`,
       ) as HTMLElement | null;
       if (!element) return;
       element.scrollIntoView({ behavior: 'smooth', block: 'center' });
@@ -86,7 +77,6 @@ export function GiftsPage() {
   }, [gifts, location.hash]);
 
   const renderGiftCard = (gift: IGift) => {
-    const isInfoOpen = Boolean(infoOpen[gift.id]);
     return (
       <div
         className={`${s.card} ${
@@ -99,28 +89,16 @@ export function GiftsPage() {
           <Text variant="span" className={s.name}>
             {gift.name}
           </Text>
-          <button
-            type="button"
-            className={`${s.infoButton} ${isInfoOpen ? s.infoActive : ''}`}
-            onClick={() => toggleInfo(gift.id)}
-            aria-pressed={isInfoOpen}
-            aria-label={isInfoOpen ? 'Hide description' : 'Show description'}
-          >
-            <InfoIcon className={s.infoIcon} />
-          </button>
         </div>
         <div className={s.content}>
-          {isInfoOpen ? (
-            <div className={s.description}>{gift.description}</div>
-          ) : (
-            <img
-              src={gift.imgUrl}
-              alt={gift.name}
-              className={s.image}
-              draggable={false}
-            />
-          )}
+          <img
+            src={gift.imgUrl}
+            alt={gift.name}
+            className={s.image}
+            draggable={false}
+          />
         </div>
+        <div className={s.description}>{gift.description}</div>
         <button
           type="button"
           className={s.priceButton}
@@ -151,9 +129,7 @@ export function GiftsPage() {
       {!isLoading && !isError ? (
         <>
           <div className={s.grid}>
-            {gifts
-              .filter((gift) => !gift.isBought)
-              .map(renderGiftCard)}
+            {gifts.filter((gift) => !gift.isBought).map(renderGiftCard)}
           </div>
 
           {gifts.some((gift) => gift.isBought) ? (
@@ -162,9 +138,7 @@ export function GiftsPage() {
                 Owned
               </Text>
               <div className={s.grid}>
-                {gifts
-                  .filter((gift) => gift.isBought)
-                  .map(renderGiftCard)}
+                {gifts.filter((gift) => gift.isBought).map(renderGiftCard)}
               </div>
             </div>
           ) : null}
