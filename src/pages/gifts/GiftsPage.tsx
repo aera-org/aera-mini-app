@@ -49,6 +49,8 @@ export function GiftsPage() {
     })();
   };
 
+  console.log('location.hash', location.hash);
+
   useEffect(() => {
     if (!location.hash || gifts.length === 0) return;
     const giftId = decodeURIComponent(location.hash.replace('#', '').trim());
