@@ -75,7 +75,7 @@
   margin-top: 24px;
   display: grid;
   grid-template-columns: repeat(3, minmax(0, 1fr));
-  gap: 14px;
+  gap: 14px 12px;
 }
 
 .planCard {
