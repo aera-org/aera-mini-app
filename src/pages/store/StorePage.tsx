@@ -13,6 +13,7 @@ import air5 from '@/assets/air/air-5.png';
 import air6 from '@/assets/air/air-6.png';
 import fuelIcon from '@/assets/mini/fuel.png';
 import { type IPlan, PlanType } from '@/common/types';
+import { cn } from '@/common/utils';
 import { Text } from '@/components';
 import { useLaunchParams } from '@/context/LaunchParamsContext';
 
@@ -92,7 +93,10 @@ export function StorePage() {
       {!isLoading && !isError ? (
         <div className={s.grid}>
           {airPlans.map((plan: IPlan, index) => (
-            <div className={s.planCard} key={plan.id}>
+            <div className={cn(s.planCard)} key={plan.id}>
+              {plan.isRecommended ? (
+                <span className={s.recommendedBadge}>Best Offer</span>
+              ) : null}
               <img
                 src={airIcons[index % airIcons.length]}
                 alt="air"

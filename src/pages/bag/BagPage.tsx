@@ -8,7 +8,7 @@ import airIcon from '@/assets/mini/air.png';
 import cameraIcon from '@/assets/mini/camera.png';
 import fuelIcon from '@/assets/mini/fuel.png';
 import heartIcon from '@/assets/mini/heart.png';
-import { PlanPeriod, PlanType, type IPlan } from '@/common/types';
+import { type IPlan, PlanPeriod, PlanType } from '@/common/types';
 import { Text } from '@/components';
 import { useLaunchParams } from '@/context/LaunchParamsContext';
 import { useUser } from '@/context/UserContext';
@@ -123,7 +123,7 @@ export function BagPage() {
       try {
         const invoiceLink = await createPlanInvoice(
           selectedPlan.id,
-          launchParams
+          launchParams,
         );
         TelegramWebApp.openInvoice(invoiceLink, (status) => {
           if (status === 'paid') {
@@ -167,9 +167,12 @@ export function BagPage() {
                 key={plan.id}
                 className={`${s.planCard} ${
                   plan.id === selectedId ? s.selected : ''
-                }`}
+                } ${plan.isRecommended ? s.recommended : ''}`}
                 onClick={() => setSelectedId(plan.id)}
               >
+                {plan.isRecommended ? (
+                  <span className={s.recommendedBadge}>Most Popular</span>
+                ) : null}
                 <div className={s.planContent}>
                   <div className={s.planRow}>
                     <span className={s.planPeriod}>{formatPeriod(plan)}</span>
