@@ -5,11 +5,8 @@ import { useEffect, useMemo, useState } from 'react';
 import { createPlanInvoice } from '@/api/payments';
 import { getPlans } from '@/api/plans';
 import airIcon from '@/assets/mini/air.png';
-import cameraIcon from '@/assets/mini/camera.png';
-import fuelIcon from '@/assets/mini/fuel.png';
-import heartIcon from '@/assets/mini/heart.png';
 import { type IPlan, PlanPeriod, PlanType } from '@/common/types';
-import { Text } from '@/components';
+import { Loader, Text } from '@/components';
 import { useLaunchParams } from '@/context/LaunchParamsContext';
 import { useUser } from '@/context/UserContext';
 
@@ -106,16 +103,7 @@ export function BagPage() {
   );
 
   const remaining = getRemainingLabel(user?.subscribedUntil);
-
-  const featureItems = useMemo(() => {
-    const airAmount = selectedPlan?.air ?? 0;
-    return [
-      { icon: fuelIcon, text: 'Unlimited fuel' },
-      { icon: cameraIcon, text: 'All images without blur' },
-      { icon: airIcon, text: `${airAmount} AIR` },
-      { icon: heartIcon, text: 'Advanced roleplay' },
-    ];
-  }, [selectedPlan?.air]);
+  const featureItems = selectedPlan?.items ?? [];
 
   const handleSubscribe = () => {
     if (!selectedPlan) return;
@@ -149,9 +137,7 @@ export function BagPage() {
       </div>
 
       {isLoading ? (
-        <Text variant="span" center>
-          Loading...
-        </Text>
+        <Loader />
       ) : null}
       {isError ? (
         <Text variant="span">
@@ -205,15 +191,15 @@ export function BagPage() {
 
           {selectedPlan ? (
             <ul className={s.features}>
-              {featureItems.map((feature) => (
-                <li key={feature.text} className={s.featureItem}>
-                  <img
-                    src={feature.icon}
-                    alt=""
-                    className={s.featureIcon}
-                    draggable={false}
-                  />
-                  <span>{feature.text}</span>
+              {featureItems.map((feature, index) => (
+                <li
+                  key={`${feature.emoji}-${feature.value}-${index}`}
+                  className={s.featureItem}
+                >
+                  <span className={s.featureEmoji} aria-hidden>
+                    {feature.emoji}
+                  </span>
+                  <span>{feature.value}</span>
                 </li>
               ))}
             </ul>

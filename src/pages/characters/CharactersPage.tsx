@@ -3,7 +3,7 @@ import TelegramWebApp from '@twa-dev/sdk';
 
 import { getCharacters } from '@/api/characters';
 import type { ICharacter } from '@/common/types';
-import { Text } from '@/components';
+import { Loader, Text } from '@/components';
 
 import s from './CharactersPage.module.scss';
 
@@ -35,11 +35,7 @@ export function CharactersPage() {
 
   return (
     <div className={s.container}>
-      {isLoading ? (
-        <Text variant="span" center>
-          Loading...
-        </Text>
-      ) : null}
+      {isLoading ? <Loader /> : null}
       {isError ? (
         <Text variant="span">
           {error instanceof Error ? error.message : 'Failed to load characters'}

@@ -14,7 +14,7 @@ import air6 from '@/assets/air/air-6.png';
 import fuelIcon from '@/assets/mini/fuel.png';
 import { type IPlan, PlanType } from '@/common/types';
 import { cn } from '@/common/utils';
-import { Text } from '@/components';
+import { Loader, Text } from '@/components';
 import { useLaunchParams } from '@/context/LaunchParamsContext';
 
 import s from './StorePage.module.scss';
@@ -83,7 +83,7 @@ export function StorePage() {
         </div>
       </div>
 
-      {isLoading ? <Text variant="span">Loading...</Text> : null}
+      {isLoading ? <Loader /> : null}
       {isError ? (
         <Text variant="span">
           {error instanceof Error ? error.message : 'Failed to load plans'}

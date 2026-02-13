@@ -5,7 +5,7 @@ import { useLocation, useNavigate } from 'react-router-dom';
 import { buyGift, getGifts } from '@/api/gifts';
 import airIcon from '@/assets/mini/air.png';
 import type { IGift } from '@/common/types';
-import { Text } from '@/components';
+import { Loader, Text } from '@/components';
 import { useUser } from '@/context/UserContext';
 
 import s from './GiftsPage.module.scss';
@@ -130,7 +130,7 @@ export function GiftsPage() {
 
   return (
     <div className={s.container}>
-      {isLoading ? <Text variant="span">Loading...</Text> : null}
+      {isLoading ? <Loader /> : null}
       {isError ? (
         <Text variant="span">
           {error instanceof Error ? error.message : 'Failed to load gifts'}
