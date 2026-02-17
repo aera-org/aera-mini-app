@@ -10,7 +10,9 @@
   height: 100%;
   color: var(--loader-color);
   scale: 0.8;
+
 }
+
 .loader:before,
 .loader:after {
   content: "";
