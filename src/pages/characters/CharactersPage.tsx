@@ -26,9 +26,8 @@ export function CharactersPage() {
       return;
     }
 
-    const payload = `character_${character.name}`;
     TelegramWebApp.openTelegramLink(
-      `https://t.me/${botUsername}?start=${encodeURIComponent(payload)}`,
+      `https://t.me/${botUsername}?start=c_${character.name}`,
     );
     TelegramWebApp.close();
   };
