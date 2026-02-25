@@ -50,6 +50,10 @@ function getRemainingLabel(subscribedUntil?: string | null) {
   };
 }
 
+function getDefaultPlan(plans: IPlan[]) {
+  return plans.find((plan) => plan.isRecommended) ?? plans[0];
+}
+
 export function BagPage() {
   const { user } = useUser();
   const launchParams = useLaunchParams();
@@ -83,7 +87,7 @@ export function BagPage() {
       if (current && plans.some((plan) => plan.id === current)) {
         return current;
       }
-      return plans[0].id;
+      return getDefaultPlan(plans)?.id ?? null;
     });
   }, [plans]);
 
@@ -98,7 +102,7 @@ export function BagPage() {
   }, [queryClient]);
 
   const selectedPlan = useMemo(
-    () => plans.find((plan) => plan.id === selectedId) ?? plans[0],
+    () => plans.find((plan) => plan.id === selectedId) ?? getDefaultPlan(plans),
     [plans, selectedId],
   );
 
