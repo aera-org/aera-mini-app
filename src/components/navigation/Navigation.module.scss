@@ -17,6 +17,38 @@
   width: 70%;
 }
 
+.backNav {
+  width: auto;
+  gap: 0;
+  padding: 10px 18px;
+}
+
+.backButton {
+  border: none;
+  background: transparent;
+  padding: 0;
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  color: #fff;
+  cursor: pointer;
+}
+
+.backButton svg {
+  width: 20px;
+  height: 20px;
+}
+
+.backLabel {
+  color: #fff;
+  font-family: var(--font-ui);
+  font-weight: 500;
+  font-size: 20px;
+  line-height: 120%;
+  letter-spacing: -0.48px;
+  text-align: right;
+}
+
 .navItem {
   display: flex;
   flex-direction: column;

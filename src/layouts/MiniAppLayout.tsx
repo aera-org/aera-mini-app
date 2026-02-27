@@ -6,7 +6,7 @@ import bagIcon from '@/assets/mini/bag.png';
 import fuelIcon from '@/assets/mini/fuel.png';
 import giftsIcon from '@/assets/mini/gifts.png';
 import girlsIcon from '@/assets/mini/girls.png';
-import { Header, MiniAppShell, Navigation } from '@/components';
+import { BackNavigation, Header, MiniAppShell, Navigation } from '@/components';
 import { useUser } from '@/context/UserContext';
 
 const pageTitleMap: Record<string, string> = {
@@ -20,6 +20,7 @@ export function MiniAppLayout() {
   const location = useLocation();
   const navigate = useNavigate();
   const { user } = useUser();
+  const isGirlDetails = location.pathname.startsWith('/girls/');
 
   const pageName = pageTitleMap[location.pathname] ?? 'Girls';
   const appClassName = pageName;
@@ -39,13 +40,25 @@ export function MiniAppLayout() {
         />
       }
       footer={
-        <Navigation
-          items={[
-            { label: 'Gifts', path: '/gifts', icon: giftsIcon },
-            { label: 'Girls', path: '/girls', icon: girlsIcon },
-            { label: 'Bag', path: '/bag', icon: bagIcon },
-          ]}
-        />
+        isGirlDetails ? (
+          <BackNavigation
+            onBack={() => {
+              if (window.history.length > 1) {
+                navigate(-1);
+                return;
+              }
+              navigate('/girls');
+            }}
+          />
+        ) : (
+          <Navigation
+            items={[
+              { label: 'Gifts', path: '/gifts', icon: giftsIcon },
+              { label: 'Girls', path: '/girls', icon: girlsIcon },
+              { label: 'Bag', path: '/bag', icon: bagIcon },
+            ]}
+          />
+        )
       }
     >
       <Outlet />

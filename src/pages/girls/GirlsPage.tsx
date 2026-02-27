@@ -1,6 +1,6 @@
 import { useQuery } from '@tanstack/react-query';
-import TelegramWebApp from '@twa-dev/sdk';
 import { useMemo } from 'react';
+import { useNavigate } from 'react-router-dom';
 
 import { getGirls } from '@/api/girls';
 import { MessageIcon, MessageMoreIcon } from '@/assets/icons';
@@ -21,6 +21,7 @@ type ScenarioWithGirl = {
 };
 
 export function GirlsPage() {
+  const navigate = useNavigate();
   const {
     data: girls = [],
     isLoading,
@@ -33,16 +34,7 @@ export function GirlsPage() {
   });
 
   const handleCardClick = (character: ICharacter) => {
-    const botUsername = import.meta.env.VITE_BOT_USERNAME;
-    if (!botUsername) {
-      console.error('VITE_BOT_USERNAME is not set');
-      return;
-    }
-
-    TelegramWebApp.openTelegramLink(
-      `https://t.me/${botUsername}?start=g_${character.name}`,
-    );
-    TelegramWebApp.close();
+    navigate(`/girls/${character.id}`);
   };
 
   const featuredGirls = girls.filter((girl) => girl.isFeatured);

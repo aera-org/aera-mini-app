@@ -22,7 +22,11 @@ export function Navigation({ items }: NavigationProps) {
   return (
     <nav className={s.nav}>
       {items.map((item) => {
-        const isActive = location.pathname === item.path;
+        const isActive =
+          item.path === '/girls'
+            ? location.pathname === '/girls' ||
+              location.pathname.startsWith('/girls/')
+            : location.pathname === item.path;
         return (
           <button
             key={item.path}

@@ -27,7 +27,11 @@ export function Card({
     : style;
 
   return (
-    <div className={cn(s.card, [s[variant], className])} style={styles} {...props}>
+    <div
+      className={cn(s.card, [s[variant], backgroundImage ? s.withBackground : null, className])}
+      style={styles}
+      {...props}
+    >
       {children}
     </div>
   );
