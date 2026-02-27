@@ -8,6 +8,7 @@
   font-family: var(--font-content);
   overflow-y: auto;
   height: calc(var(--vh, 1vh) * 100);
+  background: linear-gradient(180deg, #221A09 44.23%, #05090C 100%)
 }
 
 .statusCard {
@@ -35,124 +36,160 @@
 }
 
 .planCard {
-  position: relative;
   display: flex;
   align-items: center;
   justify-content: space-between;
-  gap: 12px;
-  padding: 12px 16px;
+  gap: 14px;
+  padding: 14px;
   cursor: pointer;
   transition: border-color 0.2s ease, background 0.2s ease;
+  background: linear-gradient(180deg, rgba(255, 212, 53, 0.04) 0%, rgba(255, 212, 53, 0.15) 100%);
 }
-
-.recommendedBadge {
-  position: absolute;
-  top: 0;
-  left: 50%;
-  transform: translateY(-50%);
-  padding: 4px 8px;
-  border: 1px solid #ffffff4d;
-  border-radius: 999px;
-  background: rgba(97, 79, 186, 0.4);
-  box-shadow: rgb(97, 79, 186) 0 0 16px, rgba(97, 79, 186, 0.5) 0 0 24px,
-    rgba(97, 79, 186, 0.376) 0 0 8px inset;
-  color: #fff;
-  font-size: 13px;
-  font-weight: 600;
-  line-height: 1;
-  white-space: nowrap;
-  z-index: 1;
-}
-
-.recommended {
-  margin-top: 10px;
-}
-
 
 .selected {
-  border-color: rgba(255, 255, 255, 0.35);
-  background: rgba(255, 255, 255, 0.06);
+  border-color: rgba(255, 212, 53, 1);
 }
 
-.planContent {
+.planLeft {
   flex: 1;
+  min-width: 0;
   display: flex;
-  flex-direction: column;
-  gap: 6px;
+  align-items: flex-start;
+  gap: 10px;
 }
 
-.planRow {
-  display: flex;
-  align-items: center;
-  gap: 4px;
-}
-
-.planPeriod {
-  color: rgb(133, 107, 255);
-  font-size: 14px;
-  font-weight: 600;
-}
-
-.air {
+.selectIndicator {
+  width: 24px;
+  height: 24px;
+  border-radius: 50%;
+  border: 1px solid rgba(255, 255, 255, 0.16);
+  background: rgba(71, 57, 20, 1);
   display: inline-flex;
   align-items: center;
-  font-size: 14px;
-  color: #fff;
+  justify-content: center;
+  flex-shrink: 0;
+  margin-top: 2px;
+}
+
+.selectIndicatorDot {
+  width: 12px;
+  height: 12px;
+  border-radius: 50%;
+  background: transparent;
+}
+
+.selected .selectIndicator {
+  background: rgba(255, 212, 53, 1);
+}
+
+.selected .selectIndicatorDot {
+  background: white;
+  box-shadow: 2px 2px 2px 0 rgba(41, 8, 125, 0.5);
+}
+
+.planRows {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+  align-items: flex-start;
+}
+
+.planRowTop {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+
+.airRow {
+  display: inline-flex;
+  align-items: center;
+  gap: 2px;
 }
 
 .airIcon {
   width: 20px;
   height: 20px;
-  margin-top: 2px;
 }
 
-.planPriceRow {
-  display: flex;
-  align-items: center;
-  gap: 6px;
+.airText {
+  font-family: var(--font-ui);
+  font-weight: 600;
+  font-style: normal;
   font-size: 14px;
+  line-height: 100%;
+  letter-spacing: -1.23px;
   color: #fff;
 }
 
-.priceAmount {
-  font-family: var(--font-display);
-  font-size: 20px;
-  line-height: 1;
-  margin-top: -2px;
-}
-
-.star {
-  font-size: 14px;
-}
-
-.planDuration {
-  color: rgb(130, 130, 130);
-  font-size: 13px;
-}
-
-.radio {
-  width: 22px;
-  height: 22px;
-  border-radius: 50%;
-  border: 2px solid rgba(255, 255, 255, 0.3);
+.planRowBottom {
   display: flex;
   align-items: center;
+  gap: 6px;
+}
+
+.planPeriod {
+  font-family: var(--font-display);
+  font-weight: 500;
+  font-style: normal;
+  color: #fff;
+  font-size: 22px;
+  line-height: 20px;
+  letter-spacing: -0.84px;
+}
+
+.dailyPrice {
+  font-family: var(--font-ui);
+  font-weight: 600;
+  font-style: normal;
+  color: rgba(180, 180, 180, 1);
+  font-size: 13px;
+  line-height: 100%;
+  letter-spacing: -0.43px;
+}
+
+.save {
+  font-family: var(--font-ui);
+  font-weight: 600;
+  font-style: normal;
+  color: rgba(180, 180, 180, 1);
+  font-size: 13px;
+  line-height: 100%;
+  letter-spacing: -0.43px;
+  text-transform: uppercase;
+}
+
+.recommendedBadge {
+  display: inline-flex;
+  align-items: center;
   justify-content: center;
+  padding: 3px 8px;
+  border-radius: 20px;
+  background: rgba(217, 146, 254, 1);
 }
 
-.radioDot {
-  width: 10px;
-  height: 10px;
-  border-radius: 50%;
-  background: transparent;
+.recommendedBadgeText {
+  color: #fff;
+  font-size: 14px;
+  line-height: 100%;
+  letter-spacing: -0.58px;
+  text-transform: lowercase;
 }
 
-.selected .radio {
-  border-color: rgb(133, 107, 255);
+.planRight {
+  display: flex;
+  align-items: center;
+  gap: 4px;
+  flex-shrink: 0;
 }
 
-.selected .radioDot {
-  background: rgb(133, 107, 255);
+.priceAmount {
+  font-family: var(--font-ui);
+  font-weight: 600;
+  font-style: normal;
+  font-size: 18px;
+  line-height: 100%;
+  letter-spacing: -0.43px;
+  color: #fff;
 }
 
 .features {

@@ -18,6 +18,8 @@ export { default as PencilLineIcon } from './pencil-line.svg?react';
 export { default as PlusIcon } from './plus.svg?react';
 export { default as RadioIcon } from './radio.svg?react';
 export { default as SendIcon } from './send.svg?react';
+export { default as TgStarIcon } from './tg-star.svg?react';
+export { default as TgStarWhiteIcon } from './tg-star-white.svg?react';
 export { default as TrashIcon } from './trash.svg?react';
 export { default as UserIcon } from './user.svg?react';
 export { default as UserCogIcon } from './user-cog.svg?react';

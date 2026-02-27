@@ -4,6 +4,7 @@ import { useEffect, useMemo, useState } from 'react';
 
 import { createPlanInvoice } from '@/api/payments';
 import { getPlans } from '@/api/plans';
+import { TgStarIcon, TgStarWhiteIcon } from '@/assets/icons';
 import airIcon from '@/assets/mini/air.png';
 import { type IPlan, PlanPeriod, PlanType } from '@/common/types';
 import { Card, Loader, Typography } from '@/components';
@@ -52,6 +53,24 @@ function getRemainingLabel(subscribedUntil?: string | null) {
 
 function getDefaultPlan(plans: IPlan[]) {
   return plans.find((plan) => plan.isRecommended) ?? plans[0];
+}
+
+function getPlanDays(plan: IPlan) {
+  const count = Math.max(1, plan.periodCount ?? 1);
+  switch (plan.period) {
+    case PlanPeriod.Day:
+      return count;
+    case PlanPeriod.Month:
+      return count * 30;
+    case PlanPeriod.Year:
+      return count * 365;
+    default:
+      return count;
+  }
+}
+
+function getDailyPrice(plan: IPlan) {
+  return plan.price / getPlanDays(plan);
 }
 
 export function BagPage() {
@@ -105,6 +124,12 @@ export function BagPage() {
     () => plans.find((plan) => plan.id === selectedId) ?? getDefaultPlan(plans),
     [plans, selectedId],
   );
+  const baseDailyPrice = useMemo(() => {
+    const dayPlans = plans.filter((plan) => plan.period === PlanPeriod.Day);
+    const sourcePlans = dayPlans.length ? dayPlans : plans;
+    if (!sourcePlans.length) return 0;
+    return Math.min(...sourcePlans.map(getDailyPrice));
+  }, [plans]);
 
   const remaining = getRemainingLabel(user?.subscribedUntil);
   const featureItems = selectedPlan?.items ?? [];
@@ -130,7 +155,7 @@ export function BagPage() {
 
   return (
     <div className={s.container}>
-      <Card className={s.statusCard} variant="accent">
+      <Card className={s.statusCard}>
         <div>
           <Typography as="div" variant="body-sm" className={s.statusTitle}>
             Your plan
@@ -144,9 +169,7 @@ export function BagPage() {
         </Typography>
       </Card>
 
-      {isLoading ? (
-        <Loader />
-      ) : null}
+      {isLoading ? <Loader /> : null}
       {isError ? (
         <Typography variant="body-md">
           {error instanceof Error ? error.message : 'Failed to load plans'}
@@ -156,64 +179,124 @@ export function BagPage() {
       {!isLoading && !isError ? (
         <>
           <div className={s.plans}>
-            {plans.map((plan) => (
-              <Card
-                key={plan.id}
-                className={`${s.planCard} ${
-                  plan.id === selectedId ? s.selected : ''
-                } ${plan.isRecommended ? s.recommended : ''}`}
-                variant="accent"
-                onClick={() => setSelectedId(plan.id)}
-              >
-                {plan.isRecommended ? (
-                  <Typography
-                    as="span"
-                    variant="label"
-                    weight={600}
-                    className={s.recommendedBadge}
-                  >
-                    Most Popular
-                  </Typography>
-                ) : null}
-                <div className={s.planContent}>
-                  <div className={s.planRow}>
+            {plans.map((plan) => {
+              const currentDailyPrice = getDailyPrice(plan);
+              const dailyPriceLabel = Math.max(
+                1,
+                Math.round(currentDailyPrice),
+              );
+              const savePercent =
+                baseDailyPrice > 0
+                  ? Math.max(
+                      0,
+                      Math.round(
+                        (1 - currentDailyPrice / baseDailyPrice) * 100,
+                      ),
+                    )
+                  : 0;
+
+              return (
+                <Card
+                  key={plan.id}
+                  className={`${s.planCard} ${plan.id === selectedId ? s.selected : ''}`}
+                  variant={plan.isRecommended ? 'accent' : 'neutral'}
+                  onClick={() => setSelectedId(plan.id)}
+                >
+                  <div className={s.planLeft}>
+                    <div className={s.selectIndicator}>
+                      <span className={s.selectIndicatorDot} />
+                    </div>
+                    <div className={s.planRows}>
+                      <div className={s.planRowTop}>
+                        <Typography
+                          as="span"
+                          variant="body-sm"
+                          family="brand"
+                          weight={500}
+                          className={s.planPeriod}
+                        >
+                          {formatPeriod(plan)}
+                        </Typography>
+                        <span className={s.airRow}>
+                          <Typography
+                            as="span"
+                            variant="body-sm"
+                            family="system"
+                            weight={600}
+                            className={s.airText}
+                          >
+                            +
+                          </Typography>
+                          <img
+                            className={s.airIcon}
+                            src={airIcon}
+                            alt="air"
+                            draggable={false}
+                          />
+                          <Typography
+                            as="span"
+                            variant="body-sm"
+                            family="system"
+                            weight={600}
+                            className={s.airText}
+                          >
+                            {plan.air} AIR
+                          </Typography>
+                        </span>
+                      </div>
+                      <div className={s.planRowBottom}>
+                        <TgStarWhiteIcon width={16} height={16} />
+                        <Typography
+                          as="span"
+                          variant="caption"
+                          family="system"
+                          weight={600}
+                          className={s.dailyPrice}
+                        >
+                          {dailyPriceLabel} / day
+                        </Typography>
+                        {savePercent > 0 ? (
+                          <Typography
+                            as="span"
+                            variant="caption"
+                            family="system"
+                            weight={600}
+                            className={s.save}
+                          >
+                            SAVE {savePercent}%
+                          </Typography>
+                        ) : null}
+                        {plan.isRecommended ? (
+                          <span className={s.recommendedBadge}>
+                            <Typography
+                              as="span"
+                              variant="caption"
+                              family="brand"
+                              weight={500}
+                              className={s.recommendedBadgeText}
+                            >
+                              most popular
+                            </Typography>
+                          </span>
+                        ) : null}
+                      </div>
+                    </div>
+                  </div>
+                  <div className={s.planRight}>
+                    <TgStarIcon width={20} height={20} />
                     <Typography
                       as="span"
-                      variant="body-sm"
+                      variant="body-md"
+                      family="system"
                       weight={600}
-                      className={s.planPeriod}
+                      className={s.priceAmount}
                     >
-                      {formatPeriod(plan)}
-                    </Typography>
-                    <Typography as="span" variant="body-sm" className={s.air}>
-                      + {plan.air}
-                      <img
-                        className={s.airIcon}
-                        src={airIcon}
-                        alt="air"
-                        draggable={false}
-                      />
+                      {plan.price}
                     </Typography>
                   </div>
-                  <div className={s.planRow}>
-                    <div className={s.planPriceRow}>
-                      <Typography as="span" variant="heading-lg" className={s.priceAmount}>
-                        {plan.price}
-                      </Typography>
-                      <Typography as="span" variant="body-sm" className={s.star}>
-                        ⭐️
-                      </Typography>
-                    </div>
-                    <Typography as="span" variant="caption" className={s.planDuration}>
-                      / {formatPeriod(plan)}
-                    </Typography>
-                  </div>
-                </div>
-                <div className={s.radio}>
-                  <span className={s.radioDot} />
-                </div>
-              </Card>
-            ))}
+                </Card>
+              );
+            })}
           </div>
 
           {selectedPlan ? (
