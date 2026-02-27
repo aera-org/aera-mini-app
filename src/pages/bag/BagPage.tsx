@@ -6,7 +6,7 @@ import { createPlanInvoice } from '@/api/payments';
 import { getPlans } from '@/api/plans';
 import airIcon from '@/assets/mini/air.png';
 import { type IPlan, PlanPeriod, PlanType } from '@/common/types';
-import { Loader, Text } from '@/components';
+import { Card, Loader, Typography } from '@/components';
 import { useLaunchParams } from '@/context/LaunchParamsContext';
 import { useUser } from '@/context/UserContext';
 
@@ -130,43 +130,62 @@ export function BagPage() {
 
   return (
     <div className={s.container}>
-      <div className={s.statusCard}>
+      <Card className={s.statusCard} variant="accent">
         <div>
-          <div className={s.statusTitle}>Your plan</div>
-          <div className={s.statusValue}>
+          <Typography as="div" variant="body-sm" className={s.statusTitle}>
+            Your plan
+          </Typography>
+          <Typography as="div" variant="heading-sm" className={s.statusValue}>
             {remaining.active ? 'Subscribed' : ''}
-          </div>
+          </Typography>
         </div>
-        <div className={s.statusDate}>{remaining.label}</div>
-      </div>
+        <Typography as="div" variant="body-sm" className={s.statusDate}>
+          {remaining.label}
+        </Typography>
+      </Card>
 
       {isLoading ? (
         <Loader />
       ) : null}
       {isError ? (
-        <Text variant="span">
+        <Typography variant="body-md">
           {error instanceof Error ? error.message : 'Failed to load plans'}
-        </Text>
+        </Typography>
       ) : null}
 
       {!isLoading && !isError ? (
         <>
           <div className={s.plans}>
             {plans.map((plan) => (
-              <div
+              <Card
                 key={plan.id}
                 className={`${s.planCard} ${
                   plan.id === selectedId ? s.selected : ''
                 } ${plan.isRecommended ? s.recommended : ''}`}
+                variant="accent"
                 onClick={() => setSelectedId(plan.id)}
               >
                 {plan.isRecommended ? (
-                  <span className={s.recommendedBadge}>Most Popular</span>
+                  <Typography
+                    as="span"
+                    variant="label"
+                    weight={600}
+                    className={s.recommendedBadge}
+                  >
+                    Most Popular
+                  </Typography>
                 ) : null}
                 <div className={s.planContent}>
                   <div className={s.planRow}>
-                    <span className={s.planPeriod}>{formatPeriod(plan)}</span>
-                    <span className={s.air}>
+                    <Typography
+                      as="span"
+                      variant="body-sm"
+                      weight={600}
+                      className={s.planPeriod}
+                    >
+                      {formatPeriod(plan)}
+                    </Typography>
+                    <Typography as="span" variant="body-sm" className={s.air}>
                       + {plan.air}
                       <img
                         className={s.airIcon}
@@ -174,22 +193,26 @@ export function BagPage() {
                         alt="air"
                         draggable={false}
                       />
-                    </span>
+                    </Typography>
                   </div>
                   <div className={s.planRow}>
                     <div className={s.planPriceRow}>
-                      <span className={s.priceAmount}>{plan.price}</span>
-                      <span className={s.star}>⭐️</span>
+                      <Typography as="span" variant="heading-lg" className={s.priceAmount}>
+                        {plan.price}
+                      </Typography>
+                      <Typography as="span" variant="body-sm" className={s.star}>
+                        ⭐️
+                      </Typography>
                     </div>
-                    <span className={s.planDuration}>
+                    <Typography as="span" variant="caption" className={s.planDuration}>
                       / {formatPeriod(plan)}
-                    </span>
+                    </Typography>
                   </div>
                 </div>
                 <div className={s.radio}>
                   <span className={s.radioDot} />
                 </div>
-              </div>
+              </Card>
             ))}
           </div>
 
@@ -203,14 +226,18 @@ export function BagPage() {
                   <span className={s.featureEmoji} aria-hidden>
                     {feature.emoji}
                   </span>
-                  <span>{feature.value}</span>
+                  <Typography as="span" variant="body-sm">
+                    {feature.value}
+                  </Typography>
                 </li>
               ))}
             </ul>
           ) : null}
 
           <button className={s.subscribeButton} onClick={handleSubscribe}>
-            {remaining.active ? 'Extend' : 'Subscribe'}
+            <Typography as="span" variant="heading-sm" weight={600}>
+              {remaining.active ? 'Extend' : 'Subscribe'}
+            </Typography>
           </button>
         </>
       ) : null}

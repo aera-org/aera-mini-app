@@ -1,4 +1,4 @@
-import { Text } from '../text';
+import { Typography } from '../text';
 import style from './index.module.css';
 
 type ModalProps = {
@@ -15,7 +15,7 @@ const Modal = ({ children, title, onClose, isOpen }: ModalProps) => {
 
   return (
     <div className={classes} onClick={onClose}>
-      {title ? <Text>{title}</Text> : null}
+      {title ? <Typography variant="heading-md">{title}</Typography> : null}
       <div
         className={style.content}
         onClick={(event) => {

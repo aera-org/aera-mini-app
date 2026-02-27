@@ -1,0 +1,30 @@
+.card {
+  position: relative;
+  border-radius: 16px;
+  border: 1px solid rgba(255, 255, 255, 0.3);
+  overflow: hidden;
+}
+
+.neutral {
+  background: transparent;
+  background-image: var(--card-bg-image, none);
+  background-size: cover;
+  background-position: center;
+  background-repeat: no-repeat;
+}
+
+.accent {
+  background-image:
+    repeating-linear-gradient(
+      -45deg,
+      rgba(255, 255, 255, 0.1) 0 1px,
+      transparent 1px 8px
+    ),
+    linear-gradient(
+      180deg,
+      rgba(253, 23, 155, 0.13) 0%,
+      rgba(255, 255, 255, 0.02) 100%
+    );
+  backdrop-filter: blur(20px);
+  -webkit-backdrop-filter: blur(20px);
+}

@@ -8,6 +8,8 @@ export { default as ImageIcon } from './image.svg?react';
 export { default as InfoIcon } from './info.svg?react';
 export { default as LayersIcon } from './layers.svg?react';
 export { default as LogsIcon } from './logs.svg?react';
+export { default as MessageIcon } from './message-circle.svg?react';
+export { default as MessageMoreIcon } from './message-circle-more.svg?react';
 export { default as MessageSquareQuoteIcon } from './message-square-quote.svg?react';
 export { default as NewspaperIcon } from './newspaper.svg?react';
 export { default as PencilLineIcon } from './pencil-line.svg?react';

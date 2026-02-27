@@ -1,4 +1,4 @@
-import { Text } from '@/components';
+import { Typography } from '@/components';
 
 import s from './Header.module.scss';
 
@@ -23,17 +23,21 @@ export function Header({
 }: HeaderProps) {
   return (
     <header className={s.header}>
-      <Text variant="h2" className={s.title}>
+      <Typography variant="heading-lg" className={s.title}>
         {pageName}
-      </Text>
+      </Typography>
       <div className={s.statsCard}>
         <div className={s.stat}>
           <img className={s.icon} src={fuelIcon} alt="fuel" />
-          <span className={s.count}>{fuel}</span>
+          <Typography as="span" variant="body-sm" weight={600} className={s.count}>
+            {fuel}
+          </Typography>
         </div>
         <div className={s.stat}>
           <img className={s.icon} src={airIcon} alt="air" />
-          <span className={s.count}>{air}</span>
+          <Typography as="span" variant="body-sm" weight={600} className={s.count}>
+            {air}
+          </Typography>
         </div>
         <button className={s.iconButton} onClick={onActionClick}>
           {actionIcon}

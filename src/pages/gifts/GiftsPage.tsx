@@ -5,7 +5,7 @@ import { useLocation, useNavigate } from 'react-router-dom';
 import { buyGift, getGifts } from '@/api/gifts';
 import airIcon from '@/assets/mini/air.png';
 import type { IGift } from '@/common/types';
-import { Loader, Text } from '@/components';
+import { Card, Loader, Typography } from '@/components';
 import { useUser } from '@/context/UserContext';
 
 import s from './GiftsPage.module.scss';
@@ -89,17 +89,18 @@ export function GiftsPage() {
 
   const renderGiftCard = (gift: IGift) => {
     return (
-      <div
+      <Card
         className={`${s.card} ${
           highlightedId === gift.id ? s.highlighted : ''
         }`}
+        variant="accent"
         key={gift.id}
         data-gift-id={gift.id}
       >
         <div className={s.header}>
-          <Text variant="span" className={s.name}>
+          <Typography as="span" variant="heading-sm" className={s.name}>
             {gift.name}
-          </Text>
+          </Typography>
         </div>
         <div className={s.content}>
           <img
@@ -109,14 +110,23 @@ export function GiftsPage() {
             draggable={false}
           />
         </div>
-        <div className={s.description}>{gift.description}</div>
+        <Typography
+          as="div"
+          variant="caption"
+          color="muted"
+          className={s.description}
+        >
+          {gift.description}
+        </Typography>
         <button
           type="button"
           className={s.priceButton}
           onClick={() => handleBuy(gift)}
           disabled={gift.isBought || buyingId === gift.id}
         >
-          <span className={s.price}>{gift.price}</span>
+          <Typography as="span" variant="body-md" weight={600} className={s.price}>
+            {gift.price}
+          </Typography>
           <img
             src={airIcon}
             alt="air"
@@ -124,7 +134,7 @@ export function GiftsPage() {
             draggable={false}
           />
         </button>
-      </div>
+      </Card>
     );
   };
 
@@ -132,9 +142,9 @@ export function GiftsPage() {
     <div className={s.container}>
       {isLoading ? <Loader /> : null}
       {isError ? (
-        <Text variant="span">
+        <Typography variant="body-md">
           {error instanceof Error ? error.message : 'Failed to load gifts'}
-        </Text>
+        </Typography>
       ) : null}
 
       {!isLoading && !isError ? (
@@ -145,9 +155,9 @@ export function GiftsPage() {
 
           {gifts.some((gift) => gift.isBought) ? (
             <div className={s.ownedSection}>
-              <Text variant="span" className={s.ownedTitle}>
+              <Typography as="span" variant="heading-sm" className={s.ownedTitle}>
                 Owned
-              </Text>
+              </Typography>
               <div className={s.grid}>
                 {gifts.filter((gift) => gift.isBought).map(renderGiftCard)}
               </div>

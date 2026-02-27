@@ -9,7 +9,9 @@
   align-items: center;
   justify-content: space-between;
   gap: 12px;
-  background: rgb(0, 0, 0);
+  background: linear-gradient(0deg, #261031 -0.03%, #000000 99.97%);
+  border-bottom: 1px solid rgba(0, 0, 0, 1);
+  box-shadow: 0px 1px 0px 0px rgba(255, 255, 255, 0.09);
 }
 
 .title {

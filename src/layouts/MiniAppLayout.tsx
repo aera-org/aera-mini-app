@@ -3,14 +3,14 @@ import { Outlet, useLocation, useNavigate } from 'react-router-dom';
 import { PlusIcon } from '@/assets/icons';
 import airIcon from '@/assets/mini/air.png';
 import bagIcon from '@/assets/mini/bag.png';
-import chatIcon from '@/assets/mini/chat.png';
 import fuelIcon from '@/assets/mini/fuel.png';
 import giftsIcon from '@/assets/mini/gifts.png';
+import girlsIcon from '@/assets/mini/girls.png';
 import { Header, MiniAppShell, Navigation } from '@/components';
 import { useUser } from '@/context/UserContext';
 
 const pageTitleMap: Record<string, string> = {
-  '/characters': 'Characters',
+  '/girls': 'Girls',
   '/gifts': 'Gifts',
   '/bag': 'Bag',
   '/store': 'Store',
@@ -21,7 +21,7 @@ export function MiniAppLayout() {
   const navigate = useNavigate();
   const { user } = useUser();
 
-  const pageName = pageTitleMap[location.pathname] ?? 'Characters';
+  const pageName = pageTitleMap[location.pathname] ?? 'Girls';
   const appClassName = pageName;
 
   return (
@@ -42,7 +42,7 @@ export function MiniAppLayout() {
         <Navigation
           items={[
             { label: 'Gifts', path: '/gifts', icon: giftsIcon },
-            { label: 'Chat', path: '/characters', icon: chatIcon },
+            { label: 'Girls', path: '/girls', icon: girlsIcon },
             { label: 'Bag', path: '/bag', icon: bagIcon },
           ]}
         />

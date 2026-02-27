@@ -55,7 +55,7 @@
 }
 
 .content > p {
-  font-family: var(--RobotoCondensed, sans-serif);
+  font-family: var(--font-ui);
   font-size: 14px;
   font-style: normal;
   font-weight: 700;

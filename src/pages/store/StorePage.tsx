@@ -13,8 +13,7 @@ import air5 from '@/assets/air/air-5.png';
 import air6 from '@/assets/air/air-6.png';
 import fuelIcon from '@/assets/mini/fuel.png';
 import { type IPlan, PlanType } from '@/common/types';
-import { cn } from '@/common/utils';
-import { Loader, Text } from '@/components';
+import { Card, Loader, Typography } from '@/components';
 import { useLaunchParams } from '@/context/LaunchParamsContext';
 
 import s from './StorePage.module.scss';
@@ -64,38 +63,49 @@ export function StorePage() {
 
   return (
     <div className={s.container}>
-      <div className={s.heroCard}>
+      <Card className={s.heroCard} variant="accent">
         <div className={s.heroIconWrap}>
           <img src={fuelIcon} alt="fuel" className={s.heroIcon} />
         </div>
         <div className={s.heroContent}>
-          <div className={s.heroTitle}>Unlimited Fuel</div>
-          <div className={s.heroSubtitle}>
+          <Typography as="div" variant="heading-md" className={s.heroTitle}>
+            Unlimited Fuel
+          </Typography>
+          <Typography as="div" variant="body-sm" className={s.heroSubtitle}>
             Remove the barriers. Gain endless fuel!
-          </div>
+          </Typography>
           <button
             type="button"
             className={s.heroButton}
             onClick={() => navigate('/bag')}
           >
-            🚀 Let&apos;s go
+            <Typography as="span" variant="body-md" weight={600}>
+              🚀 Let&apos;s go
+            </Typography>
           </button>
         </div>
-      </div>
+      </Card>
 
       {isLoading ? <Loader /> : null}
       {isError ? (
-        <Text variant="span">
+        <Typography variant="body-md">
           {error instanceof Error ? error.message : 'Failed to load plans'}
-        </Text>
+        </Typography>
       ) : null}
 
       {!isLoading && !isError ? (
         <div className={s.grid}>
           {airPlans.map((plan: IPlan, index) => (
-            <div className={cn(s.planCard)} key={plan.id}>
+            <Card className={s.planCard} variant="accent" key={plan.id}>
               {plan.isRecommended ? (
-                <span className={s.recommendedBadge}>Best Offer</span>
+                <Typography
+                  as="span"
+                  variant="label"
+                  weight={600}
+                  className={s.recommendedBadge}
+                >
+                  Best Offer
+                </Typography>
               ) : null}
               <img
                 src={airIcons[index % airIcons.length]}
@@ -103,16 +113,22 @@ export function StorePage() {
                 className={s.planIcon}
                 draggable={false}
               />
-              <div className={s.planAir}>{plan.air} air</div>
+              <Typography as="div" variant="body-sm" weight={600} className={s.planAir}>
+                {plan.air} air
+              </Typography>
               <button
                 type="button"
                 className={s.planButton}
                 onClick={() => handleBuy(plan)}
               >
-                <span className={s.planPrice}>{plan.price}</span>
-                <span className={s.planStar}>⭐️</span>
+                <Typography as="span" variant="body-sm" weight={600} className={s.planPrice}>
+                  {plan.price}
+                </Typography>
+                <Typography as="span" variant="body-sm" className={s.planStar}>
+                  ⭐️
+                </Typography>
               </button>
-            </div>
+            </Card>
           ))}
         </div>
       ) : null}

@@ -1,6 +1,7 @@
 import { useLocation, useNavigate } from 'react-router-dom';
 
 import { cn } from '@/common/utils';
+import { Typography } from '@/components/text';
 
 import s from './Navigation.module.scss';
 
@@ -25,12 +26,20 @@ export function Navigation({ items }: NavigationProps) {
         return (
           <button
             key={item.path}
-            className={s.navItem}
+            className={cn(s.navItem, [], { [s.active]: isActive })}
             onClick={() => navigate(item.path)}
           >
-            <span className={cn(s.navButton, [], { [s.active]: isActive })}>
+            <span className={s.navButton}>
               <img src={item.icon} alt={item.label} draggable={false} />
             </span>
+            <Typography
+              as="span"
+              variant="caption"
+              family="system"
+              className={cn(s.navLabel, [], { [s.activeLabel]: isActive })}
+            >
+              {item.label}
+            </Typography>
           </button>
         );
       })}
