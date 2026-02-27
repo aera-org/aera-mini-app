@@ -4,7 +4,12 @@ import { useEffect, useMemo, useState } from 'react';
 
 import { createPlanInvoice } from '@/api/payments';
 import { getPlans } from '@/api/plans';
-import { CheckIcon, MinusIcon, TgStarIcon, TgStarWhiteIcon } from '@/assets/icons';
+import {
+  CheckIcon,
+  MinusIcon,
+  TgStarIcon,
+  TgStarWhiteIcon,
+} from '@/assets/icons';
 import airIcon from '@/assets/mini/air.png';
 import { PlanFeaturesA, PlanFeaturesB } from '@/common/consts';
 import { type IPlan, PlanPeriod, PlanType } from '@/common/types';
@@ -192,19 +197,21 @@ export function BagPage() {
 
   return (
     <div className={s.container}>
-      <Card className={s.statusCard}>
-        <div>
-          <Typography as="div" variant="body-sm" className={s.statusTitle}>
-            Your plan
+      {remaining.active && (
+        <Card className={s.statusCard}>
+          <div>
+            <Typography as="div" variant="body-sm" className={s.statusTitle}>
+              Your plan
+            </Typography>
+            <Typography as="div" variant="heading-sm" className={s.statusValue}>
+              {remaining.active ? 'Subscribed' : ''}
+            </Typography>
+          </div>
+          <Typography as="div" variant="body-sm" className={s.statusDate}>
+            {remaining.label}
           </Typography>
-          <Typography as="div" variant="heading-sm" className={s.statusValue}>
-            {remaining.active ? 'Subscribed' : ''}
-          </Typography>
-        </div>
-        <Typography as="div" variant="body-sm" className={s.statusDate}>
-          {remaining.label}
-        </Typography>
-      </Card>
+        </Card>
+      )}
 
       {isLoading ? <Loader /> : null}
       {isError ? (
@@ -347,9 +354,17 @@ export function BagPage() {
                       className={`${s.featureItem} ${isActive ? s.featureActive : s.featureInactive}`}
                     >
                       {isActive ? (
-                        <CheckIcon width={16} height={16} className={s.featureIcon} />
+                        <CheckIcon
+                          width={16}
+                          height={16}
+                          className={s.featureIcon}
+                        />
                       ) : (
-                        <MinusIcon width={16} height={16} className={s.featureIcon} />
+                        <MinusIcon
+                          width={16}
+                          height={16}
+                          className={s.featureIcon}
+                        />
                       )}
                       <Typography
                         as="span"
@@ -373,9 +388,17 @@ export function BagPage() {
                       className={`${s.featureItem} ${isActive ? s.featureActive : s.featureInactive}`}
                     >
                       {isActive ? (
-                        <CheckIcon width={16} height={16} className={s.featureIcon} />
+                        <CheckIcon
+                          width={16}
+                          height={16}
+                          className={s.featureIcon}
+                        />
                       ) : (
-                        <MinusIcon width={16} height={16} className={s.featureIcon} />
+                        <MinusIcon
+                          width={16}
+                          height={16}
+                          className={s.featureIcon}
+                        />
                       )}
                       <Typography
                         as="span"
