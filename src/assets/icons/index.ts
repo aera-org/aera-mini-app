@@ -1,6 +1,7 @@
 export { default as ArrowLeftIcon } from './arrow-left.svg?react';
 export { default as AudioLinesIcon } from './audio-lines.svg?react';
 export { default as ChartIcon } from './chart-no-axes-combined.svg?react';
+export { default as CheckIcon } from './check.svg?react';
 export { default as CircleDotIcon } from './circle-dot.svg?react';
 export { default as DollarSignIcon } from './dollar-sign.svg?react';
 export { default as ExternalLinkIcon } from './external-link.svg?react';
@@ -13,6 +14,7 @@ export { default as LogsIcon } from './logs.svg?react';
 export { default as MessageIcon } from './message-circle.svg?react';
 export { default as MessageMoreIcon } from './message-circle-more.svg?react';
 export { default as MessageSquareQuoteIcon } from './message-square-quote.svg?react';
+export { default as MinusIcon } from './minus.svg?react';
 export { default as NewspaperIcon } from './newspaper.svg?react';
 export { default as PencilLineIcon } from './pencil-line.svg?react';
 export { default as PlusIcon } from './plus.svg?react';

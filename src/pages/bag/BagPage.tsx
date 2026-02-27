@@ -4,8 +4,9 @@ import { useEffect, useMemo, useState } from 'react';
 
 import { createPlanInvoice } from '@/api/payments';
 import { getPlans } from '@/api/plans';
-import { TgStarIcon, TgStarWhiteIcon } from '@/assets/icons';
+import { CheckIcon, MinusIcon, TgStarIcon, TgStarWhiteIcon } from '@/assets/icons';
 import airIcon from '@/assets/mini/air.png';
+import { PlanFeaturesA, PlanFeaturesB } from '@/common/consts';
 import { type IPlan, PlanPeriod, PlanType } from '@/common/types';
 import { Card, Loader, Typography } from '@/components';
 import { useLaunchParams } from '@/context/LaunchParamsContext';
@@ -124,15 +125,51 @@ export function BagPage() {
     () => plans.find((plan) => plan.id === selectedId) ?? getDefaultPlan(plans),
     [plans, selectedId],
   );
+  const selectedPlanIndex = useMemo(() => {
+    if (!selectedPlan) return 0;
+    const index = plans.findIndex((plan) => plan.id === selectedPlan.id);
+    return index >= 0 ? index : 0;
+  }, [plans, selectedPlan]);
   const baseDailyPrice = useMemo(() => {
     const dayPlans = plans.filter((plan) => plan.period === PlanPeriod.Day);
     const sourcePlans = dayPlans.length ? dayPlans : plans;
     if (!sourcePlans.length) return 0;
     return Math.min(...sourcePlans.map(getDailyPrice));
   }, [plans]);
+  const activeFeatures = useMemo(() => {
+    const activeA = new Set<number>();
+    const activeB = new Set<number>();
+
+    if (selectedPlanIndex === 0) {
+      activeA.add(0);
+      activeA.add(1);
+      activeB.add(0);
+      activeB.add(2);
+    } else if (selectedPlanIndex === 1) {
+      activeA.add(0);
+      activeA.add(1);
+      activeB.add(0);
+      activeB.add(1);
+      activeB.add(2);
+      activeB.add(3);
+    } else if (selectedPlanIndex === 2) {
+      activeA.add(0);
+      activeA.add(1);
+      activeA.add(2);
+      activeB.add(0);
+      activeB.add(1);
+      activeB.add(2);
+      activeB.add(3);
+      activeB.add(4);
+    } else {
+      PlanFeaturesA.forEach((_, index) => activeA.add(index));
+      PlanFeaturesB.forEach((_, index) => activeB.add(index));
+    }
+
+    return { activeA, activeB };
+  }, [selectedPlanIndex]);
 
   const remaining = getRemainingLabel(user?.subscribedUntil);
-  const featureItems = selectedPlan?.items ?? [];
 
   const handleSubscribe = () => {
     if (!selectedPlan) return;
@@ -300,21 +337,60 @@ export function BagPage() {
           </div>
 
           {selectedPlan ? (
-            <ul className={s.features}>
-              {featureItems.map((feature, index) => (
-                <li
-                  key={`${feature.emoji}-${feature.value}-${index}`}
-                  className={s.featureItem}
-                >
-                  <span className={s.featureEmoji} aria-hidden>
-                    {feature.emoji}
-                  </span>
-                  <Typography as="span" variant="body-sm">
-                    {feature.value}
-                  </Typography>
-                </li>
-              ))}
-            </ul>
+            <div className={s.featuresGrid}>
+              <div className={s.featuresColumnA}>
+                {PlanFeaturesA.map((feature, index) => {
+                  const isActive = activeFeatures.activeA.has(index);
+                  return (
+                    <div
+                      key={`feature-a-${index}`}
+                      className={`${s.featureItem} ${isActive ? s.featureActive : s.featureInactive}`}
+                    >
+                      {isActive ? (
+                        <CheckIcon width={16} height={16} className={s.featureIcon} />
+                      ) : (
+                        <MinusIcon width={16} height={16} className={s.featureIcon} />
+                      )}
+                      <Typography
+                        as="span"
+                        variant="body-md"
+                        family="system"
+                        weight={600}
+                        className={s.featureText}
+                      >
+                        {feature}
+                      </Typography>
+                    </div>
+                  );
+                })}
+              </div>
+              <div className={s.featuresColumnB}>
+                {PlanFeaturesB.map((feature, index) => {
+                  const isActive = activeFeatures.activeB.has(index);
+                  return (
+                    <div
+                      key={`feature-b-${index}`}
+                      className={`${s.featureItem} ${isActive ? s.featureActive : s.featureInactive}`}
+                    >
+                      {isActive ? (
+                        <CheckIcon width={16} height={16} className={s.featureIcon} />
+                      ) : (
+                        <MinusIcon width={16} height={16} className={s.featureIcon} />
+                      )}
+                      <Typography
+                        as="span"
+                        variant="body-md"
+                        family="system"
+                        weight={600}
+                        className={s.featureText}
+                      >
+                        {feature}
+                      </Typography>
+                    </div>
+                  );
+                })}
+              </div>
+            </div>
           ) : null}
 
           <button className={s.subscribeButton} onClick={handleSubscribe}>
