@@ -3,7 +3,6 @@ import { Typography } from '@/components';
 import s from './Header.module.scss';
 
 type HeaderProps = {
-  pageName: string;
   fuel: number;
   air: number;
   fuelIcon: string;
@@ -13,7 +12,6 @@ type HeaderProps = {
 };
 
 export function Header({
-  pageName,
   fuel,
   air,
   fuelIcon,
@@ -21,25 +19,30 @@ export function Header({
   actionIcon,
   onActionClick,
 }: HeaderProps) {
+  const fuelMax = 100;
+  const normalizedFuel = Math.max(0, Math.min(fuel, fuelMax));
+  const fuelPercent = (normalizedFuel / fuelMax) * 100;
+
   return (
     <header className={s.header}>
-      <Typography variant="heading-lg" className={s.title}>
-        {pageName}
-      </Typography>
-      <div className={s.statsCard}>
-        <div className={s.stat}>
-          <img className={s.icon} src={fuelIcon} alt="fuel" />
-          <Typography as="span" variant="body-sm" weight={600} className={s.count}>
-            {fuel}
-          </Typography>
+      <div className={s.statsRow}>
+        <img className={s.fuelIcon} src={fuelIcon} alt="fuel" />
+        <div className={s.fuelBar} aria-label={`Fuel ${fuelPercent}%`}>
+          <div className={s.fuelTrack}>
+            <div className={s.fuelProgress} style={{ width: `${fuelPercent}%` }} />
+          </div>
         </div>
-        <div className={s.stat}>
-          <img className={s.icon} src={airIcon} alt="air" />
-          <Typography as="span" variant="body-sm" weight={600} className={s.count}>
-            {air}
-          </Typography>
-        </div>
-        <button className={s.iconButton} onClick={onActionClick}>
+        <img className={s.airIcon} src={airIcon} alt="air" />
+        <Typography
+          as="span"
+          variant="body-md"
+          family="system"
+          weight={600}
+          className={s.airCount}
+        >
+          {air} AIR
+        </Typography>
+        <button type="button" className={s.iconButton} onClick={onActionClick}>
           {actionIcon}
         </button>
       </div>

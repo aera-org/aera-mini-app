@@ -236,6 +236,7 @@ export function GirlsPage() {
             <FeaturedGirlsSlider
               girls={featuredGirls}
               onMessageClick={(girl) => handleCardClick(girl)}
+              onGiftClick={() => navigate('/gifts')}
             />
           ) : null}
           <div className={s.container}>

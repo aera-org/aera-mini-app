@@ -1,6 +1,5 @@
-import { useCallback, useEffect, useState } from 'react';
-
 import useEmblaCarousel from 'embla-carousel-react';
+import { useCallback, useEffect, useState } from 'react';
 
 import { GiftIcon, MessageIcon } from '@/assets/icons';
 import type { ICharacter } from '@/common/types';
@@ -12,13 +11,18 @@ import s from './FeaturedGirlsSlider.module.scss';
 type FeaturedGirlsSliderProps = {
   girls: ICharacter[];
   onMessageClick: (girl: ICharacter) => void;
+  onGiftClick: (girl: ICharacter) => void;
 };
 
 export function FeaturedGirlsSlider({
   girls,
   onMessageClick,
+  onGiftClick,
 }: FeaturedGirlsSliderProps) {
-  const [emblaRef, emblaApi] = useEmblaCarousel({ align: 'start', loop: false });
+  const [emblaRef, emblaApi] = useEmblaCarousel({
+    align: 'start',
+    loop: false,
+  });
   const [selectedIndex, setSelectedIndex] = useState(0);
 
   const updateSelectedIndex = useCallback(() => {
@@ -113,6 +117,7 @@ export function FeaturedGirlsSlider({
                       <IconButton
                         className={s.giftButton}
                         aria-label={`Open gifts for ${girl.name}`}
+                        onClick={() => onGiftClick(girl)}
                       >
                         <GiftIcon width={20} height={20} />
                       </IconButton>
@@ -137,6 +142,8 @@ export function FeaturedGirlsSlider({
           />
         ))}
       </div>
+      <div className={s.bottomCard1} />
+      <div className={s.bottomCard2} />
     </section>
   );
 }

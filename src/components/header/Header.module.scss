@@ -3,64 +3,91 @@
   top: 0;
   left: 0;
   width: 100%;
-  padding: 16px 16px 0 16px;
+  padding: 12px;
   z-index: 2;
   display: flex;
   align-items: center;
-  justify-content: space-between;
-  gap: 12px;
+  justify-content: center;
   background: linear-gradient(0deg, #261031 -0.03%, #000000 99.97%);
   border-bottom: 1px solid rgba(0, 0, 0, 1);
   box-shadow: 0px 1px 0px 0px rgba(255, 255, 255, 0.09);
 }
 
-.title {
-  color: #fff;
-  text-transform: capitalize;
-  font-weight: 500;
-}
-
-.statsCard {
+.statsRow {
+  width: 100%;
   display: flex;
   align-items: center;
-  gap: 10px;
-  padding: 6px 8px;
-  background: rgba(18, 18, 28, 0.6);
-  border: 1px solid rgba(255, 255, 255, 0.12);
-  border-radius: 14px;
-  backdrop-filter: blur(10px);
 }
 
-.stat {
-  display: flex;
-  align-items: center;
-  gap: 2px;
-  color: #fff;
+.fuelIcon {
+  width: 37px;
+  height: 37px;
+  flex-shrink: 0;
 }
 
-.icon {
-  width: 22px;
-  height: 22px;
+.fuelBar {
+  flex: 1;
+  min-width: 0;
+  border-radius: 15px;
+  border: 1px solid rgba(4, 255, 0, 1);
+  padding: 2px;
+  background: linear-gradient(0deg, #160e0e -0.03%, #391f46 99.97%);
 }
 
-.count {
-  font-size: 14px;
+.fuelTrack {
+  height: 14px;
+  border-radius: 11px;
+  overflow: hidden;
+  margin: 0;
+}
+
+.fuelProgress {
+  height: 14px;
+  border-radius: 9px;
+  background-image:
+    repeating-linear-gradient(
+      -60deg,
+      rgba(255, 255, 255, 0.2) 0 14px,
+      transparent 14px 28px
+    ),
+    linear-gradient(90deg, #e5c41e 0%, #e29d0a 100%);
+}
+
+.airIcon {
+  width: 28px;
+  height: 28px;
+  flex-shrink: 0;
+  margin-left: 4px;
+}
+
+.airCount {
   font-family: var(--font-ui);
   font-weight: 600;
+  font-style: normal;
+  font-size: 16px;
+  line-height: 100%;
+  letter-spacing: -1.23px;
+  text-transform: uppercase;
+  color: #fff;
+  white-space: nowrap;
 }
 
 .iconButton {
-  border: none;
+  border: 2px solid rgba(255, 255, 255, 1);
   border-radius: 50%;
-  width: 28px;
-  height: 28px;
+  width: 20px;
+  height: 20px;
   display: flex;
   align-items: center;
   justify-content: center;
   cursor: pointer;
   padding: 0;
   color: #fff;
-  background: #7564df;
+  background: rgba(255, 255, 255, 0.11);
+  //backdrop-filter: blur(8.75px);
+  //-webkit-backdrop-filter: blur(8.75px);
+  flex-shrink: 0;
+  margin-left: 8px;
 }
 
 .iconButton svg {

@@ -30,7 +30,6 @@ export function MiniAppLayout() {
       appClassName={appClassName}
       header={
         <Header
-          pageName={pageName}
           fuel={user?.fuel ?? 0}
           air={user?.air ?? 0}
           fuelIcon={fuelIcon}

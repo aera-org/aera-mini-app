@@ -8,6 +8,32 @@
   position: relative;
 }
 
+.bottomCard1 {
+  height: 5px;
+  width: 92%;
+  position: relative;
+  bottom: -1px;
+
+  opacity: 0.4;
+  border-bottom-right-radius: 5px;
+  border-bottom-left-radius: 5px;
+  background: rgba(255, 255, 255, 1);
+  margin: 0 auto;
+}
+
+.bottomCard2 {
+  height: 5px;
+  width: 88%;
+  position: relative;
+  bottom: -2px;
+
+  opacity: 0.15;
+  border-bottom-right-radius: 5px;
+  border-bottom-left-radius: 5px;
+  background: rgba(255, 255, 255, 1);
+  margin: 0 auto;
+}
+
 .viewport {
   overflow: hidden;
 }
