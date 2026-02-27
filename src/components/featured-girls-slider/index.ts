@@ -1,0 +1,1 @@
+export { FeaturedGirlsSlider } from './FeaturedGirlsSlider';

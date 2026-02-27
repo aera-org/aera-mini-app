@@ -1,0 +1,163 @@
+.slider {
+  width: 100vw;
+  width: 100dvw;
+  margin-left: calc(50% - 50vw);
+  margin-left: calc(50% - 50dvw);
+  margin-right: calc(50% - 50vw);
+  margin-right: calc(50% - 50dvw);
+  position: relative;
+}
+
+.viewport {
+  overflow: hidden;
+}
+
+.container {
+  display: flex;
+}
+
+.slide {
+  flex: 0 0 100%;
+}
+
+.slideBackground {
+  position: relative;
+  width: 100%;
+  height: 418px;
+  padding: 50px 20px;
+  border-bottom-left-radius: 16px;
+  border-bottom-right-radius: 16px;
+  overflow: hidden;
+  background-size: cover;
+  background-position: center;
+  background-repeat: no-repeat;
+  display: flex;
+  align-items: flex-end;
+}
+
+.slideOverlay {
+  position: absolute;
+  inset: 0;
+  background: linear-gradient(
+    180deg,
+    rgba(0, 0, 0, 0) 14.88%,
+    rgba(0, 0, 0, 0.10) 85.1%
+  );
+}
+
+.content {
+  position: relative;
+  width: 188px;
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+}
+
+.titleRow {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.name {
+  font-family: var(--font-display);
+  font-weight: 600;
+  font-style: normal;
+  font-size: 28.4px;
+  line-height: 31.24px;
+  letter-spacing: -0.58px;
+  color: #fff;
+  text-shadow: 0 1px 2px rgba(0, 0, 0, 0.45);
+}
+
+.badge {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  padding: 3px 8px;
+  border-radius: 20px;
+  background: rgba(217, 146, 254, 1);
+}
+
+.badgeText {
+  font-family: var(--font-display);
+  font-weight: 500;
+  font-style: normal;
+  color: #fff;
+  font-size: 14px;
+  line-height: 100%;
+  letter-spacing: -0.58px;
+  text-transform: lowercase;
+}
+
+.description {
+  font-family: var(--font-ui);
+  font-weight: 400;
+  font-style: normal;
+  font-size: 16px;
+  line-height: 120%;
+  letter-spacing: -0.41px;
+  color: rgba(255, 255, 255, 0.9);
+  text-shadow: 0 1px 2px rgba(0, 0, 0, 0.45);
+}
+
+.actions {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.messageButton {
+  border: none;
+  border-radius: 999px;
+  background: #fff;
+  color: #000;
+  padding: 8px 20px;
+  display: inline-flex;
+  align-items: center;
+  gap: 4px;
+  cursor: pointer;
+}
+
+.messageButtonText {
+  font-family: var(--font-display);
+  font-weight: 500;
+  font-style: normal;
+  color: #000;
+  font-size: 18px;
+  line-height: 100%;
+  letter-spacing: -0.58px;
+}
+
+.giftButton {
+  flex-shrink: 0;
+}
+
+.indicator {
+  position: absolute;
+  left: 0;
+  right: 0;
+  bottom: 12px;
+  z-index: 2;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  gap: 8px;
+}
+
+.indicatorItem {
+  width: 8px;
+  height: 8px;
+  border: none;
+  border-radius: 50%;
+  background: rgba(255, 255, 255, 0.35);
+  cursor: pointer;
+  padding: 0;
+}
+
+.indicatorItemActive {
+  width: 30px;
+  height: 8px;
+  border-radius: 999px;
+  background: rgba(255, 255, 255, 0.92);
+}

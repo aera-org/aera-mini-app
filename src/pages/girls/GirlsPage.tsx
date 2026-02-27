@@ -5,7 +5,13 @@ import { useMemo } from 'react';
 import { getGirls } from '@/api/girls';
 import { MessageIcon, MessageMoreIcon } from '@/assets/icons';
 import type { ICharacter, IScenario } from '@/common/types';
-import { Card, IconButton, Loader, Typography } from '@/components';
+import {
+  Card,
+  FeaturedGirlsSlider,
+  IconButton,
+  Loader,
+  Typography,
+} from '@/components';
 
 import s from './GirlsPage.module.scss';
 
@@ -70,7 +76,9 @@ export function GirlsPage() {
             scenario,
           })),
         )
-        .filter((item) => item.scenario.isNew && item.scenario.isActive === false),
+        .filter(
+          (item) => item.scenario.isNew && item.scenario.isActive === false,
+        ),
     [girls],
   );
 
@@ -217,53 +225,67 @@ export function GirlsPage() {
   );
 
   return (
-    <div className={s.container}>
-      {isLoading ? <Loader /> : null}
+    <div className={s.page}>
+      {isLoading ? (
+        <div className={s.container}>
+          <Loader />
+        </div>
+      ) : null}
       {isError ? (
-        <Typography variant="body-md">
-          {error instanceof Error ? error.message : 'Failed to load girls'}
-        </Typography>
+        <div className={s.container}>
+          <Typography variant="body-md">
+            {error instanceof Error ? error.message : 'Failed to load girls'}
+          </Typography>
+        </div>
       ) : null}
       {!isLoading && !isError ? (
         <>
           {featuredGirls.length ? (
-            <div className={s.featuredRow}>
-              {featuredGirls.map(renderGirlCard)}
-            </div>
+            <FeaturedGirlsSlider
+              girls={featuredGirls}
+              onMessageClick={(girl) => handleCardClick(girl)}
+            />
           ) : null}
-          {newScenarios.length ? (
-            <section className={s.newScenariosSection}>
-              <Typography
-                as="span"
-                variant="heading-sm"
-                family="brand"
-                weight={500}
-                className={s.newScenariosTitle}
-              >
-                New Scenarios
-              </Typography>
-              <div className={s.newScenariosList}>
-                {newScenarios.map(renderScenarioItem)}
+          <div className={s.container}>
+            {featuredGirls.length ? (
+              <div className={s.featuredRow}>
+                {featuredGirls.map(renderGirlCard)}
               </div>
-            </section>
-          ) : null}
-          <div className={s.grid}>{girls.map(renderGirlCard)}</div>
-          {comingSoonScenarios.length ? (
-            <section className={s.comingSoonSection}>
-              <Typography
-                as="span"
-                variant="heading-sm"
-                family="brand"
-                weight={500}
-                className={s.comingSoonSectionTitle}
-              >
-                Coming soon scenarios
-              </Typography>
-              <div className={s.comingSoonList}>
-                {comingSoonScenarios.map(renderComingSoonScenario)}
-              </div>
-            </section>
-          ) : null}
+            ) : null}
+            {newScenarios.length ? (
+              <section className={s.newScenariosSection}>
+                <Typography
+                  as="span"
+                  variant="heading-sm"
+                  family="brand"
+                  weight={500}
+                  className={s.newScenariosTitle}
+                >
+                  New scenarios
+                </Typography>
+                <div className={s.newScenariosList}>
+                  {newScenarios.map(renderScenarioItem)}
+                </div>
+              </section>
+            ) : null}
+            <div className={s.grid}>{girls.map(renderGirlCard)}</div>
+            {comingSoonScenarios.length ? (
+              <section className={s.comingSoonSection}>
+                <Typography
+                  as="span"
+                  variant="heading-sm"
+                  family="brand"
+                  weight={500}
+                  className={s.comingSoonSectionTitle}
+                >
+                  Coming soon scenarios
+                </Typography>
+                <div className={s.comingSoonList}>
+                  {comingSoonScenarios.map(renderComingSoonScenario)}
+                </div>
+              </section>
+            ) : null}
+          </div>
         </>
       ) : null}
     </div>
