@@ -11,6 +11,7 @@ export interface ICharacter {
 
 export interface IScenario {
   id: string;
+  slug?: string;
   name: string;
   description: string;
   shortDescription: string;

@@ -1,3 +1,4 @@
+import { useState } from 'react';
 import { Outlet, useLocation, useNavigate } from 'react-router-dom';
 
 import { PlusIcon } from '@/assets/icons';
@@ -6,7 +7,13 @@ import bagIcon from '@/assets/mini/bag.png';
 import fuelIcon from '@/assets/mini/fuel.png';
 import giftsIcon from '@/assets/mini/gifts.png';
 import girlsIcon from '@/assets/mini/girls.png';
-import { BackNavigation, Header, MiniAppShell, Navigation } from '@/components';
+import {
+  BackNavigation,
+  BagNavigation,
+  Header,
+  MiniAppShell,
+  Navigation,
+} from '@/components';
 import { useUser } from '@/context/UserContext';
 
 const pageTitleMap: Record<string, string> = {
@@ -20,7 +27,11 @@ export function MiniAppLayout() {
   const location = useLocation();
   const navigate = useNavigate();
   const { user } = useUser();
+  const [bagUpgradeAction, setBagUpgradeAction] = useState<(() => void) | null>(
+    null,
+  );
   const isGirlDetails = location.pathname.startsWith('/girls/');
+  const isBagPage = location.pathname === '/bag';
 
   const pageName = pageTitleMap[location.pathname] ?? 'Girls';
   const appClassName = pageName;
@@ -49,6 +60,17 @@ export function MiniAppLayout() {
               navigate('/girls');
             }}
           />
+        ) : isBagPage ? (
+          <BagNavigation
+            onBack={() => {
+              if (window.history.length > 1) {
+                navigate(-1);
+                return;
+              }
+              navigate('/girls');
+            }}
+            onUpgrade={() => bagUpgradeAction?.()}
+          />
         ) : (
           <Navigation
             items={[
@@ -60,7 +82,7 @@ export function MiniAppLayout() {
         )
       }
     >
-      <Outlet />
+      <Outlet context={{ setBagUpgradeAction }} />
     </MiniAppShell>
   );
 }

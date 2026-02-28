@@ -5,6 +5,7 @@ import { useParams } from 'react-router-dom';
 
 import { getGirls } from '@/api/girls';
 import { MessageMoreIcon } from '@/assets/icons';
+import type { IScenario } from '@/common/types';
 import { Card, Loader, Typography } from '@/components';
 
 import s from './GirlPage.module.scss';
@@ -78,15 +79,19 @@ export function GirlPage() {
     (scenario) => scenario.isNew && scenario.isActive,
   );
 
-  const handleStartChat = () => {
+  const handleStartScenarioChat = (scenario: IScenario) => {
     const botUsername = import.meta.env.VITE_BOT_USERNAME;
     if (!botUsername) {
       console.error('VITE_BOT_USERNAME is not set');
       return;
     }
+    if (!scenario.slug) {
+      console.error('Scenario slug is missing');
+      return;
+    }
 
     TelegramWebApp.openTelegramLink(
-      `https://t.me/${botUsername}?start=g_${girl.name}`,
+      `https://t.me/${botUsername}?start=s_${scenario.slug}`,
     );
     TelegramWebApp.close();
   };
@@ -171,7 +176,7 @@ export function GirlPage() {
                         <button
                           type="button"
                           className={s.startChatButton}
-                          onClick={handleStartChat}
+                          onClick={() => handleStartScenarioChat(scenario)}
                         >
                           <MessageMoreIcon width={20} height={20} />
                           <Typography

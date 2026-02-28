@@ -1,6 +1,7 @@
 import { useQuery, useQueryClient } from '@tanstack/react-query';
 import TelegramWebApp from '@twa-dev/sdk';
-import { useEffect, useMemo, useState } from 'react';
+import { useCallback, useEffect, useMemo, useState } from 'react';
+import { useOutletContext } from 'react-router-dom';
 
 import { createPlanInvoice } from '@/api/payments';
 import { getPlans } from '@/api/plans';
@@ -79,8 +80,13 @@ function getDailyPrice(plan: IPlan) {
   return plan.price / getPlanDays(plan);
 }
 
+type LayoutOutletContext = {
+  setBagUpgradeAction: (action: (() => void) | null) => void;
+};
+
 export function BagPage() {
   const { user } = useUser();
+  const { setBagUpgradeAction } = useOutletContext<LayoutOutletContext>();
   const launchParams = useLaunchParams();
   const queryClient = useQueryClient();
   const [selectedId, setSelectedId] = useState<string | null>(null);
@@ -135,12 +141,10 @@ export function BagPage() {
     const index = plans.findIndex((plan) => plan.id === selectedPlan.id);
     return index >= 0 ? index : 0;
   }, [plans, selectedPlan]);
-  const baseDailyPrice = useMemo(() => {
-    const dayPlans = plans.filter((plan) => plan.period === PlanPeriod.Day);
-    const sourcePlans = dayPlans.length ? dayPlans : plans;
-    if (!sourcePlans.length) return 0;
-    return Math.min(...sourcePlans.map(getDailyPrice));
-  }, [plans]);
+  const firstPlanDailyPrice = useMemo(
+    () => (plans.length ? getDailyPrice(plans[0]) : 0),
+    [plans],
+  );
   const activeFeatures = useMemo(() => {
     const activeA = new Set<number>();
     const activeB = new Set<number>();
@@ -176,14 +180,11 @@ export function BagPage() {
 
   const remaining = getRemainingLabel(user?.subscribedUntil);
 
-  const handleSubscribe = () => {
+  const handleSubscribe = useCallback(() => {
     if (!selectedPlan) return;
     void (async () => {
       try {
-        const invoiceLink = await createPlanInvoice(
-          selectedPlan.id,
-          launchParams,
-        );
+        const invoiceLink = await createPlanInvoice(selectedPlan.id, launchParams);
         TelegramWebApp.openInvoice(invoiceLink, (status) => {
           if (status === 'paid') {
             queryClient.invalidateQueries({ queryKey: ['me'] });
@@ -193,7 +194,14 @@ export function BagPage() {
         console.error(err);
       }
     })();
-  };
+  }, [launchParams, queryClient, selectedPlan]);
+
+  useEffect(() => {
+    setBagUpgradeAction(() => handleSubscribe);
+    return () => {
+      setBagUpgradeAction(null);
+    };
+  }, [handleSubscribe, setBagUpgradeAction]);
 
   return (
     <div className={s.container}>
@@ -223,21 +231,21 @@ export function BagPage() {
       {!isLoading && !isError ? (
         <>
           <div className={s.plans}>
-            {plans.map((plan) => {
+            {plans.map((plan, index) => {
               const currentDailyPrice = getDailyPrice(plan);
               const dailyPriceLabel = Math.max(
                 1,
                 Math.round(currentDailyPrice),
               );
               const savePercent =
-                baseDailyPrice > 0
-                  ? Math.max(
+                index === 0 || firstPlanDailyPrice <= 0
+                  ? 0
+                  : Math.max(
                       0,
                       Math.round(
-                        (1 - currentDailyPrice / baseDailyPrice) * 100,
+                        (1 - currentDailyPrice / firstPlanDailyPrice) * 100,
                       ),
-                    )
-                  : 0;
+                    );
 
               return (
                 <Card
@@ -299,7 +307,7 @@ export function BagPage() {
                         >
                           {dailyPriceLabel} / day
                         </Typography>
-                        {savePercent > 0 ? (
+                        {index > 0 ? (
                           <Typography
                             as="span"
                             variant="caption"
@@ -416,11 +424,6 @@ export function BagPage() {
             </div>
           ) : null}
 
-          <button className={s.subscribeButton} onClick={handleSubscribe}>
-            <Typography as="span" variant="heading-sm" weight={600}>
-              {remaining.active ? 'Extend' : 'Subscribe'}
-            </Typography>
-          </button>
         </>
       ) : null}
     </div>

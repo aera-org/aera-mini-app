@@ -49,6 +49,59 @@
   text-align: right;
 }
 
+.bagNav {
+  position: absolute;
+  left: 50%;
+  bottom: 26px;
+  transform: translateX(-50%);
+  display: flex;
+  align-items: center;
+  gap: 20px;
+  z-index: 3;
+}
+
+.bagBackButton {
+  width: 59px;
+  height: 59px;
+  border-radius: 50%;
+  border: 1px solid rgba(255, 255, 255, 0.4);
+  background: rgba(0, 0, 0, 0.47);
+  backdrop-filter: blur(14px);
+  -webkit-backdrop-filter: blur(14px);
+  color: #fff;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  padding: 0;
+  cursor: pointer;
+}
+
+.bagUpgradeButton {
+  height: 59px;
+  border: 1px solid rgba(255, 255, 255, 0.4);
+  border-radius: 30px;
+  padding: 0 22px;
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  color: #fff;
+  cursor: pointer;
+  background:
+    //linear-gradient(0deg, rgba(0, 0, 0, 0.47), rgba(0, 0, 0, 0.47)),
+    linear-gradient(180deg, rgba(255, 212, 53, 0.1) 0%, #ffd435 100%);
+}
+
+.bagUpgradeText {
+  color: #fff;
+  font-family: var(--font-ui);
+  font-weight: 500;
+  font-style: normal;
+  font-size: 20px;
+  line-height: 120%;
+  letter-spacing: -0.48px;
+  text-align: right;
+}
+
 .navItem {
   display: flex;
   flex-direction: column;

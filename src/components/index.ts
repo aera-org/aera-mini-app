@@ -7,6 +7,7 @@ export { Loader } from './loader/Loader';
 export { MiniAppShell } from './mini-app-shell';
 export { default as Modal } from './modal';
 export { BackNavigation } from './navigation/BackNavigation';
+export { BagNavigation } from './navigation/BagNavigation';
 export { Navigation } from './navigation/Navigation';
 export { Skeleton } from './skeleton';
 export { Text, Typography } from './text';

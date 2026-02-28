@@ -1,5 +1,6 @@
 export { default as ArrowLeftIcon } from './arrow-left.svg?react';
 export { default as AudioLinesIcon } from './audio-lines.svg?react';
+export { default as BoltIcon } from './bolt.svg?react';
 export { default as ChartIcon } from './chart-no-axes-combined.svg?react';
 export { default as CheckIcon } from './check.svg?react';
 export { default as CircleDotIcon } from './circle-dot.svg?react';

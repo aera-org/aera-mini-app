@@ -1,4 +1,5 @@
 import { useQuery } from '@tanstack/react-query';
+import TelegramWebApp from '@twa-dev/sdk';
 import { useMemo } from 'react';
 import { useNavigate } from 'react-router-dom';
 
@@ -35,6 +36,23 @@ export function GirlsPage() {
 
   const handleCardClick = (character: ICharacter) => {
     navigate(`/girls/${character.id}`);
+  };
+
+  const handleActiveScenarioClick = (scenario: IScenario) => {
+    const botUsername = import.meta.env.VITE_BOT_USERNAME;
+    if (!botUsername) {
+      console.error('VITE_BOT_USERNAME is not set');
+      return;
+    }
+    if (!scenario.slug) {
+      console.error('Scenario slug is missing');
+      return;
+    }
+
+    TelegramWebApp.openTelegramLink(
+      `https://t.me/${botUsername}?start=s_${scenario.slug}`,
+    );
+    TelegramWebApp.close();
   };
 
   const featuredGirls = girls.filter((girl) => girl.isFeatured);
@@ -124,7 +142,7 @@ export function GirlsPage() {
       type="button"
       className={s.scenarioItem}
       key={`${girl.id}-${scenario.id}`}
-      onClick={() => handleCardClick(girl)}
+      onClick={() => handleActiveScenarioClick(scenario)}
     >
       <Card
         className={s.scenarioThumb}
@@ -136,7 +154,7 @@ export function GirlsPage() {
           className={s.scenarioMessageButton}
           onClick={(event) => {
             event.stopPropagation();
-            handleCardClick(girl);
+            handleActiveScenarioClick(scenario);
           }}
         >
           <MessageMoreIcon width={12} height={12} />
