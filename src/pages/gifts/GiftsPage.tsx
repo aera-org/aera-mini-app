@@ -3,6 +3,7 @@ import { useEffect, useState } from 'react';
 import { useLocation, useNavigate } from 'react-router-dom';
 
 import { buyGift, getGifts } from '@/api/gifts';
+import { GiftIcon } from '@/assets/icons';
 import airIcon from '@/assets/mini/air.png';
 import type { IGift } from '@/common/types';
 import { Card, Loader, Typography } from '@/components';
@@ -97,12 +98,7 @@ export function GiftsPage() {
         key={gift.id}
         data-gift-id={gift.id}
       >
-        <div className={s.header}>
-          <Typography as="span" variant="heading-sm" className={s.name}>
-            {gift.name}
-          </Typography>
-        </div>
-        <div className={s.content}>
+        <div className={s.iconWrap}>
           <img
             src={gift.imgUrl}
             alt={gift.name}
@@ -110,30 +106,62 @@ export function GiftsPage() {
             draggable={false}
           />
         </div>
-        <Typography
-          as="div"
-          variant="caption"
-          color="muted"
-          className={s.description}
-        >
-          {gift.description}
-        </Typography>
-        <button
-          type="button"
-          className={s.priceButton}
-          onClick={() => handleBuy(gift)}
-          disabled={gift.isBought || buyingId === gift.id}
-        >
-          <Typography as="span" variant="body-md" weight={600} className={s.price}>
-            {gift.price}
+        <div className={s.body}>
+          <Typography
+            as="span"
+            variant="body-sm"
+            family="brand"
+            weight={500}
+            className={s.name}
+          >
+            {gift.name}
           </Typography>
-          <img
-            src={airIcon}
-            alt="air"
-            className={s.airIcon}
-            draggable={false}
-          />
-        </button>
+          <Typography
+            as="div"
+            variant="caption"
+            family="system"
+            weight={400}
+            color="muted"
+            className={s.description}
+          >
+            {gift.description}
+          </Typography>
+          <button
+            type="button"
+            className={s.giftButton}
+            onClick={() => handleBuy(gift)}
+            disabled={gift.isBought || buyingId === gift.id}
+          >
+            <GiftIcon width={20} height={20} className={s.giftIcon} />
+            <Typography
+              as="span"
+              variant="body-sm"
+              family="brand"
+              weight={500}
+              color="black"
+              className={s.giftButtonText}
+            >
+              Gift
+            </Typography>
+          </button>
+          <div className={s.priceRow}>
+            <img
+              src={airIcon}
+              alt="air"
+              className={s.airIcon}
+              draggable={false}
+            />
+            <Typography
+              as="span"
+              variant="caption"
+              family="system"
+              weight={600}
+              className={s.price}
+            >
+              {gift.price}
+            </Typography>
+          </div>
+        </div>
       </Card>
     );
   };
