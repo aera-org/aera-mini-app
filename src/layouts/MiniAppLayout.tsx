@@ -32,6 +32,7 @@ export function MiniAppLayout() {
   );
   const isGirlDetails = location.pathname.startsWith('/girls/');
   const isBagPage = location.pathname === '/bag';
+  const isStorePage = location.pathname === '/store';
 
   const pageName = pageTitleMap[location.pathname] ?? 'Girls';
   const appClassName = pageName;
@@ -50,7 +51,7 @@ export function MiniAppLayout() {
         />
       }
       footer={
-        isGirlDetails ? (
+        isGirlDetails || isStorePage ? (
           <BackNavigation
             onBack={() => {
               if (window.history.length > 1) {
