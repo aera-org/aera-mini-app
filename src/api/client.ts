@@ -21,3 +21,20 @@ export async function apiFetch(
     headers,
   });
 }
+
+export async function localFetch(
+  input: string,
+  init: RequestInit = {}
+): Promise<Response> {
+  const headers = new Headers(init.headers ?? {});
+  const initData = import.meta.env.VITE_AUTH || TelegramWebApp.initData;
+
+  if (initData) {
+    headers.set('X-Telegram-Init-Data', initData);
+  }
+
+  return fetch(input, {
+    ...init,
+    headers,
+  });
+}

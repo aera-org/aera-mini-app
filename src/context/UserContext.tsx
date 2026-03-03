@@ -1,7 +1,7 @@
 import { useQuery } from '@tanstack/react-query';
-import { createContext, useContext } from 'react';
+import { createContext, useContext, useEffect } from 'react';
 
-import { getMe } from '@/api/me';
+import { getMe, patchMeCountryOnce } from '@/api/me';
 import type { IUser } from '@/common/types';
 
 export type UserContextValue = {
@@ -12,12 +12,20 @@ export type UserContextValue = {
 };
 
 const UserContext = createContext<UserContextValue | undefined>(undefined);
+const countryPatchKey = 'country-patch-session-v1';
 
 export function UserProvider({ children }: { children: React.ReactNode }) {
   const { data, isLoading, error, refetch } = useQuery({
     queryKey: ['me'],
     queryFn: getMe,
   });
+
+  useEffect(() => {
+    if (typeof window === 'undefined') return;
+    if (sessionStorage.getItem(countryPatchKey)) return;
+    sessionStorage.setItem(countryPatchKey, '1');
+    void patchMeCountryOnce().catch(() => {});
+  }, []);
 
   const refresh = async () => {
     await refetch();

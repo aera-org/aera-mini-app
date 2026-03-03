@@ -1,6 +1,6 @@
 import type { IUser } from '@/common/types';
 
-import { apiFetch } from './client';
+import { apiFetch, localFetch } from './client';
 
 export async function getMe(): Promise<IUser> {
   const response = await apiFetch('/me');
@@ -14,4 +14,12 @@ export async function getMe(): Promise<IUser> {
     return (data as { data: IUser }).data;
   }
   return data as IUser;
+}
+
+export async function patchMeCountryOnce(): Promise<void> {
+  const response = await localFetch('/api/me-country', { method: 'PATCH' });
+  if (!response.ok && response.status !== 204) {
+    const text = await response.text().catch(() => '');
+    throw new Error(text || 'Failed to patch country');
+  }
 }
