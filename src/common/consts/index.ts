@@ -1,6 +1,6 @@
 export const PlanFeaturesA = [
   'Unlimited texts',
-  'Premium response speed',
+  'Unlimited NSFW photos',
   'Premium response speed',
   'Deep immersion mode',
   'Exclusive character drops',
