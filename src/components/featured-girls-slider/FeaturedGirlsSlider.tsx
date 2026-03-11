@@ -43,6 +43,13 @@ export function FeaturedGirlsSlider({
 
   if (girls.length === 0) return null;
 
+  // place girl with name Auriel first
+  girls.sort((a, b) => {
+    if (a.name === 'Auriel') return -1;
+    if (b.name === 'Auriel') return 1;
+    return 0;
+  });
+
   return (
     <section className={s.slider}>
       <div className={s.viewport} ref={emblaRef}>
