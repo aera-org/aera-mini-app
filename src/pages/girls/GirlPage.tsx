@@ -1,30 +1,45 @@
-import { useQuery } from '@tanstack/react-query';
+import { useQuery, useQueryClient } from '@tanstack/react-query';
 import TelegramWebApp from '@twa-dev/sdk';
 import { useMemo } from 'react';
-import { useParams } from 'react-router-dom';
+import { useParams, useSearchParams } from 'react-router-dom';
 
 import { getGirls } from '@/api/girls';
 import { MessageMoreIcon } from '@/assets/icons';
-import type { IScenario } from '@/common/types';
+import {
+  CharacterType,
+  isCharacterType,
+  type ICharacter,
+  type IScenario,
+} from '@/common/types';
 import { Card, Loader, Typography } from '@/components';
 
 import s from './GirlPage.module.scss';
 
 export function GirlPage() {
   const { id } = useParams<{ id: string }>();
+  const [searchParams] = useSearchParams();
+  const queryClient = useQueryClient();
+  const rawType = searchParams.get('type') ?? '';
+  const selectedType = isCharacterType(rawType)
+    ? rawType
+    : CharacterType.Realistic;
+  const cachedGirls =
+    queryClient.getQueryData<ICharacter[]>(['girls', selectedType]) ?? [];
+  const cachedGirl = cachedGirls.find((character) => character.id === id);
   const {
     data: girls = [],
     isLoading,
     isError,
     error,
   } = useQuery({
-    queryKey: ['girls'],
-    queryFn: getGirls,
+    queryKey: ['girls', selectedType],
+    queryFn: () => getGirls(selectedType),
+    enabled: !cachedGirl,
   });
 
   const girl = useMemo(
-    () => girls.find((character) => character.id === id),
-    [girls, id],
+    () => cachedGirl ?? girls.find((character) => character.id === id),
+    [cachedGirl, girls, id],
   );
 
   const sortedScenarios = useMemo(() => {

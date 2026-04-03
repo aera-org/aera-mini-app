@@ -1,0 +1,66 @@
+.root {
+  position: relative;
+  width: 100%;
+  height: 42px;
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 4px;
+  padding: 4px;
+  border-radius: 28px;
+  background:
+    linear-gradient(180deg, rgba(41, 9, 68, 0.92) 0%, rgba(20, 4, 34, 0.96) 100%);
+  box-shadow:
+    0 22px 36px rgba(17, 0, 31, 0.42),
+    inset 0 1px 0 rgba(255, 255, 255, 0.08);
+  overflow: hidden;
+  isolation: isolate;
+}
+
+.rootDisabled {
+  opacity: 0.72;
+}
+
+.indicator {
+  position: absolute;
+  top: 4px;
+  left: 4px;
+  width: calc(50% - 4px);
+  height: calc(100% - 8px);
+  border-radius: 24px;
+  background:
+    radial-gradient(circle at 18% 50%, rgba(182, 114, 255, 0.48) 0%, rgba(182, 114, 255, 0) 52%),
+    linear-gradient(180deg, rgba(114, 69, 195, 1) 0%, rgba(91, 47, 171, 1) 100%);
+  border: 1px solid rgba(245, 237, 255, 0.65);
+  box-shadow:
+    0 0 0 1px rgba(255, 255, 255, 0.08) inset,
+    0 14px 30px rgba(174, 87, 255, 0.46),
+    0 0 28px rgba(191, 120, 255, 0.5);
+  transition: transform 220ms ease;
+  z-index: 0;
+}
+
+.option {
+  position: relative;
+  z-index: 1;
+  min-width: 0;
+  min-height: 34px;
+  padding: 0 16px;
+  border: none;
+  border-radius: 24px;
+  background: transparent;
+  color: rgba(219, 206, 237, 0.48);
+  font-family: var(--font-display);
+  font-size: 20px;
+  line-height: 1;
+  letter-spacing: -0.04em;
+  cursor: pointer;
+  transition: color 220ms ease, opacity 220ms ease;
+}
+
+.optionActive {
+  color: #fff;
+}
+
+.option:disabled {
+  cursor: default;
+}

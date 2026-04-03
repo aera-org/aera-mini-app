@@ -1,11 +1,16 @@
-import { useQuery } from '@tanstack/react-query';
+import { keepPreviousData, useQuery } from '@tanstack/react-query';
 import TelegramWebApp from '@twa-dev/sdk';
 import { useMemo } from 'react';
-import { useNavigate } from 'react-router-dom';
+import { useNavigate, useSearchParams } from 'react-router-dom';
 
 import { getGirls } from '@/api/girls';
 import { MessageIcon, MessageMoreIcon } from '@/assets/icons';
-import type { ICharacter, IScenario } from '@/common/types';
+import {
+  CharacterType,
+  isCharacterType,
+  type ICharacter,
+  type IScenario,
+} from '@/common/types';
 import {
   Card,
   FeaturedGirlsSlider,
@@ -14,6 +19,7 @@ import {
   Typography,
 } from '@/components';
 
+import { CharacterTypeSwitch } from './CharacterTypeSwitch';
 import s from './GirlsPage.module.scss';
 
 type ScenarioWithGirl = {
@@ -23,19 +29,32 @@ type ScenarioWithGirl = {
 
 export function GirlsPage() {
   const navigate = useNavigate();
+  const [searchParams, setSearchParams] = useSearchParams();
+  const rawType = searchParams.get('type') ?? '';
+  const selectedType = isCharacterType(rawType)
+    ? rawType
+    : CharacterType.Realistic;
   const {
     data: girls = [],
     isLoading,
+    isFetching,
     isError,
     error,
   } = useQuery({
-    queryKey: ['girls'],
-    queryFn: getGirls,
+    queryKey: ['girls', selectedType],
+    queryFn: () => getGirls(selectedType),
+    placeholderData: keepPreviousData,
     select: (data) => [...data].sort((a, b) => a.name.localeCompare(b.name)),
   });
 
   const handleCardClick = (character: ICharacter) => {
-    navigate(`/girls/${character.id}`);
+    navigate(`/girls/${character.id}?type=${selectedType}`);
+  };
+
+  const handleTypeChange = (value: CharacterType) => {
+    const nextSearchParams = new URLSearchParams(searchParams);
+    nextSearchParams.set('type', value);
+    setSearchParams(nextSearchParams);
   };
 
   const handleActiveScenarioClick = (scenario: IScenario) => {
@@ -258,6 +277,11 @@ export function GirlsPage() {
             />
           ) : null}
           <div className={s.container}>
+            <CharacterTypeSwitch
+              value={selectedType}
+              onChange={handleTypeChange}
+              disabled={isFetching}
+            />
             {featuredGirls.length ? (
               <div className={s.featuredRow}>
                 {featuredGirls.map(renderGirlCard)}
