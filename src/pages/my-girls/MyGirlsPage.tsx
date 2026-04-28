@@ -170,7 +170,21 @@ export function MyGirlsPage() {
       ) : null}
       {!isLoading && !isError ? (
         <div className={s.container}>
-          <div className={s.grid}>{characters.map(renderCharacterCard)}</div>
+          {characters.length ? (
+            <div className={s.grid}>{characters.map(renderCharacterCard)}</div>
+          ) : (
+            <div className={s.emptyState}>
+              <Typography
+                as="p"
+                variant="body-md"
+                family="brand"
+                weight={500}
+                className={s.emptyStateText}
+              >
+                Your dream girl will appear here
+              </Typography>
+            </div>
+          )}
         </div>
       ) : null}
     </div>
