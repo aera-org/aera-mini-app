@@ -18,7 +18,7 @@ import {
   type ICharacter,
 } from '@/common/types';
 import { capitalize, cn, formatPersonality } from '@/common/utils';
-import { Typography } from '@/components';
+import { CreatePending, Typography } from '@/components';
 
 import s from './CreateCharacterPage.module.scss';
 
@@ -211,6 +211,7 @@ export function CreateCharacterPage() {
         ].sort((a, b) => a.name.localeCompare(b.name));
       });
       void queryClient.invalidateQueries({ queryKey: ['characters', 'custom'] });
+      void queryClient.invalidateQueries({ queryKey: ['me'] });
       navigate(`/my-girls/${character.id}`, { replace: true });
     },
   });
@@ -294,6 +295,10 @@ export function CreateCharacterPage() {
     const step = selectSteps[stepIndex - 1];
     return <SelectStepView step={step} draft={draft} onChange={updateDraft} />;
   };
+
+  if (createMutation.isPending) {
+    return <CreatePending title="Creating your character" />;
+  }
 
   return (
     <div className={s.page}>

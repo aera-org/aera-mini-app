@@ -51,6 +51,36 @@
   gap: 12px;
 }
 
+.priceBadge {
+  display: inline-flex;
+  align-items: center;
+  gap: 5px;
+  width: fit-content;
+  margin-bottom: 8px;
+  // margin-left: 8px;
+  // margin-top: 8px;
+  background: rgba(0, 0, 0, 0.47);
+  border: 1px solid rgba(255, 255, 255, 0.35);
+  backdrop-filter: blur(14px);
+  -webkit-backdrop-filter: blur(14px);
+  padding: 5px 8px;
+  border-radius: 999px;
+}
+
+.priceIcon {
+  width: 18px;
+  height: 18px;
+  object-fit: contain;
+}
+
+.priceText {
+  color: #fff;
+  font-size: 14px;
+  line-height: 100%;
+  letter-spacing: 0;
+  white-space: nowrap;
+}
+
 .heroCopy {
   display: flex;
   flex-direction: column;

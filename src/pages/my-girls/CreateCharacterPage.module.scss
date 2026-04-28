@@ -74,6 +74,10 @@
   flex-shrink: 0;
 }
 
+.scenarioPage .progressTrack {
+  display: none;
+}
+
 .progressFill {
   height: 100%;
   min-width: 8px;
@@ -122,6 +126,17 @@
   font-family: var(--font-ui);
   font-size: 18px;
   outline: none;
+}
+
+.textArea {
+  min-height: 76px;
+  padding: 14px 18px;
+  resize: none;
+  line-height: 130%;
+}
+
+.textAreaSmall {
+  min-height: 48px;
 }
 
 .input:focus {

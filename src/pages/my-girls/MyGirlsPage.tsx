@@ -4,14 +4,19 @@ import { useNavigate } from 'react-router-dom';
 import { getCustomCharacters } from '@/api/girls';
 import customCharacterImage from '@/assets/characters/custom.jpg';
 import { MessageIcon } from '@/assets/icons';
+import airIcon from '@/assets/mini/air.png';
 import type { ICharacter } from '@/common/types';
 import { formatPersonality } from '@/common/utils';
 import { Card, IconButton, Loader, Typography } from '@/components';
+import { useUser } from '@/context/UserContext';
 
 import s from './MyGirlsPage.module.scss';
 
+const CHARACTER_CREATE_PRICE = 99;
+
 export function MyGirlsPage() {
   const navigate = useNavigate();
+  const { user } = useUser();
   const {
     data: characters = [],
     isLoading,
@@ -25,6 +30,15 @@ export function MyGirlsPage() {
 
   const handleCardClick = (character: ICharacter) => {
     navigate(`/my-girls/${character.id}`);
+  };
+
+  const handleCreateCharacterClick = () => {
+    if ((user?.air ?? 0) < CHARACTER_CREATE_PRICE) {
+      navigate('/store');
+      return;
+    }
+
+    navigate('/my-girls/create');
   };
 
   const renderCharacterCard = (character: ICharacter) => (
@@ -82,6 +96,23 @@ export function MyGirlsPage() {
           <div className={s.heroOverlay} />
           <div className={s.heroContent}>
             <div className={s.heroCopy}>
+            <div className={s.priceBadge}>
+              <img
+                src={airIcon}
+                alt="air"
+                className={s.priceIcon}
+                draggable={false}
+              />
+              <Typography
+                as="span"
+                variant="body-sm"
+                family="brand"
+                weight={500}
+                className={s.priceText}
+              >
+                99 AIR
+              </Typography>
+            </div>
               <Typography
                 as="h1"
                 variant="heading-lg"
@@ -104,7 +135,7 @@ export function MyGirlsPage() {
             <button
               type="button"
               className={s.createButton}
-              onClick={() => navigate('/my-girls/create')}
+              onClick={handleCreateCharacterClick}
             >
               <Typography
                 as="span"

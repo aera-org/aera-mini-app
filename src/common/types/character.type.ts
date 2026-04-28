@@ -112,3 +112,9 @@ export interface CustomCharacterCreateDto {
   breastSize: CharacterBreastSize;
   type: CharacterType;
 }
+
+export interface CustomScenarioCreateDto {
+  description: string;
+  lingerie: string;
+  clothes: string;
+}

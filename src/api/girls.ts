@@ -1,6 +1,7 @@
 import type {
   CharacterType,
   CustomCharacterCreateDto,
+  CustomScenarioCreateDto,
   ICharacter,
 } from '@/common/types';
 
@@ -40,7 +41,7 @@ export async function getCustomCharacters(): Promise<ICharacter[]> {
 export async function createCustomCharacter(
   body: CustomCharacterCreateDto,
 ): Promise<ICharacter> {
-  const response = await apiFetch('/character/custom', {
+  const response = await apiFetch('/characters/custom', {
     method: 'POST',
     headers: {
       'Content-Type': 'application/json',
@@ -51,6 +52,26 @@ export async function createCustomCharacter(
   if (!response.ok) {
     const text = await response.text();
     throw new Error(text || 'Failed to create custom character');
+  }
+
+  return (await response.json()) as ICharacter;
+}
+
+export async function createCustomScenario(
+  characterId: string,
+  body: CustomScenarioCreateDto,
+): Promise<ICharacter> {
+  const response = await apiFetch(`/characters/custom/${characterId}/scenarios`, {
+    method: 'POST',
+    headers: {
+      'Content-Type': 'application/json',
+    },
+    body: JSON.stringify(body),
+  });
+
+  if (!response.ok) {
+    const text = await response.text();
+    throw new Error(text || 'Failed to create custom scenario');
   }
 
   return (await response.json()) as ICharacter;

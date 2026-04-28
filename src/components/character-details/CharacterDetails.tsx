@@ -14,7 +14,7 @@ type CreateScenarioCard = {
   imageUrl: string;
   title: string;
   description: string;
-  priceAir: number;
+  priceAir?: number;
   onClick: () => void;
 };
 
@@ -189,23 +189,25 @@ export function CharacterDetails({
                   variant="neutral"
                   backgroundImage={createScenarioCard.imageUrl}
                 >
-                  <div className={s.airPriceBadge}>
-                    <img
-                      src={airIcon}
-                      alt="air"
-                      className={s.airPriceIcon}
-                      draggable={false}
-                    />
-                    <Typography
-                      as="span"
-                      variant="body-sm"
-                      family="brand"
-                      weight={500}
-                      className={s.airPriceText}
-                    >
-                      {createScenarioCard.priceAir} AIR
-                    </Typography>
-                  </div>
+                  {typeof createScenarioCard.priceAir === 'number' ? (
+                    <div className={s.airPriceBadge}>
+                      <img
+                        src={airIcon}
+                        alt="air"
+                        className={s.airPriceIcon}
+                        draggable={false}
+                      />
+                      <Typography
+                        as="span"
+                        variant="body-sm"
+                        family="brand"
+                        weight={500}
+                        className={s.airPriceText}
+                      >
+                        {createScenarioCard.priceAir} AIR
+                      </Typography>
+                    </div>
+                  ) : null}
                   <div className={s.scenarioCardBody}>
                     <div className={s.scenarioRow}>
                       <div className={s.scenarioTextBlock}>

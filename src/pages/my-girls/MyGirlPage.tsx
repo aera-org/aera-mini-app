@@ -1,6 +1,6 @@
 import { useQuery, useQueryClient } from '@tanstack/react-query';
 import { useMemo } from 'react';
-import { useParams } from 'react-router-dom';
+import { useNavigate, useParams } from 'react-router-dom';
 
 import { getCustomCharacters } from '@/api/girls';
 import customScenarioImage from '@/assets/mini/custom-horizontal.png';
@@ -8,9 +8,14 @@ import type { ICharacter } from '@/common/types';
 import { formatPersonality } from '@/common/utils';
 import { CharacterDetails, Loader, Typography } from '@/components';
 import s from '@/components/character-details/CharacterDetails.module.scss';
+import { useUser } from '@/context/UserContext';
+
+const SCENARIO_CREATE_PRICE = 39;
 
 export function MyGirlPage() {
   const { id } = useParams<{ id: string }>();
+  const navigate = useNavigate();
+  const { user } = useUser();
   const queryClient = useQueryClient();
   const cachedCharacters =
     queryClient.getQueryData<ICharacter[]>(['characters', 'custom']) ?? [];
@@ -69,6 +74,19 @@ export function MyGirlPage() {
     );
   }
 
+  const scenarioCreatePrice = character.scenarios.length
+    ? SCENARIO_CREATE_PRICE
+    : 0;
+
+  const handleCreateScenarioClick = () => {
+    if (scenarioCreatePrice > 0 && (user?.air ?? 0) < scenarioCreatePrice) {
+      navigate('/store');
+      return;
+    }
+
+    navigate(`/my-girls/${character.id}/scenarios/create`);
+  };
+
   return (
     <CharacterDetails
       className={s.custom}
@@ -81,8 +99,8 @@ export function MyGirlPage() {
         title: '✨ Your Scenario',
         description:
           'Role, setting, lingerie... Whatever you wish.',
-        priceAir: 39,
-        onClick: () => {},
+        priceAir: scenarioCreatePrice || undefined,
+        onClick: handleCreateScenarioClick,
       }}
     />
   );
