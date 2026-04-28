@@ -1,6 +1,5 @@
 import { keepPreviousData, useQuery } from '@tanstack/react-query';
 import TelegramWebApp from '@twa-dev/sdk';
-import { useMemo } from 'react';
 import { useNavigate, useSearchParams } from 'react-router-dom';
 
 import { getGirls } from '@/api/girls';
@@ -91,7 +90,7 @@ export function GirlsPage() {
 
   const featuredGirls = girls.filter((girl) => girl.isFeatured);
 
-  const newScenarios = useMemo(() => {
+  const newScenarios = (() => {
     const parseDate = (value: string) => {
       const timestamp = Date.parse(value);
       return Number.isNaN(timestamp) ? 0 : timestamp;
@@ -109,22 +108,16 @@ export function GirlsPage() {
         (a, b) =>
           parseDate(b.scenario.createdAt) - parseDate(a.scenario.createdAt),
       );
-  }, [girls]);
+  })();
 
-  const comingSoonScenarios = useMemo(
-    () =>
-      girls
-        .flatMap((girl) =>
-          (girl.scenarios ?? []).map((scenario) => ({
-            girl,
-            scenario,
-          })),
-        )
-        .filter(
-          (item) => item.scenario.isNew && item.scenario.isActive === false,
-        ),
-    [girls],
-  );
+  const comingSoonScenarios = girls
+    .flatMap((girl) =>
+      (girl.scenarios ?? []).map((scenario) => ({
+        girl,
+        scenario,
+      })),
+    )
+    .filter((item) => item.scenario.isNew && item.scenario.isActive === false);
 
   const renderGirlCard = (character: ICharacter) => (
     <Card
@@ -350,6 +343,14 @@ export function GirlsPage() {
               girls={featuredGirls}
               onMessageClick={(girl) => handleCardClick(girl)}
               onGiftClick={() => navigate('/gifts')}
+              customSlide={{
+                backgroundImage: customCharacterImage,
+                title: 'Your Character',
+                description: 'Create your own dream partner',
+                priceAir: CHARACTER_CREATE_PRICE,
+                actionLabel: 'Try now',
+                onActionClick: handleCreateCharacterClick,
+              }}
             />
           ) : null}
           <div className={s.container}>

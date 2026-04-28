@@ -67,7 +67,7 @@
   background: linear-gradient(
     180deg,
     rgba(0, 0, 0, 0) 14.88%,
-    rgba(0, 0, 0, 0.10) 85.1%
+    rgba(0, 0, 0, 0.1) 85.1%
   );
 }
 
@@ -153,6 +153,56 @@
   font-size: 18px;
   line-height: 100%;
   letter-spacing: -0.58px;
+}
+
+.customSlideBackground {
+  background-position: center;
+}
+
+.customSlidePrice {
+  position: absolute;
+  left: 50%;
+  top: 50%;
+  z-index: 1;
+  transform: translate(-50%, -50%);
+  display: inline-flex;
+  align-items: center;
+  gap: 4px;
+}
+
+.customSlidePriceIcon {
+  width: 28px;
+  height: 28px;
+  flex-shrink: 0;
+}
+
+.customSlidePriceText {
+  color: #fff;
+  font-size: 18px;
+  line-height: 100%;
+  letter-spacing: 0;
+  white-space: nowrap;
+  text-shadow: 0 1px 2px rgba(0, 0, 0, 0.5);
+}
+
+.customSlideButton {
+  width: fit-content;
+  padding: 8px 22px;
+  border: none;
+  border-radius: 999px;
+  background: rgba(217, 146, 254, 1);
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+}
+
+.customSlideButtonText {
+  color: #000;
+  font-size: 20px;
+  line-height: 100%;
+  letter-spacing: 0;
+  white-space: nowrap;
 }
 
 .giftButton {
