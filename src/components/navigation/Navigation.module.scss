@@ -6,15 +6,17 @@
   display: flex;
   justify-content: center;
   align-items: center;
-  gap: 28px;
   padding: 5px 16px;
+  box-sizing: border-box;
   background: rgba(0, 0, 0, 0.47);
   border: 1px solid rgba(255, 255, 255, 0.4);
   border-radius: 40px;
   backdrop-filter: blur(14px);
   -webkit-backdrop-filter: blur(14px);
   z-index: 3;
-  width: 70%;
+  width: min(calc(100% - 32px), 390px);
+  gap: 8px;
+  justify-content: space-between;
 }
 
 .backNav {

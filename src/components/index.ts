@@ -1,5 +1,6 @@
 export { Button } from './button';
 export { Card } from './card';
+export { CharacterDetails } from './character-details';
 export { FeaturedGirlsSlider } from './featured-girls-slider';
 export { Header } from './header/Header';
 export { IconButton } from './icon-button';

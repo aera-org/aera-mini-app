@@ -17,3 +17,18 @@ export async function getGirls(type?: CharacterType): Promise<ICharacter[]> {
 
   return data.data;
 }
+
+export async function getCustomCharacters(): Promise<ICharacter[]> {
+  const response = await apiFetch('/characters/custom');
+  if (!response.ok) {
+    const text = await response.text();
+    throw new Error(text || 'Failed to load custom characters');
+  }
+
+  const data = (await response.json()) as ICharacter[] | { data: ICharacter[] };
+  if (Array.isArray(data)) {
+    return data;
+  }
+
+  return data.data;
+}

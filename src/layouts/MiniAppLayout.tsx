@@ -7,6 +7,7 @@ import bagIcon from '@/assets/mini/bag.png';
 import fuelIcon from '@/assets/mini/fuel.png';
 import giftsIcon from '@/assets/mini/gifts.png';
 import girlsIcon from '@/assets/mini/girls.png';
+import myGirlIcon from '@/assets/mini/my-girl.png';
 import {
   BackNavigation,
   BagNavigation,
@@ -18,6 +19,7 @@ import { useUser } from '@/context/UserContext';
 
 const pageTitleMap: Record<string, string> = {
   '/girls': 'Girls',
+  '/my-girls': 'Girls',
   '/gifts': 'Gifts',
   '/bag': 'Bag',
   '/store': 'Store',
@@ -30,7 +32,9 @@ export function MiniAppLayout() {
   const [bagUpgradeAction, setBagUpgradeAction] = useState<(() => void) | null>(
     null,
   );
-  const isGirlDetails = location.pathname.startsWith('/girls/');
+  const isGirlDetails =
+    location.pathname.startsWith('/girls/') ||
+    location.pathname.startsWith('/my-girls/');
   const isBagPage = location.pathname === '/bag';
   const isStorePage = location.pathname === '/store';
 
@@ -76,6 +80,7 @@ export function MiniAppLayout() {
           <Navigation
             items={[
               { label: 'Gifts', path: '/gifts', icon: giftsIcon },
+              { label: 'My Girl', path: '/my-girls', icon: myGirlIcon },
               { label: 'Girls', path: '/girls', icon: girlsIcon },
               { label: 'Bag', path: '/bag', icon: bagIcon },
             ]}
