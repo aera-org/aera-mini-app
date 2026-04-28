@@ -360,8 +360,9 @@ export function GirlsPage() {
             />
             {featuredGirls.length ? (
               <div className={s.featuredRow}>
+                {featuredGirls.slice(0, 2).map(renderGirlCard)}
                 {renderCreateCharacterCard('featured-create-character')}
-                {featuredGirls.map(renderGirlCard)}
+                {featuredGirls.slice(2).map(renderGirlCard)}
               </div>
             ) : null}
             {newScenarios.length ? (
@@ -381,8 +382,9 @@ export function GirlsPage() {
               </section>
             ) : null}
             <div className={s.grid}>
-              {girls.map(renderGirlCard)}
+              {girls.slice(0, 3).map(renderGirlCard)}
               {renderCreateCharacterCard('grid-create-character')}
+              {girls.slice(3).map(renderGirlCard)}
             </div>
             {comingSoonScenarios.length ? (
               <section className={s.comingSoonSection}>
