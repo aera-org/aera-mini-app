@@ -1,0 +1,21 @@
+Screen 1: Profile
+- Name (max 100 chars)
+- Age (18, 25, 30, 40, 55)
+- Type
+
+Screen 2: Personality
+(pick 1-3)
+
+Screen 3: Ethnicity
+Screen 4: Hair color
+Screen 5: Hair style
+Screen 6: Eye color
+Screen 7: Body type
+Screen 8: Breast size
+
+Screen 9: Review + Create
+
+
+
+
+

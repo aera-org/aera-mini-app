@@ -1,4 +1,8 @@
-import type { CharacterType, ICharacter } from '@/common/types';
+import type {
+  CharacterType,
+  CustomCharacterCreateDto,
+  ICharacter,
+} from '@/common/types';
 
 import { apiFetch } from './client';
 
@@ -31,4 +35,23 @@ export async function getCustomCharacters(): Promise<ICharacter[]> {
   }
 
   return data.data;
+}
+
+export async function createCustomCharacter(
+  body: CustomCharacterCreateDto,
+): Promise<ICharacter> {
+  const response = await apiFetch('/character/custom', {
+    method: 'POST',
+    headers: {
+      'Content-Type': 'application/json',
+    },
+    body: JSON.stringify(body),
+  });
+
+  if (!response.ok) {
+    const text = await response.text();
+    throw new Error(text || 'Failed to create custom character');
+  }
+
+  return (await response.json()) as ICharacter;
 }

@@ -99,3 +99,16 @@ export interface IScenario {
   isNew: boolean;
   createdAt: string;
 }
+
+export interface CustomCharacterCreateDto {
+  name: string;
+  age: number;
+  personality: CharacterPersonality[];
+  hairColor: CharacterHairColor;
+  ethnicity: CharacterEthnicity;
+  bodyType: CharacterBodyType;
+  hairStyle: CharacterHairStyle;
+  eyeColor: CharacterEyeColor;
+  breastSize: CharacterBreastSize;
+  type: CharacterType;
+}

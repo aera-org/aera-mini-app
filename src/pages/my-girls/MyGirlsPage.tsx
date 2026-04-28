@@ -104,7 +104,7 @@ export function MyGirlsPage() {
             <button
               type="button"
               className={s.createButton}
-              onClick={() => {}}
+              onClick={() => navigate('/my-girls/create')}
             >
               <Typography
                 as="span"
