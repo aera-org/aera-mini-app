@@ -1,30 +1,31 @@
-import { createContext, useContext, useMemo, useState } from 'react';
+import TelegramWebApp from '@twa-dev/sdk';
+import { useMemo, useState } from 'react';
 
 import type { LaunchParams } from '@/common/types';
 
+import { LaunchParamsContext } from './launch-params-context';
+
 const STORAGE_KEY = 'aera_launch_params';
 
-type LaunchParamsContextValue = {
-  params: LaunchParams;
-};
-
-const LaunchParamsContext = createContext<LaunchParamsContextValue | undefined>(
-  undefined
-);
-
-function normalizeValue(value: string | null): string | undefined {
+function normalizeValue(value: string | null | undefined): string | undefined {
   if (!value) return undefined;
   const trimmed = value.trim();
   return trimmed.length > 0 ? trimmed : undefined;
 }
 
-function readFromUrl(): LaunchParams | null {
+function readFromRuntime(): LaunchParams | null {
   if (typeof window === 'undefined') return null;
   const search = new URLSearchParams(window.location.search);
   const characterName = normalizeValue(search.get('character'));
   const scenarioId = normalizeValue(search.get('scenario'));
-  if (!characterName && !scenarioId) return null;
-  return { characterName, scenarioId };
+  const startParam = normalizeValue(
+    TelegramWebApp.initDataUnsafe?.start_param ??
+      search.get('start_param') ??
+      search.get('tgWebAppStartParam') ??
+      search.get('startapp'),
+  );
+  if (!characterName && !scenarioId && !startParam) return null;
+  return { characterName, scenarioId, startParam };
 }
 
 function readFromStorage(): LaunchParams | null {
@@ -37,6 +38,7 @@ function readFromStorage(): LaunchParams | null {
     return {
       characterName: normalizeValue(parsed.characterName ?? null),
       scenarioId: normalizeValue(parsed.scenarioId ?? null),
+      startParam: normalizeValue(parsed.startParam ?? null),
     };
   } catch {
     return null;
@@ -58,10 +60,10 @@ export function LaunchParamsProvider({
   children: React.ReactNode;
 }) {
   const [params] = useState<LaunchParams>(() => {
-    const fromUrl = readFromUrl();
-    if (fromUrl) {
-      writeToStorage(fromUrl);
-      return fromUrl;
+    const fromRuntime = readFromRuntime();
+    if (fromRuntime) {
+      writeToStorage(fromRuntime);
+      return fromRuntime;
     }
     const fromStorage = readFromStorage();
     return fromStorage ?? {};
@@ -74,12 +76,4 @@ export function LaunchParamsProvider({
       {children}
     </LaunchParamsContext.Provider>
   );
-}
-
-export function useLaunchParams() {
-  const context = useContext(LaunchParamsContext);
-  if (!context) {
-    throw new Error('useLaunchParams must be used within LaunchParamsProvider');
-  }
-  return context.params;
 }

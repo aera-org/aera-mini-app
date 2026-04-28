@@ -1,4 +1,4 @@
-import { useState } from 'react';
+import { useEffect, useRef, useState } from 'react';
 import { Outlet, useLocation, useNavigate } from 'react-router-dom';
 
 import { PlusIcon } from '@/assets/icons';
@@ -15,6 +15,7 @@ import {
   MiniAppShell,
   Navigation,
 } from '@/components';
+import { useLaunchParams } from '@/context/useLaunchParams';
 import { useUser } from '@/context/UserContext';
 
 const pageTitleMap: Record<string, string> = {
@@ -28,7 +29,9 @@ const pageTitleMap: Record<string, string> = {
 export function MiniAppLayout() {
   const location = useLocation();
   const navigate = useNavigate();
+  const launchParams = useLaunchParams();
   const { user } = useUser();
+  const hasHandledLaunchRedirect = useRef(false);
   const [bagUpgradeAction, setBagUpgradeAction] = useState<(() => void) | null>(
     null,
   );
@@ -40,6 +43,17 @@ export function MiniAppLayout() {
 
   const pageName = pageTitleMap[location.pathname] ?? 'Girls';
   const appClassName = pageName;
+
+  useEffect(() => {
+    if (hasHandledLaunchRedirect.current) return;
+    if (launchParams.startParam !== 'my-girls') return;
+
+    hasHandledLaunchRedirect.current = true;
+
+    if (location.pathname === '/' || location.pathname === '/girls') {
+      navigate('/my-girls', { replace: true });
+    }
+  }, [launchParams.startParam, location.pathname, navigate]);
 
   return (
     <MiniAppShell

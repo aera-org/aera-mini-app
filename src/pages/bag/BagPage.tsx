@@ -15,7 +15,7 @@ import airIcon from '@/assets/mini/air.png';
 import { PlanFeaturesA, PlanFeaturesB } from '@/common/consts';
 import { type IPlan, PlanPeriod, PlanType } from '@/common/types';
 import { Card, Loader, Typography } from '@/components';
-import { useLaunchParams } from '@/context/LaunchParamsContext';
+import { useLaunchParams } from '@/context/useLaunchParams';
 import { useUser } from '@/context/UserContext';
 
 import s from './BagPage.module.scss';

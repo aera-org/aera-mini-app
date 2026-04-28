@@ -15,7 +15,7 @@ import { BoltIcon, TgStarIcon } from '@/assets/icons';
 import upgradeImage from '@/assets/mini/upgrade.png';
 import { type IPlan, PlanType } from '@/common/types';
 import { Card, Loader, Typography } from '@/components';
-import { useLaunchParams } from '@/context/LaunchParamsContext';
+import { useLaunchParams } from '@/context/useLaunchParams';
 
 import s from './StorePage.module.scss';
 
