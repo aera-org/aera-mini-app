@@ -20,6 +20,9 @@ export function GiftsPage() {
   const { user } = useUser();
   const queryClient = useQueryClient();
   const [highlightedId, setHighlightedId] = useState<string | null>(null);
+  const [pendingScrollGiftId, setPendingScrollGiftId] = useState<string | null>(
+    null,
+  );
   const {
     data: gifts = [],
     isLoading,
@@ -32,7 +35,7 @@ export function GiftsPage() {
 
   const buyMutation = useMutation({
     mutationFn: buyGift,
-    onSuccess: (result) => {
+    onSuccess: (result, giftId) => {
       if (result.shouldClose === true) {
         TelegramWebApp.close();
         return;
@@ -40,6 +43,7 @@ export function GiftsPage() {
 
       if (!result.success) return;
 
+      setPendingScrollGiftId(giftId);
       void queryClient.invalidateQueries({ queryKey: ['gifts'] });
       void queryClient.invalidateQueries({ queryKey: ['me'] });
     },
@@ -119,6 +123,37 @@ export function GiftsPage() {
       if (retryId) window.clearTimeout(retryId);
     };
   }, [gifts, location.hash]);
+
+  useEffect(() => {
+    if (!pendingScrollGiftId) return;
+
+    const gift = gifts.find((item) => item.id === pendingScrollGiftId);
+    if (!gift?.isBought) return;
+
+    let timeoutId: number | undefined;
+    const rafId = window.requestAnimationFrame(() => {
+      const element = document.querySelector(
+        `[data-gift-id="${pendingScrollGiftId}"]`,
+      ) as HTMLElement | null;
+      if (!element) return;
+
+      element.scrollIntoView({ behavior: 'smooth', block: 'center' });
+      setHighlightedId(pendingScrollGiftId);
+      setPendingScrollGiftId((current) =>
+        current === pendingScrollGiftId ? null : current,
+      );
+      timeoutId = window.setTimeout(() => {
+        setHighlightedId((current) =>
+          current === pendingScrollGiftId ? null : current,
+        );
+      }, 1800);
+    });
+
+    return () => {
+      window.cancelAnimationFrame(rafId);
+      if (timeoutId) window.clearTimeout(timeoutId);
+    };
+  }, [gifts, pendingScrollGiftId]);
 
   const renderGiftCard = (gift: IGift) => {
     const action = getGiftAction(gift);
