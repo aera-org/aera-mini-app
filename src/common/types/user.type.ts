@@ -4,4 +4,5 @@ export interface IUser {
   air: number;
   languageCode: string;
   subscribedUntil?: string | null;
+  hasActiveChat: boolean
 }

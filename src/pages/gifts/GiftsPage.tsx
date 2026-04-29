@@ -1,8 +1,9 @@
-import { useQuery, useQueryClient } from '@tanstack/react-query';
+import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query';
+import TelegramWebApp from '@twa-dev/sdk';
 import { useEffect, useState } from 'react';
 import { useLocation, useNavigate } from 'react-router-dom';
 
-import { buyGift, getGifts } from '@/api/gifts';
+import { buyGift, getGifts, sendGift } from '@/api/gifts';
 import { GiftIcon } from '@/assets/icons';
 import airIcon from '@/assets/mini/air.png';
 import type { IGift } from '@/common/types';
@@ -11,12 +12,13 @@ import { useUser } from '@/context/UserContext';
 
 import s from './GiftsPage.module.scss';
 
+type GiftAction = 'buy' | 'gift' | 'owned';
+
 export function GiftsPage() {
   const location = useLocation();
   const navigate = useNavigate();
   const { user } = useUser();
   const queryClient = useQueryClient();
-  const [buyingId, setBuyingId] = useState<string | null>(null);
   const [highlightedId, setHighlightedId] = useState<string | null>(null);
   const {
     data: gifts = [],
@@ -28,26 +30,56 @@ export function GiftsPage() {
     queryFn: getGifts,
   });
 
-  const handleBuy = (gift: IGift) => {
+  const buyMutation = useMutation({
+    mutationFn: buyGift,
+    onSuccess: (result) => {
+      if (result.shouldClose === true) {
+        TelegramWebApp.close();
+        return;
+      }
+
+      if (!result.success) return;
+
+      void queryClient.invalidateQueries({ queryKey: ['gifts'] });
+      void queryClient.invalidateQueries({ queryKey: ['me'] });
+    },
+    onError: (err) => {
+      console.error(err);
+    },
+  });
+
+  const sendGiftMutation = useMutation({
+    mutationFn: sendGift,
+    onSuccess: () => {
+      TelegramWebApp.close();
+    },
+    onError: (err) => {
+      console.error(err);
+    },
+  });
+
+  const getGiftAction = (gift: IGift): GiftAction => {
+    if (!gift.isBought) return 'buy';
+    return user?.hasActiveChat ? 'gift' : 'owned';
+  };
+
+  const handleGiftAction = (gift: IGift) => {
+    const action = getGiftAction(gift);
+
+    if (action === 'owned') return;
+
+    if (action === 'gift') {
+      sendGiftMutation.mutate(gift.id);
+      return;
+    }
+
     const currentAir = user?.air ?? 0;
-    if (gift.isBought) return;
     if (currentAir < gift.price) {
       navigate('/store');
       return;
     }
 
-    void (async () => {
-      try {
-        setBuyingId(gift.id);
-        await buyGift(gift.id);
-        queryClient.invalidateQueries({ queryKey: ['gifts'] });
-        queryClient.invalidateQueries({ queryKey: ['me'] });
-      } catch (err) {
-        console.error(err);
-      } finally {
-        setBuyingId(null);
-      }
-    })();
+    buyMutation.mutate(gift.id);
   };
 
   useEffect(() => {
@@ -89,6 +121,14 @@ export function GiftsPage() {
   }, [gifts, location.hash]);
 
   const renderGiftCard = (gift: IGift) => {
+    const action = getGiftAction(gift);
+    const isPending =
+      (buyMutation.isPending && buyMutation.variables === gift.id) ||
+      (sendGiftMutation.isPending && sendGiftMutation.variables === gift.id);
+    const isDisabled = action === 'owned' || isPending;
+    const buttonText =
+      action === 'buy' ? 'Buy' : action === 'gift' ? 'Gift' : 'Owned';
+
     return (
       <Card
         className={`${s.card} ${
@@ -129,8 +169,8 @@ export function GiftsPage() {
           <button
             type="button"
             className={s.giftButton}
-            onClick={() => handleBuy(gift)}
-            disabled={gift.isBought || buyingId === gift.id}
+            onClick={() => handleGiftAction(gift)}
+            disabled={isDisabled}
           >
             <GiftIcon width={20} height={20} className={s.giftIcon} />
             <Typography
@@ -141,7 +181,7 @@ export function GiftsPage() {
               color="black"
               className={s.giftButtonText}
             >
-              Gift
+              {buttonText}
             </Typography>
           </button>
           <div className={s.priceRow}>
