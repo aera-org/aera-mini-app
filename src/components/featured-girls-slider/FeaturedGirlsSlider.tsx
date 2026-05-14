@@ -55,13 +55,7 @@ export function FeaturedGirlsSlider({
 
   if (girls.length === 0) return null;
 
-  // place girl with name Auriel first
-  const sortedGirls = [...girls].sort((a, b) => {
-    if (a.name === 'Auriel') return -1;
-    if (b.name === 'Auriel') return 1;
-    return 0;
-  });
-  const indicatorCount = sortedGirls.length + (customSlide ? 1 : 0);
+  const indicatorCount = girls.length + (customSlide ? 1 : 0);
 
   const renderGirlSlide = (girl: ICharacter) => {
     const hasNewScenario = (girl.scenarios ?? []).some(
@@ -214,9 +208,9 @@ export function FeaturedGirlsSlider({
     <section className={s.slider}>
       <div className={s.viewport} ref={emblaRef}>
         <div className={s.container}>
-          {sortedGirls.slice(0, 2).map(renderGirlSlide)}
+          {girls.slice(0, 2).map(renderGirlSlide)}
           {renderCustomSlide()}
-          {sortedGirls.slice(2).map(renderGirlSlide)}
+          {girls.slice(2).map(renderGirlSlide)}
         </div>
       </div>
       <div className={s.indicator}>

@@ -8,6 +8,7 @@ import {
   type ICharacter,
   isCharacterType,
 } from '@/common/types';
+import { compareScenarios, sortGirlsForCatalog } from '@/common/utils';
 import { CharacterDetails, Loader, Typography } from '@/components';
 import s from '@/components/character-details/CharacterDetails.module.scss';
 
@@ -19,8 +20,9 @@ export function GirlPage() {
   const selectedType = isCharacterType(rawType)
     ? rawType
     : CharacterType.Realistic;
-  const cachedGirls =
-    queryClient.getQueryData<ICharacter[]>(['girls', selectedType]) ?? [];
+  const cachedGirls = sortGirlsForCatalog(
+    queryClient.getQueryData<ICharacter[]>(['girls', selectedType]) ?? [],
+  );
   const cachedGirl = cachedGirls.find((character) => character.id === id);
   const {
     data: girls = [],
@@ -31,6 +33,7 @@ export function GirlPage() {
     queryKey: ['girls', selectedType],
     queryFn: () => getGirls(selectedType),
     enabled: !cachedGirl,
+    select: sortGirlsForCatalog,
   });
 
   const girl = useMemo(
@@ -75,6 +78,7 @@ export function GirlPage() {
       character={girl}
       heroImageUrl={girl.promoImgUrl ?? girl.avatarUrl}
       getScenarioImageUrl={(scenario) => scenario.promoImgHorizontalUrl}
+      scenarioComparator={compareScenarios}
     />
   );
 }

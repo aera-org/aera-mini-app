@@ -93,6 +93,7 @@ export interface IScenario {
   description: string;
   shortDescription: string;
   isActive: boolean;
+  isTop: boolean;
   promoImgUrl: string;
   promoImgHorizontalUrl: string;
   openingImageUrl?: string;

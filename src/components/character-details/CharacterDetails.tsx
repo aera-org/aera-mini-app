@@ -24,6 +24,7 @@ type CharacterDetailsProps = {
   description?: string;
   getScenarioImageUrl: (scenario: IScenario) => string | undefined;
   createScenarioCard?: CreateScenarioCard;
+  scenarioComparator?: (a: IScenario, b: IScenario) => number;
   className?: string;
 };
 
@@ -33,23 +34,29 @@ export function CharacterDetails({
   description = character.description,
   getScenarioImageUrl,
   createScenarioCard,
+  scenarioComparator,
   className,
 }: CharacterDetailsProps) {
   const sortedScenarios = useMemo(() => {
     if (!character.scenarios?.length) return [];
 
-    const parseDate = (value: string) => {
-      const timestamp = Date.parse(value);
-      return Number.isNaN(timestamp) ? 0 : timestamp;
-    };
-
     return [...character.scenarios].sort((a, b) => {
+      if (scenarioComparator) {
+        return scenarioComparator(a, b);
+      }
+
       if (a.isActive !== b.isActive) {
         return a.isActive ? -1 : 1;
       }
-      return parseDate(b.createdAt) - parseDate(a.createdAt);
+
+      const leftCreatedAt = Date.parse(a.createdAt);
+      const rightCreatedAt = Date.parse(b.createdAt);
+      const leftTimestamp = Number.isNaN(leftCreatedAt) ? 0 : leftCreatedAt;
+      const rightTimestamp = Number.isNaN(rightCreatedAt) ? 0 : rightCreatedAt;
+
+      return rightTimestamp - leftTimestamp;
     });
-  }, [character.scenarios]);
+  }, [character.scenarios, scenarioComparator]);
 
   const hasNewScenario = (character.scenarios ?? []).some(
     (scenario) => scenario.isNew && scenario.isActive,

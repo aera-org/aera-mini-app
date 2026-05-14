@@ -13,6 +13,11 @@ import {
   isCharacterType,
 } from '@/common/types';
 import {
+  compareGirlsByTopScenarioAndName,
+  compareScenarios,
+  sortGirlsForCatalog,
+} from '@/common/utils';
+import {
   Card,
   FeaturedGirlsSlider,
   IconButton,
@@ -49,7 +54,7 @@ export function GirlsPage() {
     queryKey: ['girls', selectedType],
     queryFn: () => getGirls(selectedType),
     placeholderData: keepPreviousData,
-    select: (data) => [...data].sort((a, b) => a.name.localeCompare(b.name)),
+    select: sortGirlsForCatalog,
   });
 
   const handleCardClick = (character: ICharacter) => {
@@ -90,25 +95,24 @@ export function GirlsPage() {
 
   const featuredGirls = girls.filter((girl) => girl.isFeatured);
 
-  const newScenarios = (() => {
-    const parseDate = (value: string) => {
-      const timestamp = Date.parse(value);
-      return Number.isNaN(timestamp) ? 0 : timestamp;
-    };
+  const compareScenarioEntries = (a: ScenarioWithGirl, b: ScenarioWithGirl) => {
+    const scenarioResult = compareScenarios(a.scenario, b.scenario);
+    if (scenarioResult !== 0) {
+      return scenarioResult;
+    }
 
-    return girls
-      .flatMap((girl) =>
-        (girl.scenarios ?? []).map((scenario) => ({
-          girl,
-          scenario,
-        })),
-      )
-      .filter((item) => item.scenario.isNew && item.scenario.isActive === true)
-      .sort(
-        (a, b) =>
-          parseDate(b.scenario.createdAt) - parseDate(a.scenario.createdAt),
-      );
-  })();
+    return compareGirlsByTopScenarioAndName(a.girl, b.girl);
+  };
+
+  const newScenarios = girls
+    .flatMap((girl) =>
+      (girl.scenarios ?? []).map((scenario) => ({
+        girl,
+        scenario,
+      })),
+    )
+    .filter((item) => item.scenario.isNew && item.scenario.isActive === true)
+    .sort(compareScenarioEntries);
 
   const comingSoonScenarios = girls
     .flatMap((girl) =>
@@ -117,7 +121,8 @@ export function GirlsPage() {
         scenario,
       })),
     )
-    .filter((item) => item.scenario.isNew && item.scenario.isActive === false);
+    .filter((item) => item.scenario.isNew && item.scenario.isActive === false)
+    .sort(compareScenarioEntries);
 
   const renderGirlCard = (character: ICharacter) => (
     <Card
