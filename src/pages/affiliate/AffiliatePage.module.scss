@@ -1,0 +1,79 @@
+.page {
+  width: 100%;
+  min-height: calc(var(--vh, 1vh) * 100);
+  padding: 92px 16px 132px;
+  overflow-y: auto;
+}
+
+.card {
+  width: 100%;
+  max-width: 390px;
+  margin: 0 auto;
+  padding: 28px 20px 22px;
+  border: 1px solid rgba(255, 255, 255, 0.14);
+  border-radius: 28px;
+  background:
+    linear-gradient(180deg, rgba(255, 255, 255, 0.08) 0%, rgba(255, 255, 255, 0.03) 100%),
+    rgba(10, 7, 20, 0.72);
+  box-shadow:
+    0 18px 48px rgba(0, 0, 0, 0.28),
+    inset 0 1px 0 rgba(255, 255, 255, 0.08);
+  backdrop-filter: blur(18px);
+  -webkit-backdrop-filter: blur(18px);
+  display: flex;
+  flex-direction: column;
+  gap: 28px;
+}
+
+.copy {
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+}
+
+.title {
+  margin: 0;
+  font-size: 30px;
+  line-height: 1.05;
+  letter-spacing: -0.03em;
+}
+
+.text {
+  color: rgba(255, 255, 255, 0.82);
+  display: flex;
+  flex-direction: column;
+  gap: 14px;
+}
+
+.paragraph {
+  margin: 0;
+  line-height: 1.58;
+}
+
+.cta {
+  width: 100%;
+  min-height: 59px;
+  border: 1px solid rgba(255, 255, 255, 0.4);
+  border-radius: 30px;
+  padding: 0 22px;
+  background:
+    linear-gradient(0deg, rgba(0, 0, 0, 0.2), rgba(0, 0, 0, 0.2)),
+    linear-gradient(180deg, rgba(255, 212, 53, 0.1) 0%, #ffd435 100%);
+  color: #fff;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+  cursor: pointer;
+}
+
+.cta:disabled {
+  opacity: 0.55;
+  cursor: default;
+}
+
+.ctaText {
+  font-size: 20px;
+  line-height: 120%;
+  letter-spacing: -0.48px;
+}

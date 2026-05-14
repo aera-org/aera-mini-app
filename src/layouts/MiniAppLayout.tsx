@@ -3,6 +3,7 @@ import { Outlet, useLocation, useNavigate } from 'react-router-dom';
 
 import { PlusIcon } from '@/assets/icons';
 import airIcon from '@/assets/mini/air.png';
+import affiliateIcon from '@/assets/mini/airs.png';
 import bagIcon from '@/assets/mini/bag.png';
 import fuelIcon from '@/assets/mini/fuel.png';
 import giftsIcon from '@/assets/mini/gifts.png';
@@ -19,6 +20,7 @@ import { useLaunchParams } from '@/context/useLaunchParams';
 import { useUser } from '@/context/UserContext';
 
 const pageTitleMap: Record<string, string> = {
+  '/affiliate': 'Affiliate',
   '/girls': 'Girls',
   '/my-girls': 'Girls',
   '/gifts': 'Gifts',
@@ -93,10 +95,14 @@ export function MiniAppLayout() {
         ) : (
           <Navigation
             items={[
-              { label: 'Gifts', path: '/gifts', icon: giftsIcon },
+              { label: 'Affiliate', path: '/affiliate', icon: affiliateIcon },
+
               { label: 'My Girl', path: '/my-girls', icon: myGirlIcon },
               { label: 'Girls', path: '/girls', icon: girlsIcon },
+              { label: 'Gifts', path: '/gifts', icon: giftsIcon },
+
               { label: 'Bag', path: '/bag', icon: bagIcon },
+
             ]}
           />
         )
