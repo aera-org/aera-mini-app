@@ -77,7 +77,7 @@ export function GirlPage() {
     <CharacterDetails
       character={girl}
       heroImageUrl={girl.promoImgUrl ?? girl.avatarUrl}
-      getScenarioImageUrl={(scenario) => scenario.promoImgHorizontalUrl}
+      getScenarioImageUrl={(scenario) => scenario.promoImgHorizontalUrl || scenario.openingImageUrl}
       scenarioComparator={compareScenarios}
     />
   );

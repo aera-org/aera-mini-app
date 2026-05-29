@@ -224,7 +224,7 @@ export function CharacterDetails({
           scenario.id,
           scenario.scenarioProgress?.maxStage
             ? STAGE_TO_INDEX[scenario.scenarioProgress.maxStage]
-            : 0,
+            : null,
         ]),
       ),
     [sortedScenarios],
@@ -324,7 +324,7 @@ export function CharacterDetails({
             <div className={s.scenariosList}>
               {sortedScenarios.map((scenario) => {
                 const lockState = scenarioLockStateById.get(scenario.id) ?? null;
-                const intimacyIndex = scenarioIntimacyIndexById.get(scenario.id) ?? 0;
+                const intimacyIndex = scenarioIntimacyIndexById.get(scenario.id) ?? null;
                 const shouldShowIntimacy = scenario.isActive && !lockState;
 
                 return (
@@ -362,8 +362,10 @@ export function CharacterDetails({
                           {shouldShowIntimacy ? (
                             <div className={s.intimacyScale} aria-hidden>
                               {Array.from({ length: INTIMACY_SEGMENTS }, (_, index) => {
-                                const isActiveSegment = index <= intimacyIndex;
-                                const isCurrentSegment = index === intimacyIndex;
+                                const isActiveSegment =
+                                  intimacyIndex !== null && index <= intimacyIndex;
+                                const isCurrentSegment =
+                                  intimacyIndex !== null && index === intimacyIndex;
 
                                 return (
                                   <span
