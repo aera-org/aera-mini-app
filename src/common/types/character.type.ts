@@ -86,10 +86,29 @@ export interface ICharacter {
   type: CharacterType;
 }
 
+export enum RoleplayStage {
+  Acquaintance = 'ACQUAINTANCE',
+  Flirting = 'FLIRTING',
+  Seduction = 'SEDUCTION',
+
+  Resistance = 'RESISTANCE',
+
+  Undressing = 'UNDRESSING',
+  Prelude = 'PRELUDE',
+  Sex = 'SEX',
+  Aftercare = 'AFTERCARE',
+}
+export interface IScenarioProgress {
+  id: string;
+  opensAt: string;
+  maxStage: RoleplayStage;
+}
+
 export interface IScenario {
   id: string;
   slug?: string;
   name: string;
+  level: number;
   description: string;
   shortDescription: string;
   isActive: boolean;
@@ -99,6 +118,8 @@ export interface IScenario {
   openingImageUrl?: string;
   isNew: boolean;
   createdAt: string;
+  opensAfterId?: string;
+  scenarioProgress?: IScenarioProgress;
 }
 
 export interface CustomCharacterCreateDto {
