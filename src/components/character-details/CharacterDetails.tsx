@@ -3,7 +3,7 @@ import { useMemo } from 'react';
 
 import { MessageMoreIcon } from '@/assets/icons';
 import airIcon from '@/assets/mini/air.png';
-import type { ICharacter, IScenario } from '@/common/types';
+import { type ICharacter, type IScenario,STAGE_TO_INDEX } from '@/common/types';
 import { cn } from '@/common/utils';
 import { Card } from '@/components/card';
 import { Typography } from '@/components/text';
@@ -11,6 +11,7 @@ import { Typography } from '@/components/text';
 import s from './CharacterDetails.module.scss';
 
 const GENERIC_UNLOCK_TEXT = 'Finish previous scenario to unlock';
+const INTIMACY_SEGMENTS = 8;
 
 type ScenarioLockState =
   | {
@@ -117,6 +118,30 @@ export function CharacterDetails({
   scenarioComparator,
   className,
 }: CharacterDetailsProps) {
+  const relationshipsScale = useMemo(() => {
+    const scenarios = character.scenarios ?? [];
+    const totalSegments = INTIMACY_SEGMENTS * scenarios.length;
+
+    if (!totalSegments) {
+      return null;
+    }
+
+    const filledSegments = scenarios.reduce((sum, scenario) => {
+      const maxStage = scenario.scenarioProgress?.maxStage;
+
+      if (!maxStage) {
+        return sum;
+      }
+
+      return sum + STAGE_TO_INDEX[maxStage] + 1;
+    }, 0);
+
+    return {
+      totalSegments,
+      filledSegments,
+    };
+  }, [character.scenarios]);
+
   const scenarioNameById = useMemo(
     () =>
       new Map((character.scenarios ?? []).map((scenario) => [scenario.id, scenario.name])),
@@ -192,6 +217,19 @@ export function CharacterDetails({
     );
   }, [scenarioNameById, sortedScenarios]);
 
+  const scenarioIntimacyIndexById = useMemo(
+    () =>
+      new Map(
+        sortedScenarios.map((scenario) => [
+          scenario.id,
+          scenario.scenarioProgress?.maxStage
+            ? STAGE_TO_INDEX[scenario.scenarioProgress.maxStage]
+            : 0,
+        ]),
+      ),
+    [sortedScenarios],
+  );
+
   const handleStartScenarioChat = (scenario: IScenario) => {
     const botUsername = import.meta.env.VITE_BOT_USERNAME;
     if (!botUsername) {
@@ -252,12 +290,42 @@ export function CharacterDetails({
           >
             {description}
           </Typography>
+          {relationshipsScale ? (
+            <div className={s.relationshipsBlock}>
+              <Typography
+                as="span"
+                variant="body-sm"
+                family="brand"
+                weight={500}
+                className={s.relationshipsLabel}
+              >
+                Intimacy level
+              </Typography>
+              <div className={s.relationshipsScale} aria-hidden>
+                {Array.from(
+                  { length: relationshipsScale.totalSegments },
+                  (_, index) => (
+                    <span
+                      key={`relationship-${character.id}-${index}`}
+                      className={cn(s.relationshipsSegment, [
+                        index < relationshipsScale.filledSegments
+                          ? s.relationshipsSegmentActive
+                          : null,
+                      ])}
+                    />
+                  ),
+                )}
+              </div>
+            </div>
+          ) : null}
         </div>
         <div className={s.container}>
           <section className={s.scenariosSection}>
             <div className={s.scenariosList}>
               {sortedScenarios.map((scenario) => {
                 const lockState = scenarioLockStateById.get(scenario.id) ?? null;
+                const intimacyIndex = scenarioIntimacyIndexById.get(scenario.id) ?? 0;
+                const shouldShowIntimacy = scenario.isActive && !lockState;
 
                 return (
                   <Card
@@ -291,6 +359,24 @@ export function CharacterDetails({
                           >
                             {scenario.shortDescription}
                           </Typography>
+                          {shouldShowIntimacy ? (
+                            <div className={s.intimacyScale} aria-hidden>
+                              {Array.from({ length: INTIMACY_SEGMENTS }, (_, index) => {
+                                const isActiveSegment = index <= intimacyIndex;
+                                const isCurrentSegment = index === intimacyIndex;
+
+                                return (
+                                  <span
+                                    key={`${scenario.id}-intimacy-${index}`}
+                                    className={cn(s.intimacySegment, [
+                                      isActiveSegment ? s.intimacySegmentActive : null,
+                                      isCurrentSegment ? s.intimacySegmentCurrent : null,
+                                    ])}
+                                  />
+                                );
+                              })}
+                            </div>
+                          ) : null}
                         </div>
                         {lockState ? null : scenario.isActive ? (
                           <button

@@ -98,6 +98,18 @@ export enum RoleplayStage {
   Sex = 'SEX',
   Aftercare = 'AFTERCARE',
 }
+
+export const STAGE_TO_INDEX: Record<RoleplayStage, number> = {
+  [RoleplayStage.Acquaintance]: 0,
+  [RoleplayStage.Flirting]: 1,
+  [RoleplayStage.Seduction]: 2,
+  [RoleplayStage.Resistance]: 3,
+  [RoleplayStage.Undressing]: 4,
+  [RoleplayStage.Prelude]: 5,
+  [RoleplayStage.Sex]: 6,
+  [RoleplayStage.Aftercare]: 7,
+} as const;
+
 export interface IScenarioProgress {
   id: string;
   opensAt: string;
