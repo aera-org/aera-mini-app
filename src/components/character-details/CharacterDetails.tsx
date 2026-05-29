@@ -42,6 +42,42 @@ type CharacterDetailsProps = {
   className?: string;
 };
 
+function getScenarioLockState(
+  scenario: IScenario,
+  scenarioNameById: Map<string, string>,
+  now: number,
+): ScenarioLockState {
+  if (scenario.level <= 1) {
+    return null;
+  }
+
+  const timeUntilOpen = scenario.scenarioProgress
+    ? formatTimeUntilOpen(scenario.scenarioProgress.opensAt, now)
+    : null;
+
+  if (timeUntilOpen) {
+    return {
+      kind: 'timer',
+      text: `Opens In ${timeUntilOpen}`,
+    };
+  }
+
+  if (!scenario.scenarioProgress) {
+    const prerequisiteName = scenario.opensAfterId
+      ? scenarioNameById.get(scenario.opensAfterId)
+      : null;
+
+    return {
+      kind: 'prerequisite',
+      text: prerequisiteName
+        ? `Finish "${prerequisiteName}" to unlock`
+        : GENERIC_UNLOCK_TEXT,
+    };
+  }
+
+  return null;
+}
+
 function formatTimeUntilOpen(opensAt: string, now: number): string | null {
   const opensAtTimestamp = Date.parse(opensAt);
 
@@ -118,6 +154,8 @@ export function CharacterDetails({
   scenarioComparator,
   className,
 }: CharacterDetailsProps) {
+  const now = Date.now();
+
   const relationshipsScale = useMemo(() => {
     const scenarios = character.scenarios ?? [];
     const totalSegments = INTIMACY_SEGMENTS * scenarios.length;
@@ -148,10 +186,30 @@ export function CharacterDetails({
     [character.scenarios],
   );
 
+  const scenarioLockStateById = useMemo(
+    () =>
+      new Map(
+        (character.scenarios ?? []).map((scenario) => [
+          scenario.id,
+          getScenarioLockState(scenario, scenarioNameById, now),
+        ]),
+      ),
+    [character.scenarios, now, scenarioNameById],
+  );
+
   const sortedScenarios = useMemo(() => {
     if (!character.scenarios?.length) return [];
 
     return [...character.scenarios].sort((a, b) => {
+      const leftLockState = scenarioLockStateById.get(a.id) ?? null;
+      const rightLockState = scenarioLockStateById.get(b.id) ?? null;
+      const leftIsOpen = a.isActive && !leftLockState;
+      const rightIsOpen = b.isActive && !rightLockState;
+
+      if (leftIsOpen !== rightIsOpen) {
+        return leftIsOpen ? -1 : 1;
+      }
+
       if (scenarioComparator) {
         return scenarioComparator(a, b);
       }
@@ -167,55 +225,11 @@ export function CharacterDetails({
 
       return rightTimestamp - leftTimestamp;
     });
-  }, [character.scenarios, scenarioComparator]);
+  }, [character.scenarios, scenarioComparator, scenarioLockStateById]);
 
   const hasNewScenario = (character.scenarios ?? []).some(
     (scenario) => scenario.isNew && scenario.isActive,
   );
-
-  const scenarioLockStateById = useMemo(() => {
-    const now = Date.now();
-
-    return new Map<string, ScenarioLockState>(
-      sortedScenarios.map((scenario) => {
-        if (scenario.level <= 1) {
-          return [scenario.id, null];
-        }
-
-        const timeUntilOpen = scenario.scenarioProgress
-          ? formatTimeUntilOpen(scenario.scenarioProgress.opensAt, now)
-          : null;
-
-        if (timeUntilOpen) {
-          return [
-            scenario.id,
-            {
-              kind: 'timer',
-              text: `Opens In ${timeUntilOpen}`,
-            },
-          ];
-        }
-
-        if (!scenario.scenarioProgress) {
-          const prerequisiteName = scenario.opensAfterId
-            ? scenarioNameById.get(scenario.opensAfterId)
-            : null;
-
-          return [
-            scenario.id,
-            {
-              kind: 'prerequisite',
-              text: prerequisiteName
-                ? `Finish "${prerequisiteName}" to unlock`
-                : GENERIC_UNLOCK_TEXT,
-            },
-          ];
-        }
-
-        return [scenario.id, null];
-      }),
-    );
-  }, [scenarioNameById, sortedScenarios]);
 
   const scenarioIntimacyIndexById = useMemo(
     () =>
