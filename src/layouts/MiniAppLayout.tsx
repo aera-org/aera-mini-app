@@ -55,8 +55,8 @@ export function MiniAppLayout() {
     const rawStartParam = launchParams.startParam?.trim();
     if (!rawStartParam) return;
 
-    if (rawStartParam.startsWith('cc_')) {
-      const ref = rawStartParam.slice(3).trim();
+    if (rawStartParam.startsWith('cc__')) {
+      const ref = rawStartParam.slice(4).trim();
       if (!ref) return;
 
       hasHandledLaunchRedirect.current = true;
