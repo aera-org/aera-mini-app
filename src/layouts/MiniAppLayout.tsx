@@ -1,6 +1,7 @@
 import { useEffect, useRef, useState } from 'react';
 import { Outlet, useLocation, useNavigate } from 'react-router-dom';
 
+import { postMeDeeplink } from '@/api/me';
 import { PlusIcon } from '@/assets/icons';
 import airIcon from '@/assets/mini/air.png';
 import affiliateIcon from '@/assets/mini/airs.png';
@@ -34,6 +35,7 @@ export function MiniAppLayout() {
   const launchParams = useLaunchParams();
   const { user } = useUser();
   const hasHandledLaunchRedirect = useRef(false);
+  const trackedDeeplinkRef = useRef<string | null>(null);
   const [bagUpgradeAction, setBagUpgradeAction] = useState<(() => void) | null>(
     null,
   );
@@ -48,11 +50,28 @@ export function MiniAppLayout() {
 
   useEffect(() => {
     if (hasHandledLaunchRedirect.current) return;
-    if (launchParams.startParam !== 'my-girls') return;
+    if (location.pathname !== '/' && location.pathname !== '/girls') return;
 
-    hasHandledLaunchRedirect.current = true;
+    const rawStartParam = launchParams.startParam?.trim();
+    if (!rawStartParam) return;
 
-    if (location.pathname === '/' || location.pathname === '/girls') {
+    if (rawStartParam.startsWith('cc_')) {
+      const ref = rawStartParam.slice(3).trim();
+      if (!ref) return;
+
+      hasHandledLaunchRedirect.current = true;
+
+      if (trackedDeeplinkRef.current !== rawStartParam) {
+        trackedDeeplinkRef.current = rawStartParam;
+        void postMeDeeplink({ ref, type: 'cc' }).catch(() => {});
+      }
+
+      navigate('/my-girls/create', { replace: true });
+      return;
+    }
+
+    if (rawStartParam === 'my-girls') {
+      hasHandledLaunchRedirect.current = true;
       navigate('/my-girls', { replace: true });
     }
   }, [launchParams.startParam, location.pathname, navigate]);

@@ -2,6 +2,11 @@ import type { IUser } from '@/common/types';
 
 import { apiFetch, localFetch } from './client';
 
+type MeDeeplinkDto = {
+  ref: string;
+  type: 'cc';
+};
+
 export async function getMe(): Promise<IUser> {
   const response = await apiFetch('/me');
   if (!response.ok) {
@@ -14,6 +19,21 @@ export async function getMe(): Promise<IUser> {
     return (data as { data: IUser }).data;
   }
   return data as IUser;
+}
+
+export async function postMeDeeplink(body: MeDeeplinkDto): Promise<void> {
+  const response = await apiFetch('/me/deeplink', {
+    method: 'POST',
+    headers: {
+      'Content-Type': 'application/json',
+    },
+    body: JSON.stringify(body),
+  });
+
+  if (!response.ok) {
+    const text = await response.text();
+    throw new Error(text || 'Failed to post deeplink');
+  }
 }
 
 export async function patchMeCountryOnce(): Promise<void> {

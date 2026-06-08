@@ -97,8 +97,10 @@
 .typeStep {
   display: grid;
   grid-template-columns: repeat(2, minmax(0, 1fr));
-  gap: 12px;
+  gap: 8px;
   min-height: 100%;
+  margin-left: -8px;
+  margin-right: -8px;
 }
 
 .typeCard {
@@ -128,13 +130,21 @@
 .typeVideoFallback {
   background:
     radial-gradient(circle at top, rgba(255, 255, 255, 0.18), transparent 42%),
-    linear-gradient(180deg, rgba(255, 255, 255, 0.12), rgba(255, 255, 255, 0.04));
+    linear-gradient(
+      180deg,
+      rgba(255, 255, 255, 0.12),
+      rgba(255, 255, 255, 0.04)
+    );
 }
 
 .typeCardOverlay {
   position: absolute;
   inset: 0;
-  background: linear-gradient(180deg, rgba(8, 7, 13, 0.08) 0%, rgba(8, 7, 13, 0.78) 100%);
+  background: linear-gradient(
+    180deg,
+    rgba(8, 7, 13, 0.08) 0%,
+    rgba(8, 7, 13, 0.78) 100%
+  );
 }
 
 .typeCardLabel {
