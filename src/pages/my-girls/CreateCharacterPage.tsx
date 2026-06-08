@@ -63,6 +63,10 @@ const initialDraft: CreateDraft = {
   personality: [],
 };
 
+const typeStep = {
+  title: 'Create your dream AI-Girlfriend',
+};
+
 const profileStep = {
   title: 'Profile',
 };
@@ -122,7 +126,7 @@ const reviewStep = {
   title: 'Review',
 };
 
-const totalSteps = 1 + selectSteps.length + 1;
+const totalSteps = 1 + 1 + selectSteps.length + 1;
 
 function enumOptions<T extends Record<string, string>>(source: T): Option<string>[] {
   return Object.values(source).map((value) => ({
@@ -169,14 +173,15 @@ function createDtoFromDraft(draft: CreateDraft): CustomCharacterCreateDto {
 }
 
 function isProfileValid(draft: CreateDraft) {
-  return draft.name.trim().length > 0 && Boolean(draft.age) && Boolean(draft.type);
+  return draft.name.trim().length > 0 && Boolean(draft.age);
 }
 
 function isStepValid(stepIndex: number, draft: CreateDraft) {
-  if (stepIndex === 0) return isProfileValid(draft);
+  if (stepIndex === 0) return true;
+  if (stepIndex === 1) return isProfileValid(draft);
   if (stepIndex === totalSteps - 1) return true;
 
-  const step = selectSteps[stepIndex - 1];
+  const step = selectSteps[stepIndex - 2];
   const value = draft[step.key];
   if (step.multi) {
     return Array.isArray(value) && value.length >= 1 && value.length <= 3;
@@ -186,9 +191,10 @@ function isStepValid(stepIndex: number, draft: CreateDraft) {
 }
 
 function getStepTitle(stepIndex: number) {
-  if (stepIndex === 0) return profileStep.title;
+  if (stepIndex === 0) return typeStep.title;
+  if (stepIndex === 1) return profileStep.title;
   if (stepIndex === totalSteps - 1) return reviewStep.title;
-  return selectSteps[stepIndex - 1].title;
+  return selectSteps[stepIndex - 2].title;
 }
 
 export function CreateCharacterPage() {
@@ -199,6 +205,7 @@ export function CreateCharacterPage() {
   const progress = ((stepIndex + 1) / totalSteps) * 100;
   const currentStepValid = isStepValid(stepIndex, draft);
   const isReviewStep = stepIndex === totalSteps - 1;
+  const isTypeStep = stepIndex === 0;
 
   const createMutation = useMutation({
     mutationFn: createCustomCharacter,
@@ -278,8 +285,17 @@ export function CreateCharacterPage() {
     setDraft((current) => ({ ...current, ...nextDraft }));
   };
 
+  const handleTypeSelect = (type: CharacterType) => {
+    setDraft((current) => ({ ...current, type }));
+    setStepIndex(1);
+  };
+
   const renderStep = () => {
     if (stepIndex === 0) {
+      return <TypeStep selectedType={draft.type} onSelect={handleTypeSelect} />;
+    }
+
+    if (stepIndex === 1) {
       return <ProfileStep draft={draft} onChange={updateDraft} />;
     }
 
@@ -292,7 +308,7 @@ export function CreateCharacterPage() {
       );
     }
 
-    const step = selectSteps[stepIndex - 1];
+    const step = selectSteps[stepIndex - 2];
     return <SelectStepView step={step} draft={draft} onChange={updateDraft} />;
   };
 
@@ -326,33 +342,102 @@ export function CreateCharacterPage() {
 
       <div className={s.content}>{renderStep()}</div>
 
-      <div className={s.footer}>
-        <button
-          type="button"
-          className={cn(s.nextButton, [], {
-            [s.createButton]: isReviewStep,
-          })}
-          disabled={!currentStepValid || createMutation.isPending}
-          onClick={handleNext}
-        >
-          <Typography
-            as="span"
-            variant="body-sm"
-            family="brand"
-            weight={600}
-            className={s.nextButtonText}
+      {!isTypeStep ? (
+        <div className={s.footer}>
+          <button
+            type="button"
+            className={cn(s.nextButton, [], {
+              [s.createButton]: isReviewStep,
+            })}
+            disabled={!currentStepValid || createMutation.isPending}
+            onClick={handleNext}
           >
-            {isReviewStep
-              ? createMutation.isPending
-                ? 'Creating...'
-                : 'Create'
-              : 'Next'}
-          </Typography>
-          {!isReviewStep ? (
-            <ChevronRightIcon width={24} height={24} className={s.nextChevron} />
-          ) : null}
-        </button>
-      </div>
+            <Typography
+              as="span"
+              variant="body-sm"
+              family="brand"
+              weight={600}
+              className={s.nextButtonText}
+            >
+              {isReviewStep
+                ? createMutation.isPending
+                  ? 'Creating...'
+                  : 'Create'
+                : 'Next'}
+            </Typography>
+            {!isReviewStep ? (
+              <ChevronRightIcon width={24} height={24} className={s.nextChevron} />
+            ) : null}
+          </button>
+        </div>
+      ) : null}
+    </div>
+  );
+}
+
+type TypeStepProps = {
+  selectedType?: CharacterType;
+  onSelect: (type: CharacterType) => void;
+};
+
+const typeOptions = [
+  {
+    type: CharacterType.Realistic,
+    label: 'Realistic',
+    videoUrl: import.meta.env.VITE_CC_VIDEO_R?.trim(),
+  },
+  {
+    type: CharacterType.Anime,
+    label: 'Anime',
+    videoUrl: import.meta.env.VITE_CC_VIDEO_A?.trim(),
+  },
+] satisfies Array<{
+  type: CharacterType;
+  label: string;
+  videoUrl?: string;
+}>;
+
+function TypeStep({ selectedType, onSelect }: TypeStepProps) {
+  return (
+    <div className={s.typeStep}>
+      {typeOptions.map((option) => {
+        const selected = option.type === selectedType;
+
+        return (
+          <button
+            key={option.type}
+            type="button"
+            className={cn(s.typeCard, [], {
+              [s.typeCardSelected]: selected,
+            })}
+            onClick={() => onSelect(option.type)}
+          >
+            {option.videoUrl ? (
+              <video
+                className={s.typeVideo}
+                src={option.videoUrl}
+                autoPlay
+                loop
+                muted
+                playsInline
+                preload="metadata"
+              />
+            ) : (
+              <div className={s.typeVideoFallback} aria-hidden />
+            )}
+            <div className={s.typeCardOverlay} />
+            <Typography
+              as="span"
+              variant="body-lg"
+              family="brand"
+              weight={600}
+              className={s.typeCardLabel}
+            >
+              {option.label}
+            </Typography>
+          </button>
+        );
+      })}
     </div>
   );
 }
@@ -382,16 +467,6 @@ function ProfileStep({ draft, onChange }: ProfileStepProps) {
         options={ages.map((age) => ({ value: age, label: String(age) }))}
         value={draft.age}
         onChange={(age) => onChange({ age })}
-      />
-
-      <ChoiceGroup
-        label="Type"
-        options={[
-          { value: CharacterType.Realistic, label: 'Realistic' },
-          { value: CharacterType.Anime, label: 'Anime' },
-        ]}
-        value={draft.type}
-        onChange={(type) => onChange({ type })}
       />
     </div>
   );

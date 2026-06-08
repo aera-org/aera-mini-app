@@ -94,6 +94,61 @@
   padding: 54px 8px 24px;
 }
 
+.typeStep {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 12px;
+  min-height: 100%;
+}
+
+.typeCard {
+  position: relative;
+  min-height: 460px;
+  padding: 0;
+  border: 1px solid rgba(255, 255, 255, 0.18);
+  border-radius: 24px;
+  overflow: hidden;
+  background: rgba(255, 255, 255, 0.08);
+  cursor: pointer;
+  box-shadow: 0 16px 32px rgba(0, 0, 0, 0.24);
+}
+
+.typeCardSelected {
+  border-color: rgba(255, 255, 255, 0.8);
+}
+
+.typeVideo,
+.typeVideoFallback {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  display: block;
+}
+
+.typeVideoFallback {
+  background:
+    radial-gradient(circle at top, rgba(255, 255, 255, 0.18), transparent 42%),
+    linear-gradient(180deg, rgba(255, 255, 255, 0.12), rgba(255, 255, 255, 0.04));
+}
+
+.typeCardOverlay {
+  position: absolute;
+  inset: 0;
+  background: linear-gradient(180deg, rgba(8, 7, 13, 0.08) 0%, rgba(8, 7, 13, 0.78) 100%);
+}
+
+.typeCardLabel {
+  position: absolute;
+  left: 0;
+  right: 0;
+  bottom: 22px;
+  z-index: 1;
+  text-align: center;
+  color: #fff;
+  font-size: 20px;
+  line-height: 1.1;
+}
+
 .profileForm {
   display: flex;
   flex-direction: column;
@@ -284,6 +339,16 @@
 .footer {
   flex-shrink: 0;
   padding-top: 12px;
+}
+
+@media (max-width: 380px) {
+  .typeCard {
+    min-height: 400px;
+  }
+
+  .typeCardLabel {
+    font-size: 18px;
+  }
 }
 
 .nextButton {
