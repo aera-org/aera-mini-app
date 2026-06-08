@@ -1,0 +1,1 @@
+export const CUSTOM_CHARACTER_CREATE_PRICE = 99;

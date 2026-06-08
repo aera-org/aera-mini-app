@@ -12,6 +12,7 @@ import {
   type IScenario,
   isCharacterType,
 } from '@/common/types';
+import { CUSTOM_CHARACTER_CREATE_PRICE } from '@/consts';
 import {
   compareGirlsByTopScenarioAndName,
   compareScenarios,
@@ -24,12 +25,9 @@ import {
   Loader,
   Typography,
 } from '@/components';
-import { useUser } from '@/context/UserContext';
 
 import { CharacterTypeSwitch } from './CharacterTypeSwitch';
 import s from './GirlsPage.module.scss';
-
-const CHARACTER_CREATE_PRICE = 99;
 
 type ScenarioWithGirl = {
   girl: ICharacter;
@@ -38,7 +36,6 @@ type ScenarioWithGirl = {
 
 export function GirlsPage() {
   const navigate = useNavigate();
-  const { user } = useUser();
   const [searchParams, setSearchParams] = useSearchParams();
   const rawType = searchParams.get('type') ?? '';
   const selectedType = isCharacterType(rawType)
@@ -62,11 +59,6 @@ export function GirlsPage() {
   };
 
   const handleCreateCharacterClick = () => {
-    if ((user?.air ?? 0) < CHARACTER_CREATE_PRICE) {
-      navigate('/store');
-      return;
-    }
-
     navigate('/my-girls/create');
   };
 
@@ -191,7 +183,7 @@ export function GirlsPage() {
           weight={500}
           className={s.createCardPriceText}
         >
-          {CHARACTER_CREATE_PRICE} AIR
+          {CUSTOM_CHARACTER_CREATE_PRICE} AIR
         </Typography>
       </span>
       <div className={s.cardBody}>
@@ -352,7 +344,7 @@ export function GirlsPage() {
                 backgroundImage: customCharacterImage,
                 title: 'Your Character',
                 description: 'Create your own dream partner',
-                priceAir: CHARACTER_CREATE_PRICE,
+                priceAir: CUSTOM_CHARACTER_CREATE_PRICE,
                 actionLabel: 'Try now',
                 onActionClick: handleCreateCharacterClick,
               }}

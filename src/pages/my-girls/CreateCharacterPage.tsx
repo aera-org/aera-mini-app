@@ -1,6 +1,6 @@
 import { useMutation, useQueryClient } from '@tanstack/react-query';
-import { useMemo, useState } from 'react';
-import { useNavigate } from 'react-router-dom';
+import { useEffect, useMemo, useRef, useState } from 'react';
+import { useLocation, useNavigate } from 'react-router-dom';
 
 import { createCustomCharacter } from '@/api/girls';
 import { ChevronLeftIcon, ChevronRightIcon, CrossIcon } from '@/assets/icons';
@@ -12,13 +12,17 @@ import {
   CharacterEyeColor,
   CharacterHairColor,
   CharacterHairStyle,
+  type CustomCharacterCreateRouteState,
+  type CustomCharacterDraft,
   CharacterPersonality,
   CharacterType,
   type CustomCharacterCreateDto,
   type ICharacter,
 } from '@/common/types';
+import { CUSTOM_CHARACTER_CREATE_PRICE } from '@/consts';
 import { capitalize, cn, formatPersonality } from '@/common/utils';
 import { CreatePending, Typography } from '@/components';
+import { useUser } from '@/context/UserContext';
 
 import s from './CreateCharacterPage.module.scss';
 
@@ -43,18 +47,7 @@ type SelectStep = {
   multi?: boolean;
 };
 
-type CreateDraft = {
-  name: string;
-  age?: number;
-  type?: CharacterType;
-  personality: CharacterPersonality[];
-  ethnicity?: CharacterEthnicity;
-  hairColor?: CharacterHairColor;
-  hairStyle?: CharacterHairStyle;
-  eyeColor?: CharacterEyeColor;
-  bodyType?: CharacterBodyType;
-  breastSize?: CharacterBreastSize;
-};
+type CreateDraft = CustomCharacterDraft;
 
 const ages = [18, 25, 30, 40, 55];
 
@@ -127,6 +120,7 @@ const reviewStep = {
 };
 
 const totalSteps = 1 + 1 + selectSteps.length + 1;
+const reviewStepIndex = totalSteps - 1;
 
 function enumOptions<T extends Record<string, string>>(source: T): Option<string>[] {
   return Object.values(source).map((value) => ({
@@ -198,13 +192,19 @@ function getStepTitle(stepIndex: number) {
 }
 
 export function CreateCharacterPage() {
+  const location = useLocation();
   const navigate = useNavigate();
   const queryClient = useQueryClient();
-  const [stepIndex, setStepIndex] = useState(0);
-  const [draft, setDraft] = useState<CreateDraft>(initialDraft);
+  const { user, isLoading: isUserLoading } = useUser();
+  const resumeState = getCustomCharacterRouteState(location.state);
+  const autoCreateTriggeredRef = useRef(false);
+  const [stepIndex, setStepIndex] = useState(
+    resumeState?.returnStep === 'review' ? reviewStepIndex : 0,
+  );
+  const [draft, setDraft] = useState<CreateDraft>(resumeState?.draft ?? initialDraft);
   const progress = ((stepIndex + 1) / totalSteps) * 100;
   const currentStepValid = isStepValid(stepIndex, draft);
-  const isReviewStep = stepIndex === totalSteps - 1;
+  const isReviewStep = stepIndex === reviewStepIndex;
   const isTypeStep = stepIndex === 0;
 
   const createMutation = useMutation({
@@ -278,6 +278,13 @@ export function CreateCharacterPage() {
       return;
     }
 
+    if ((user?.air ?? 0) < CUSTOM_CHARACTER_CREATE_PRICE) {
+      navigate('/store', {
+        state: buildCustomCharacterRouteState(draft),
+      });
+      return;
+    }
+
     createMutation.mutate(createDtoFromDraft(draft));
   };
 
@@ -312,6 +319,26 @@ export function CreateCharacterPage() {
     return <SelectStepView step={step} draft={draft} onChange={updateDraft} />;
   };
 
+  useEffect(() => {
+    if (!resumeState?.purchaseCompleted || !resumeState.autoCreateAfterPurchase) {
+      return;
+    }
+    if (autoCreateTriggeredRef.current) return;
+    if (isUserLoading || createMutation.isPending) return;
+    if (stepIndex !== reviewStepIndex || !isStepValid(reviewStepIndex, draft)) return;
+    if ((user?.air ?? 0) < CUSTOM_CHARACTER_CREATE_PRICE) return;
+
+    autoCreateTriggeredRef.current = true;
+    createMutation.mutate(createDtoFromDraft(draft));
+  }, [
+    createMutation,
+    draft,
+    isUserLoading,
+    resumeState,
+    stepIndex,
+    user?.air,
+  ]);
+
   if (createMutation.isPending) {
     return <CreatePending title="Creating your character" />;
   }
@@ -322,23 +349,39 @@ export function CreateCharacterPage() {
         <button type="button" className={s.iconButton} onClick={goBack}>
           <ChevronLeftIcon width={30} height={30} />
         </button>
-        <Typography
-          as="h1"
-          variant="heading-sm"
-          family="brand"
-          weight={400}
-          className={s.title}
-        >
-          {getStepTitle(stepIndex)}
-        </Typography>
+        {isTypeStep ? <div aria-hidden /> : (
+          <Typography
+            as="h1"
+            variant="heading-sm"
+            family="brand"
+            weight={400}
+            className={s.title}
+          >
+            {getStepTitle(stepIndex)}
+          </Typography>
+        )}
         <button type="button" className={s.closeButton} onClick={close}>
           <CrossIcon width={42} height={42} />
         </button>
       </div>
 
-      <div className={s.progressTrack} aria-hidden>
-        <div className={s.progressFill} style={{ width: `${progress}%` }} />
-      </div>
+      {isTypeStep ? (
+        <div className={s.typeStepTitleWrap}>
+          <Typography
+            as="h1"
+            variant="heading-lg"
+            family="brand"
+            weight={400}
+            className={s.typeStepTitle}
+          >
+            Create your dream <br /> AI-Girlfriend
+          </Typography>
+        </div>
+      ) : (
+        <div className={s.progressTrack} aria-hidden>
+          <div className={s.progressFill} style={{ width: `${progress}%` }} />
+        </div>
+      )}
 
       <div className={s.content}>{renderStep()}</div>
 
@@ -373,6 +416,33 @@ export function CreateCharacterPage() {
       ) : null}
     </div>
   );
+}
+
+function buildCustomCharacterRouteState(
+  draft: CreateDraft,
+): CustomCharacterCreateRouteState {
+  return {
+    source: 'custom-character-create',
+    draft,
+    returnStep: 'review',
+    autoCreateAfterPurchase: true,
+  };
+}
+
+function getCustomCharacterRouteState(
+  value: unknown,
+): CustomCharacterCreateRouteState | null {
+  if (!value || typeof value !== 'object') return null;
+
+  const state = value as Partial<CustomCharacterCreateRouteState>;
+  if (state.source !== 'custom-character-create') return null;
+  if (state.returnStep !== 'review') return null;
+  if (typeof state.autoCreateAfterPurchase !== 'boolean') return null;
+  if (!state.draft || typeof state.draft !== 'object') return null;
+  if (typeof state.draft.name !== 'string') return null;
+  if (!Array.isArray(state.draft.personality)) return null;
+
+  return state as CustomCharacterCreateRouteState;
 }
 
 type TypeStepProps = {

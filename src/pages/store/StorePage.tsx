@@ -1,7 +1,7 @@
 import { useQuery, useQueryClient } from '@tanstack/react-query';
 import TelegramWebApp from '@twa-dev/sdk';
 import { type CSSProperties, useEffect, useMemo } from 'react';
-import { useNavigate } from 'react-router-dom';
+import { useLocation, useNavigate } from 'react-router-dom';
 
 import { createPlanInvoice } from '@/api/payments';
 import { getPlans } from '@/api/plans';
@@ -13,7 +13,11 @@ import air5 from '@/assets/air/air-5.png';
 import air6 from '@/assets/air/air-6.png';
 import { BoltIcon, TgStarIcon } from '@/assets/icons';
 import upgradeImage from '@/assets/mini/upgrade.png';
-import { type IPlan, PlanType } from '@/common/types';
+import {
+  type CustomCharacterCreateRouteState,
+  type IPlan,
+  PlanType,
+} from '@/common/types';
 import { Card, Loader, Typography } from '@/components';
 import { useLaunchParams } from '@/context/useLaunchParams';
 
@@ -29,9 +33,11 @@ const extraBadgeColors = [
 ];
 
 export function StorePage() {
+  const location = useLocation();
   const navigate = useNavigate();
   const queryClient = useQueryClient();
   const launchParams = useLaunchParams();
+  const customCharacterRouteState = getCustomCharacterRouteState(location.state);
   const {
     data: plans = [],
     isLoading,
@@ -61,7 +67,17 @@ export function StorePage() {
         const invoiceLink = await createPlanInvoice(plan.id, launchParams);
         TelegramWebApp.openInvoice(invoiceLink, (status) => {
           if (status === 'paid') {
-            queryClient.invalidateQueries({ queryKey: ['me'] });
+            void queryClient.invalidateQueries({ queryKey: ['me'] }).finally(() => {
+              if (!customCharacterRouteState) return;
+
+              navigate('/my-girls/create', {
+                replace: true,
+                state: {
+                  ...customCharacterRouteState,
+                  purchaseCompleted: true,
+                } satisfies CustomCharacterCreateRouteState,
+              });
+            });
           }
         });
       } catch (err) {
@@ -211,4 +227,20 @@ export function StorePage() {
       ) : null}
     </div>
   );
+}
+
+function getCustomCharacterRouteState(
+  value: unknown,
+): CustomCharacterCreateRouteState | null {
+  if (!value || typeof value !== 'object') return null;
+
+  const state = value as Partial<CustomCharacterCreateRouteState>;
+  if (state.source !== 'custom-character-create') return null;
+  if (state.returnStep !== 'review') return null;
+  if (typeof state.autoCreateAfterPurchase !== 'boolean') return null;
+  if (!state.draft || typeof state.draft !== 'object') return null;
+  if (typeof state.draft.name !== 'string') return null;
+  if (!Array.isArray(state.draft.personality)) return null;
+
+  return state as CustomCharacterCreateRouteState;
 }
