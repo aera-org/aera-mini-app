@@ -1,10 +1,15 @@
-import type { IUser } from '@/common/types';
+import type { IUser, PlanType } from '@/common/types';
 
 import { apiFetch, localFetch } from './client';
 
 type MeDeeplinkDto = {
   ref: string;
   type: 'cc';
+};
+
+type PaywallOpenDto = {
+  type: PlanType.Subscription | PlanType.Air;
+  chatId: string;
 };
 
 export async function getMe(): Promise<IUser> {
@@ -33,6 +38,21 @@ export async function postMeDeeplink(body: MeDeeplinkDto): Promise<void> {
   if (!response.ok) {
     const text = await response.text();
     throw new Error(text || 'Failed to post deeplink');
+  }
+}
+
+export async function postPaywallOpen(body: PaywallOpenDto): Promise<void> {
+  const response = await apiFetch('/me/paywall-open', {
+    method: 'POST',
+    headers: {
+      'Content-Type': 'application/json',
+    },
+    body: JSON.stringify(body),
+  });
+
+  if (!response.ok) {
+    const text = await response.text();
+    throw new Error(text || 'Failed to post paywall open');
   }
 }
 

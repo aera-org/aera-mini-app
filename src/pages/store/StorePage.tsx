@@ -20,6 +20,7 @@ import {
 } from '@/common/types';
 import { Card, Loader, Typography } from '@/components';
 import { useLaunchParams } from '@/context/useLaunchParams';
+import { usePaywallOpenTracking } from '@/hooks/usePaywallOpenTracking';
 
 import s from './StorePage.module.scss';
 
@@ -38,6 +39,7 @@ export function StorePage() {
   const queryClient = useQueryClient();
   const launchParams = useLaunchParams();
   const customCharacterRouteState = getCustomCharacterRouteState(location.state);
+  usePaywallOpenTracking(PlanType.Air);
   const {
     data: plans = [],
     isLoading,

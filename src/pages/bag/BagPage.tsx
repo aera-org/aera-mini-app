@@ -17,6 +17,7 @@ import { type IPlan, PlanPeriod, PlanType } from '@/common/types';
 import { Card, Loader, Typography } from '@/components';
 import { useLaunchParams } from '@/context/useLaunchParams';
 import { useUser } from '@/context/UserContext';
+import { usePaywallOpenTracking } from '@/hooks/usePaywallOpenTracking';
 
 import s from './BagPage.module.scss';
 
@@ -90,6 +91,7 @@ export function BagPage() {
   const launchParams = useLaunchParams();
   const queryClient = useQueryClient();
   const [selectedId, setSelectedId] = useState<string | null>(null);
+  usePaywallOpenTracking(PlanType.Subscription);
 
   const {
     data: plans = [],
