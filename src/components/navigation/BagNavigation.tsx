@@ -1,4 +1,4 @@
-import { ArrowLeftIcon, BoltIcon } from '@/assets/icons';
+import { ArrowLeftIcon, SparklesIcon } from '@/assets/icons';
 import { Typography } from '@/components/text';
 
 import s from './Navigation.module.scss';
@@ -20,7 +20,7 @@ export function BagNavigation({ onBack, onUpgrade }: BagNavigationProps) {
         <ArrowLeftIcon width={20} height={20} />
       </button>
       <button type="button" className={s.bagUpgradeButton} onClick={onUpgrade}>
-        <BoltIcon width={20} height={20} />
+        <SparklesIcon width={22} height={22} />
         <Typography
           as="span"
           variant="body-md"

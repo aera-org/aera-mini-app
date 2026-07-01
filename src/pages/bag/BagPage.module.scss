@@ -1,14 +1,21 @@
 .container {
   width: 100%;
-  padding: 70px 12px 96px;
+  padding: 72px 14px 104px;
   display: flex;
   flex-direction: column;
-  gap: 16px;
+  gap: 18px;
   color: #fff;
   font-family: var(--font-content);
   overflow-y: auto;
   height: calc(var(--vh, 1vh) * 100);
-  background: linear-gradient(180deg, #221A09 44.23%, #05090C 100%)
+  background:
+    radial-gradient(circle at 20% 4%, rgba(255, 214, 65, 0.2), transparent 26%),
+    radial-gradient(
+      circle at 90% 16%,
+      rgba(230, 74, 255, 0.12),
+      transparent 30%
+    ),
+    linear-gradient(180deg, #171003 0%, #100d07 45%, #05090c 100%);
 }
 
 .statusCard {
@@ -33,107 +40,135 @@
 .plans {
   display: flex;
   flex-direction: column;
-  gap: 10px;
+  gap: 13px;
+}
+
+.introOffer {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 12px;
+  padding: 0 2px 2px;
+}
+
+.introEyebrow {
+  width: fit-content;
+  margin-bottom: 4px;
+  color: #ff4d83;
+  letter-spacing: 0.12em;
+}
+
+.introTitle {
+  max-width: 190px;
+  color: #fff;
+  font-size: 20px;
+  line-height: 1.18;
+}
+
+.introTimer {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-shrink: 0;
+}
+
+.introTimerValue {
+  color: #ff7aa8;
+  font-size: 18px;
+  line-height: 1;
+  letter-spacing: 0.03em;
 }
 
 .planCard {
   display: flex;
-  align-items: center;
-  justify-content: space-between;
-  padding: 14px;
+  flex-direction: column;
+  gap: 13px;
+  padding: 18px 16px;
   cursor: pointer;
-  transition: border-color 0.2s ease, background 0.2s ease;
+  overflow: visible;
+  border-color: rgba(255, 255, 255, 0.18);
+  background:
+    linear-gradient(
+      180deg,
+      rgba(255, 255, 255, 0.055),
+      rgba(255, 255, 255, 0.015)
+    ),
+    rgba(255, 255, 255, 0.025);
+  box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.08);
+  transition:
+    border-color 0.2s ease,
+    background 0.2s ease,
+    box-shadow 0.2s ease,
+    transform 0.2s ease;
 }
-
 
 .selected {
   border-color: rgba(255, 212, 53, 1);
   background-image:
-          repeating-linear-gradient(
-                          -45deg,
-                          rgba(255, 255, 255, 0.1) 0 1px,
-                          transparent 1px 8px
-          ),
-          linear-gradient(180deg, rgba(255, 212, 53, 0.04) 0%, rgba(255, 212, 53, 0.15) 100%);
+    linear-gradient(
+      120deg,
+      rgba(255, 212, 53, 0.18),
+      rgba(217, 146, 254, 0.1) 46%,
+      rgba(255, 255, 255, 0.03)
+    ),
+    linear-gradient(180deg, rgba(255, 255, 255, 0.06), rgba(255, 212, 53, 0.08));
   backdrop-filter: blur(20px);
   -webkit-backdrop-filter: blur(20px);
+  box-shadow:
+    0 0 0 1px rgba(255, 212, 53, 0.18),
+    0 18px 36px rgba(0, 0, 0, 0.3),
+    inset 0 1px 0 rgba(255, 255, 255, 0.14);
+  transform: translateY(-1px);
 }
 
-.planLeft {
+.recommendedPlan {
+  position: relative;
+  margin-top: 8px;
+}
+
+.planHeader {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 12px;
+}
+
+.planTitle {
   flex: 1;
   min-width: 0;
   display: flex;
-  align-items: flex-start;
-  gap: 10px;
-}
-
-.selectIndicator {
-  width: 24px;
-  height: 24px;
-  border-radius: 50%;
-  border: 1px solid rgba(255, 255, 255, 0.16);
-  background: rgba(71, 57, 20, 1);
-  display: inline-flex;
-  align-items: center;
-  justify-content: center;
-  flex-shrink: 0;
-  margin-top: 2px;
-}
-
-.selectIndicatorDot {
-  width: 12px;
-  height: 12px;
-  border-radius: 50%;
-  background: transparent;
-}
-
-.selected .selectIndicator {
-  background: rgba(255, 212, 53, 1);
-}
-
-.selected .selectIndicatorDot {
-  background: white;
-  box-shadow: 2px 2px 2px 0 rgba(41, 8, 125, 0.5);
-}
-
-.planRows {
-  display: flex;
   flex-direction: column;
-  gap: 8px;
+  gap: 5px;
   align-items: flex-start;
 }
 
-.planRowTop {
-  display: flex;
-  align-items: center;
-  gap: 10px;
-}
-
-.airRow {
-  display: inline-flex;
-  align-items: center;
-  gap: 2px;
+.planEyebrow {
+  color: rgba(255, 217, 79, 0.84);
+  font-size: 10px;
+  line-height: 1;
+  letter-spacing: 0.12em;
 }
 
 .airIcon {
-  width: 20px;
-  height: 20px;
+  width: 17px;
+  height: 17px;
+  margin-right: -4px;
 }
 
-.airText {
-  font-family: var(--font-ui);
-  font-weight: 600;
-  font-style: normal;
-  font-size: 14px;
-  line-height: 100%;
-  letter-spacing: -1.23px;
-  color: #fff;
-}
-
-.planRowBottom {
+.planPrice {
   display: flex;
+  flex-direction: column;
+  align-items: flex-end;
+  justify-content: flex-end;
+  gap: 5px;
+  flex-shrink: 0;
+}
+
+.priceTop {
+  display: inline-flex;
   align-items: center;
-  gap: 6px;
+  justify-content: flex-end;
+  gap: 7px;
 }
 
 .planPeriod {
@@ -141,64 +176,109 @@
   font-weight: 500;
   font-style: normal;
   color: #fff;
-  font-size: 22px;
-  line-height: 20px;
-  letter-spacing: -0.84px;
+  font-size: 25px;
+  line-height: 1;
+  letter-spacing: 0;
 }
 
-.dailyPrice {
-  font-family: var(--font-ui);
-  font-weight: 600;
-  font-style: normal;
-  color: rgba(180, 180, 180, 1);
-  font-size: 13px;
-  line-height: 100%;
-  letter-spacing: -0.43px;
-}
-
-.save {
-  font-family: var(--font-ui);
-  font-weight: 600;
-  font-style: normal;
-  color: rgba(180, 180, 180, 1);
-  font-size: 13px;
-  line-height: 100%;
-  letter-spacing: -0.43px;
-  text-transform: uppercase;
-}
-
-.recommendedBadge {
+.oldPrice,
+.currentPrice {
   display: inline-flex;
   align-items: center;
-  justify-content: center;
-  padding: 3px 8px;
-  border-radius: 20px;
-  background: rgba(217, 146, 254, 1);
-}
-
-.recommendedBadgeText {
-  color: #fff;
-  font-size: 14px;
-  line-height: 100%;
-  letter-spacing: -0.58px;
-  text-transform: lowercase;
-}
-
-.planRight {
-  display: flex;
-  align-items: center;
   gap: 4px;
-  flex-shrink: 0;
+}
+
+.oldPrice {
+  position: relative;
+  opacity: 0.52;
+}
+
+.oldPrice::after {
+  position: absolute;
+  left: -2px;
+  right: -2px;
+  top: 50%;
+  height: 2px;
+  content: '';
+  border-radius: 999px;
+  background: rgba(255, 255, 255, 0.9);
+  transform: rotate(-8deg);
+}
+
+.oldPriceAmount {
+  color: rgba(255, 255, 255, 0.86);
+  font-size: 13px;
+  line-height: 1;
 }
 
 .priceAmount {
   font-family: var(--font-ui);
-  font-weight: 600;
+  font-weight: 700;
   font-style: normal;
-  font-size: 18px;
-  line-height: 100%;
-  letter-spacing: -0.43px;
+  font-size: 24px;
+  line-height: 1;
+  letter-spacing: 0;
   color: #fff;
+}
+
+.planMeta {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 7px;
+}
+
+.metaPill,
+.savePill {
+  display: inline-flex;
+  align-items: center;
+  gap: 5px;
+}
+
+.metaText {
+  color: rgba(255, 255, 255, 0.82);
+  font-size: 12px;
+  line-height: 1;
+}
+
+.dailyPricePill {
+  margin-left: auto;
+}
+
+.save {
+  font-family: var(--font-ui);
+  font-weight: 700;
+  font-style: normal;
+  color: #ffe27a;
+  font-size: 12px;
+  line-height: 1;
+  letter-spacing: 0.03em;
+  text-transform: uppercase;
+}
+
+.recommendedBadge {
+  position: absolute;
+  right: 14px;
+  top: 0;
+  transform: translateY(-50%);
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  padding: 5px 11px;
+  border-radius: 20px;
+  background: linear-gradient(135deg, #d992fe 0%, #ff74c8 100%);
+  border: 1px solid rgba(255, 255, 255, 0.28);
+  box-shadow:
+    0 8px 22px rgba(217, 146, 254, 0.22),
+    0 0 0 3px rgba(16, 13, 7, 0.88);
+}
+
+.recommendedBadgeText {
+  color: #fff;
+  font-size: 13px;
+  line-height: 1;
+  letter-spacing: 0;
+  text-transform: lowercase;
 }
 
 .featuresGrid {

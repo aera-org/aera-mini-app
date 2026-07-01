@@ -14,6 +14,7 @@ import {
 import airIcon from '@/assets/mini/air.png';
 import { PlanFeaturesA, PlanFeaturesB } from '@/common/consts';
 import { type IPlan, PlanPeriod, PlanType } from '@/common/types';
+import { cn } from '@/common/utils';
 import { Card, Loader, Typography } from '@/components';
 import { useLaunchParams } from '@/context/useLaunchParams';
 import { useUser } from '@/context/UserContext';
@@ -35,12 +36,19 @@ function pluralize(count: number, one: string, many: string) {
   return count === 1 ? one : many;
 }
 
-function getRemainingLabel(subscribedUntil?: string | null) {
+const PLAN_NAME = [
+  'Trial',
+  'Basic',
+  'Premium',
+  'Ultimate',
+]
+
+function getRemainingLabel(subscribedUntil?: string | null, now = Date.now()) {
   if (!subscribedUntil) return { active: false, label: 'Free' };
   const end = Date.parse(subscribedUntil);
   if (Number.isNaN(end)) return { active: false, label: 'Free' };
 
-  const remainingMs = end - Date.now();
+  const remainingMs = end - now;
   if (remainingMs <= 0) return { active: false, label: 'Free' };
 
   const remainingHours = remainingMs / 3_600_000;
@@ -81,6 +89,30 @@ function getDailyPrice(plan: IPlan) {
   return plan.price / getPlanDays(plan);
 }
 
+function getFirstDayOfferTimer(userCreatedAt?: string, now = Date.now()) {
+  if (!userCreatedAt) return null;
+
+  const createdAt = Date.parse(userCreatedAt);
+  if (Number.isNaN(createdAt)) return null;
+
+  const remainingMs = createdAt + 24 * 3_600_000 - now;
+  if (remainingMs <= 0) return null;
+
+  const hours = Math.floor(remainingMs / 3_600_000);
+  const minutes = Math.floor((remainingMs % 3_600_000) / 60_000);
+  const seconds = Math.floor((remainingMs % 60_000) / 1000);
+
+  return {
+    label: [hours, minutes, seconds]
+      .map((part) => String(part).padStart(2, '0'))
+      .join(':'),
+  };
+}
+
+function getStandardAnchorPrice(price: number) {
+  return Math.round(price * 1.5);
+}
+
 type LayoutOutletContext = {
   setBagUpgradeAction: (action: (() => void) | null) => void;
 };
@@ -91,6 +123,7 @@ export function BagPage() {
   const launchParams = useLaunchParams();
   const queryClient = useQueryClient();
   const [selectedId, setSelectedId] = useState<string | null>(null);
+  const [now, setNow] = useState(() => Date.now());
   usePaywallOpenTracking(PlanType.Subscription);
 
   const {
@@ -134,6 +167,16 @@ export function BagPage() {
     };
   }, [queryClient]);
 
+  useEffect(() => {
+    const intervalId = window.setInterval(() => {
+      setNow(Date.now());
+    }, 1000);
+
+    return () => {
+      window.clearInterval(intervalId);
+    };
+  }, []);
+
   const selectedPlan = useMemo(
     () => plans.find((plan) => plan.id === selectedId) ?? getDefaultPlan(plans),
     [plans, selectedId],
@@ -143,10 +186,6 @@ export function BagPage() {
     const index = plans.findIndex((plan) => plan.id === selectedPlan.id);
     return index >= 0 ? index : 0;
   }, [plans, selectedPlan]);
-  const firstPlanDailyPrice = useMemo(
-    () => (plans.length ? getDailyPrice(plans[0]) : 0),
-    [plans],
-  );
   const activeFeatures = useMemo(() => {
     const activeA = new Set<number>();
     const activeB = new Set<number>();
@@ -180,7 +219,8 @@ export function BagPage() {
     return { activeA, activeB };
   }, [selectedPlanIndex]);
 
-  const remaining = getRemainingLabel(user?.subscribedUntil);
+  const remaining = getRemainingLabel(user?.subscribedUntil, now);
+  const firstDayOfferTimer = getFirstDayOfferTimer(user?.createdAt, now);
 
   const handleSubscribe = useCallback(() => {
     if (!selectedPlan) return;
@@ -232,6 +272,39 @@ export function BagPage() {
 
       {!isLoading && !isError ? (
         <>
+          <div className={s.introOffer}>
+            <div>
+              <Typography
+                as="div"
+                variant="label"
+                weight={700}
+                className={s.introEyebrow}
+              >
+                SALE 50% OFF
+              </Typography>
+              <Typography
+                as="div"
+                variant="heading-sm"
+                weight={600}
+                className={s.introTitle}
+              >
+                {firstDayOfferTimer ? 'First day offer' : 'Exclusive offer'}
+              </Typography>
+            </div>
+            {firstDayOfferTimer ? (
+              <div className={s.introTimer}>
+                <Typography
+                  as="span"
+                  variant="body-md"
+                  weight={700}
+                  className={s.introTimerValue}
+                >
+                  {firstDayOfferTimer.label}
+                </Typography>
+              </div>
+            ) : null}
+          </div>
+
           <div className={s.plans}>
             {plans.map((plan, index) => {
               const currentDailyPrice = getDailyPrice(plan);
@@ -239,115 +312,134 @@ export function BagPage() {
                 1,
                 Math.round(currentDailyPrice),
               );
-              const savePercent =
-                index === 0 || firstPlanDailyPrice <= 0
-                  ? 0
-                  : Math.max(
-                      0,
-                      Math.round(
-                        (1 - currentDailyPrice / firstPlanDailyPrice) * 100,
-                      ),
-                    );
+              let savePercent = 0
+                if(index === 2) {
+                  savePercent = 50
+                }
+
+                if(index === 3) {
+                  savePercent = 70
+                }
+              const standardAnchorPrice = getStandardAnchorPrice(plan.price);
 
               return (
                 <Card
                   key={plan.id}
-                  className={`${s.planCard} ${plan.id === selectedId ? s.selected : ''}`}
+                  className={cn(
+                    s.planCard,
+                    [plan.isRecommended ? s.recommendedPlan : null],
+                    { [s.selected]: plan.id === selectedId },
+                  )}
                   variant={plan.isRecommended ? 'accent' : 'neutral'}
                   onClick={() => setSelectedId(plan.id)}
                 >
-                  <div className={s.planLeft}>
-                    <div className={s.selectIndicator}>
-                      <span className={s.selectIndicatorDot} />
+                  <div className={s.planHeader}>
+                    <div className={s.planTitle}>
+                      <Typography
+                        as="span"
+                        variant="label"
+                        family="system"
+                        weight={700}
+                        className={s.planEyebrow}
+                      >
+                        {PLAN_NAME[index]}
+                      </Typography>
+                      <Typography
+                        as="span"
+                        variant="body-sm"
+                        family="brand"
+                        weight={500}
+                        className={s.planPeriod}
+                      >
+                        {formatPeriod(plan)}
+                      </Typography>
                     </div>
-                    <div className={s.planRows}>
-                      <div className={s.planRowTop}>
-                        <Typography
-                          as="span"
-                          variant="body-sm"
-                          family="brand"
-                          weight={500}
-                          className={s.planPeriod}
-                        >
-                          {formatPeriod(plan)}
-                        </Typography>
-                        <span className={s.airRow}>
-                          <Typography
-                            as="span"
-                            variant="body-sm"
-                            family="system"
-                            weight={600}
-                            className={s.airText}
-                          >
-                            +
-                          </Typography>
-                          <img
-                            className={s.airIcon}
-                            src={airIcon}
-                            alt="air"
-                            draggable={false}
-                          />
-                          <Typography
-                            as="span"
-                            variant="body-sm"
-                            family="system"
-                            weight={600}
-                            className={s.airText}
-                          >
-                            {plan.air} AIR
-                          </Typography>
-                        </span>
-                      </div>
-                      <div className={s.planRowBottom}>
-                        <TgStarWhiteIcon width={16} height={16} />
-                        <Typography
-                          as="span"
-                          variant="caption"
-                          family="system"
-                          weight={600}
-                          className={s.dailyPrice}
-                        >
-                          {dailyPriceLabel} / day
-                        </Typography>
-                        {index > 0 ? (
+                    <div className={s.planPrice}>
+                      <span className={s.priceTop}>
+                        <span className={s.oldPrice}>
+                          <TgStarIcon width={14} height={14} />
                           <Typography
                             as="span"
                             variant="caption"
                             family="system"
-                            weight={600}
-                            className={s.save}
+                            weight={700}
+                            className={s.oldPriceAmount}
                           >
-                            SAVE {savePercent}%
+                            {standardAnchorPrice}
                           </Typography>
-                        ) : null}
-                        {plan.isRecommended ? (
-                          <span className={s.recommendedBadge}>
-                            <Typography
-                              as="span"
-                              variant="caption"
-                              family="brand"
-                              weight={500}
-                              className={s.recommendedBadgeText}
-                            >
-                              most popular
-                            </Typography>
-                          </span>
-                        ) : null}
-                      </div>
+                        </span>
+                        <span className={s.currentPrice}>
+                          <TgStarIcon width={21} height={21} />
+                          <Typography
+                            as="span"
+                            variant="body-md"
+                            family="system"
+                            weight={700}
+                            className={s.priceAmount}
+                          >
+                            {plan.price}
+                          </Typography>
+                        </span>
+                      </span>
                     </div>
                   </div>
-                  <div className={s.planRight}>
-                    <TgStarIcon width={20} height={20} />
-                    <Typography
-                      as="span"
-                      variant="body-md"
-                      family="system"
-                      weight={600}
-                      className={s.priceAmount}
-                    >
-                      {plan.price}
-                    </Typography>
+                  <div className={s.planMeta}>
+                    <span className={s.metaPill}>
+                    <img
+                        className={s.airIcon}
+                        src={airIcon}
+                        alt="air"
+                        draggable={false}
+                      />
+                      <Typography
+                        as="span"
+                        variant="caption"
+                        family="system"
+                        weight={700}
+                        className={s.metaText}
+                      >
+                        +{plan.air} AIR
+                      </Typography>
+                    </span>
+                    {index > 1 ? (
+                      <span className={s.savePill}>
+                        <Typography
+                          as="span"
+                          variant="caption"
+                          family="system"
+                          weight={700}
+                          className={s.save}
+                        >
+                          SAVE {savePercent}%
+                        </Typography>
+                      </span>
+                    ) : null}
+                    <span className={`${s.metaPill} ${s.dailyPricePill}`}>
+                      <TgStarWhiteIcon width={15} height={15} />
+                      <Typography
+                        as="span"
+                        variant="caption"
+                        family="system"
+                        weight={700}
+                        className={s.metaText}
+                      >
+                        {dailyPriceLabel} / day
+                      </Typography>
+                    </span>
                   </div>
+                  {plan.isRecommended ? (
+                    <span className={s.recommendedBadge}>
+                      <Typography
+                        as="span"
+                        variant="caption"
+                        family="brand"
+                        weight={500}
+                        className={s.recommendedBadgeText}
+                      >
+                        most popular
+                      </Typography>
+                    </span>
+                  ) : null}
                 </Card>
               );
             })}
