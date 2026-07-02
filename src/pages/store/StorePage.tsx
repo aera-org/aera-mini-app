@@ -28,7 +28,7 @@ const airIcons = [air1, air2, air3, air4];
 const extraPercent = [
   0, 25, 40, 60
 ]
-const secondaryPlanLabels = ['quick taste', 'satisfaction', 'crazy & horny'];
+const secondaryPlanLabels = ['one night', 'satisfaction', 'crazy & horny'];
 
 export function StorePage() {
   const location = useLocation();
