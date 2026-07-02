@@ -103,10 +103,10 @@ export function StorePage() {
         />
         <div className={s.heroLeft}>
           <Typography as="div" variant="heading-lg" className={s.heroTitle}>
-            Unlimited Fuel
+            Go Unlimited
           </Typography>
           <Typography as="div" variant="body-md" className={s.heroSubtitle}>
-            Remove any barriers. Endless conversations and spicy images
+            No limits. Endless chats and explicit photos.
           </Typography>
         </div>
         <button
