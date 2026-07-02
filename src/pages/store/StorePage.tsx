@@ -1,6 +1,6 @@
 import { useQuery, useQueryClient } from '@tanstack/react-query';
 import TelegramWebApp from '@twa-dev/sdk';
-import { useEffect, useMemo } from 'react';
+import { type KeyboardEvent, useEffect, useMemo } from 'react';
 import { useLocation, useNavigate } from 'react-router-dom';
 
 import { createPlanInvoice } from '@/api/payments';
@@ -110,6 +110,17 @@ export function StorePage() {
     })();
   };
 
+  const handlePlanCardKeyDown = (
+    event: KeyboardEvent<HTMLDivElement>,
+    plan: IPlan,
+  ) => {
+    if (event.target !== event.currentTarget) return;
+    if (event.key !== 'Enter' && event.key !== ' ') return;
+
+    event.preventDefault();
+    handleBuy(plan);
+  };
+
   return (
     <div className={s.container}>
       {isLoading ? <Loader /> : null}
@@ -149,7 +160,16 @@ export function StorePage() {
           </div>
 
           {featuredPlan ? (
-            <Card className={s.featuredPlanCard} variant="accent">
+            <Card
+              className={s.featuredPlanCard}
+              variant="accent"
+              role="button"
+              tabIndex={0}
+              onClick={() => handleBuy(featuredPlan.plan)}
+              onKeyDown={(event) =>
+                handlePlanCardKeyDown(event, featuredPlan.plan)
+              }
+            >
               <div className={s.featuredCopy}>
                 <Typography
                   as="span"
@@ -178,7 +198,10 @@ export function StorePage() {
                 <button
                   type="button"
                   className={s.featuredButton}
-                  onClick={() => handleBuy(featuredPlan.plan)}
+                  onClick={(event) => {
+                    event.stopPropagation();
+                    handleBuy(featuredPlan.plan);
+                  }}
                 >
                   <TgStarIcon
                     width={20}
@@ -211,6 +234,10 @@ export function StorePage() {
                   className={`${s.planCard} ${toneClassName}`}
                   variant="accent"
                   key={plan.id}
+                  role="button"
+                  tabIndex={0}
+                  onClick={() => handleBuy(plan)}
+                  onKeyDown={(event) => handlePlanCardKeyDown(event, plan)}
                 >
                   {extra > 0 ? (
                     <Typography
@@ -260,7 +287,10 @@ export function StorePage() {
                   <button
                     type="button"
                     className={s.planButton}
-                    onClick={() => handleBuy(plan)}
+                    onClick={(event) => {
+                      event.stopPropagation();
+                      handleBuy(plan);
+                    }}
                   >
                     <TgStarIcon
                       width={18}
