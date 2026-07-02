@@ -1,6 +1,6 @@
 import { useQuery, useQueryClient } from '@tanstack/react-query';
 import TelegramWebApp from '@twa-dev/sdk';
-import { type CSSProperties, useEffect, useMemo } from 'react';
+import { useEffect, useMemo } from 'react';
 import { useLocation, useNavigate } from 'react-router-dom';
 
 import { createPlanInvoice } from '@/api/payments';
@@ -11,7 +11,7 @@ import air3 from '@/assets/air/air-5.png';
 import air4 from '@/assets/air/air-6.png';
 // import air5 from '@/assets/air/air-5.png';
 // import air6 from '@/assets/air/air-6.png';
-import { BoltIcon, TgStarIcon } from '@/assets/icons';
+import { SparklesIcon, TgStarIcon } from '@/assets/icons';
 import upgradeImage from '@/assets/mini/upgrade.png';
 import {
   type CustomCharacterCreateRouteState,
@@ -25,17 +25,10 @@ import { usePaywallOpenTracking } from '@/hooks/usePaywallOpenTracking';
 import s from './StorePage.module.scss';
 
 const airIcons = [air1, air2, air3, air4];
-const extraBadgeColors = [
-  'rgba(240, 116, 58, 1)',
-  'rgba(58, 167, 240, 1)',
-  'rgba(97, 58, 240, 1)',
-  'rgba(19, 179, 72, 1)',
-  'rgba(58, 118, 240, 1)',
-];
-
 const extraPercent = [
   0, 25, 40, 60
 ]
+const secondaryPlanLabels = ['quick taste', 'satisfaction', 'crazy & horny'];
 
 export function StorePage() {
   const location = useLocation();
@@ -55,6 +48,32 @@ export function StorePage() {
   });
 
   const airPlans = useMemo(() => plans.slice(0, airIcons.length), [plans]);
+  const airPlanItems = useMemo(
+    () =>
+      airPlans.map((plan, index) => ({
+        plan,
+        index,
+        icon: airIcons[index % airIcons.length],
+        extra: extraPercent[index] ?? 0,
+      })),
+    [airPlans],
+  );
+  const featuredPlan = useMemo(() => {
+    if (airPlanItems.length === 0) return null;
+    const recommendedPlan = airPlanItems.find((item) => item.plan.isRecommended);
+    if (recommendedPlan) return recommendedPlan;
+
+    return airPlanItems.reduce((best, item) =>
+      item.extra > best.extra ? item : best,
+    );
+  }, [airPlanItems]);
+  const secondaryPlans = useMemo(
+    () =>
+      featuredPlan
+        ? airPlanItems.filter((item) => item.plan.id !== featuredPlan.plan.id)
+        : airPlanItems,
+    [airPlanItems, featuredPlan],
+  );
 
   useEffect(() => {
     const handler = () => {
@@ -93,39 +112,6 @@ export function StorePage() {
 
   return (
     <div className={s.container}>
-      <Card className={s.heroCard} variant="neutral">
-        <img
-          src={upgradeImage}
-          alt=""
-          className={s.heroDecor}
-          aria-hidden
-          draggable={false}
-        />
-        <div className={s.heroLeft}>
-          <Typography as="div" variant="heading-lg" className={s.heroTitle}>
-            Go Unlimited
-          </Typography>
-          <Typography as="div" variant="body-md" className={s.heroSubtitle}>
-            No limits. Endless chats and explicit photos.
-          </Typography>
-        </div>
-        <button
-          type="button"
-          className={s.heroButton}
-          onClick={() => navigate('/bag')}
-        >
-          <BoltIcon width={20} height={20} />
-          <Typography
-            as="span"
-            variant="body-sm"
-            weight={500}
-            className={s.heroButtonText}
-          >
-            Upgrade
-          </Typography>
-        </button>
-      </Card>
-
       {isLoading ? <Loader /> : null}
       {isError ? (
         <Typography variant="body-md">
@@ -134,82 +120,201 @@ export function StorePage() {
       ) : null}
 
       {!isLoading && !isError ? (
-        <div className={s.grid}>
-          {airPlans.map((plan: IPlan, index) => {
-            const badgeColor =
-              extraBadgeColors[index - 1] ?? 'rgba(58, 167, 240, 1)';
-            const extraBadgeStyle = {
-              '--badge-bg': badgeColor,
-            } as CSSProperties;
-            const showBadgeGroup = plan.isRecommended || index > 0;
+        <>
+          <div className={s.offerHeader}>
+            <Typography
+              as="div"
+              variant="label"
+              weight={700}
+              className={s.offerEyebrow}
+            >
+              AIR SALE
+            </Typography>
+            <Typography
+              as="div"
+              variant="heading-lg"
+              weight={600}
+              className={s.offerTitle}
+            >
+              Fulfill your wildest fantasies and hidden desires
+            </Typography>
+            <Typography
+              as="div"
+              variant="body-sm"
+              weight={500}
+              className={s.offerSubtitle}
+            >
+              Use AIR for personal photos, explicit videos, gifts, or create your Dream Girlfriend.
+            </Typography>
+          </div>
 
-            return (
-              <Card className={s.planCard} variant="accent" key={plan.id}>
-                <img
-                  src={airIcons[index % airIcons.length]}
-                  alt="air"
-                  className={s.planIcon}
-                  draggable={false}
-                />
-                {showBadgeGroup ? (
-                  <div className={s.iconBadges}>
-                    {plan.isRecommended ? (
-                      <Typography
-                        as="span"
-                        variant="body-sm"
-                        family="brand"
-                        weight={500}
-                        className={s.topChoiceBadge}
-                      >
-                        top choice
-                      </Typography>
-                    ) : null}
-                    {index > 0 ? (
-                      <Typography
-                        as="span"
-                        variant="body-sm"
-                        family="brand"
-                        weight={500}
-                        className={s.extraBadge}
-                        style={extraBadgeStyle}
-                      >
-                        +{extraPercent[index]}% extra
-                      </Typography>
-                    ) : null}
-                  </div>
-                ) : null}
+          {featuredPlan ? (
+            <Card className={s.featuredPlanCard} variant="accent">
+              <div className={s.featuredCopy}>
+                <Typography
+                  as="span"
+                  variant="label"
+                  weight={700}
+                  className={s.featuredBadge}
+                >
+                  best value
+                </Typography>
+                <Typography
+                  as="div"
+                  variant="heading-lg"
+                  weight={700}
+                  className={s.featuredAir}
+                >
+                  {featuredPlan.plan.air} AIR
+                </Typography>
                 <Typography
                   as="div"
                   variant="body-sm"
                   weight={600}
-                  className={s.planAir}
+                  className={s.featuredBonus}
                 >
-                  {plan.air} AIR
+                  +{featuredPlan.extra}% bonus included
                 </Typography>
                 <button
                   type="button"
-                  className={s.planButton}
-                  onClick={() => handleBuy(plan)}
+                  className={s.featuredButton}
+                  onClick={() => handleBuy(featuredPlan.plan)}
                 >
                   <TgStarIcon
                     width={20}
                     height={20}
                     className={s.planStarIcon}
                   />
-                  <Typography
-                    as="span"
-                    variant="body-sm"
-                    family="brand"
-                    weight={500}
-                    className={s.planPrice}
-                  >
-                    {plan.price}
-                  </Typography>
+                  <span>{featuredPlan.plan.price}</span>
                 </button>
-              </Card>
-            );
-          })}
-        </div>
+              </div>
+              <img
+                src={featuredPlan.icon}
+                alt=""
+                className={s.featuredIcon}
+                aria-hidden
+                draggable={false}
+              />
+            </Card>
+          ) : null}
+
+          <div className={s.grid}>
+            {secondaryPlans.map(({ plan, icon, extra }, secondaryIndex) => {
+              const planLabel =
+                secondaryPlanLabels[secondaryIndex] ?? secondaryPlanLabels[0];
+              const toneClassName =
+                [s.budgetPlan, s.middlePlan, s.wildPlan][secondaryIndex] ??
+                s.budgetPlan;
+
+              return (
+                <Card
+                  className={`${s.planCard} ${toneClassName}`}
+                  variant="accent"
+                  key={plan.id}
+                >
+                  {extra > 0 ? (
+                    <Typography
+                      as="span"
+                      variant="caption"
+                      weight={700}
+                      className={s.extraBadge}
+                    >
+                      +{extra}%
+                    </Typography>
+                  ) : null}
+                  <div className={s.planTop}>
+                    <img
+                      src={icon}
+                      alt=""
+                      className={s.planIcon}
+                      aria-hidden
+                      draggable={false}
+                    />
+                    {plan.isRecommended ? (
+                      <Typography
+                        as="span"
+                        variant="caption"
+                        weight={700}
+                        className={s.topChoiceBadge}
+                      >
+                        popular
+                      </Typography>
+                    ) : null}
+                  </div>
+                  <Typography
+                    as="div"
+                    variant="body-sm"
+                    weight={700}
+                    className={s.planAir}
+                  >
+                    {plan.air} AIR
+                  </Typography>
+                  <Typography
+                    as="div"
+                    variant="caption"
+                    weight={700}
+                    className={s.extraText}
+                  >
+                    {planLabel}
+                  </Typography>
+                  <button
+                    type="button"
+                    className={s.planButton}
+                    onClick={() => handleBuy(plan)}
+                  >
+                    <TgStarIcon
+                      width={18}
+                      height={18}
+                      className={s.planStarIcon}
+                    />
+                    <Typography
+                      as="span"
+                      variant="body-sm"
+                      family="brand"
+                      weight={500}
+                      className={s.planPrice}
+                    >
+                      {plan.price}
+                    </Typography>
+                  </button>
+                </Card>
+              );
+            })}
+          </div>
+
+          <Card className={s.heroCard} variant="neutral">
+            <img
+              src={upgradeImage}
+              alt=""
+              className={s.heroDecor}
+              aria-hidden
+              draggable={false}
+            />
+            <div className={s.heroLeft}>
+              <Typography as="div" variant="heading-lg" className={s.heroTitle}>
+                Want unlimited?
+              </Typography>
+              <Typography as="div" variant="body-md" className={s.heroSubtitle}>
+                Endless chats and explicit photos.
+              </Typography>
+            </div>
+            <button
+              type="button"
+              className={s.heroButton}
+              onClick={() => navigate('/bag')}
+            >
+              <SparklesIcon width={18} height={18} />
+              <Typography
+                as="span"
+                variant="body-sm"
+                weight={500}
+                className={s.heroButtonText}
+              >
+                Upgrade
+              </Typography>
+            </button>
+          </Card>
+        </>
       ) : null}
     </div>
   );
