@@ -26,6 +26,7 @@
   position: relative;
   padding: 22px 18px 20px;
   min-height: max-content;
+  flex-shrink: 0;
   overflow: hidden;
   background:
     linear-gradient(
