@@ -12,7 +12,6 @@ import {
   type IScenario,
   isCharacterType,
 } from '@/common/types';
-import { CUSTOM_CHARACTER_CREATE_PRICE } from '@/consts';
 import {
   compareGirlsByTopScenarioAndName,
   compareScenarios,
@@ -25,6 +24,7 @@ import {
   Loader,
   Typography,
 } from '@/components';
+import { CUSTOM_CHARACTER_CREATE_PRICE } from '@/consts';
 
 import { CharacterTypeSwitch } from './CharacterTypeSwitch';
 import s from './GirlsPage.module.scss';
@@ -356,13 +356,6 @@ export function GirlsPage() {
               onChange={handleTypeChange}
               disabled={isFetching}
             />
-            {featuredGirls.length ? (
-              <div className={s.featuredRow}>
-                {featuredGirls.slice(0, 2).map(renderGirlCard)}
-                {renderCreateCharacterCard('featured-create-character')}
-                {featuredGirls.slice(2).map(renderGirlCard)}
-              </div>
-            ) : null}
             {newScenarios.length ? (
               <section className={s.newScenariosSection}>
                 <Typography
@@ -380,9 +373,8 @@ export function GirlsPage() {
               </section>
             ) : null}
             <div className={s.grid}>
-              {girls.slice(0, 3).map(renderGirlCard)}
               {renderCreateCharacterCard('grid-create-character')}
-              {girls.slice(3).map(renderGirlCard)}
+              {girls.map(renderGirlCard)}
             </div>
             {comingSoonScenarios.length ? (
               <section className={s.comingSoonSection}>

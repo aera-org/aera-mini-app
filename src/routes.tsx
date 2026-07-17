@@ -1,8 +1,8 @@
 import { Navigate, Route, Routes } from 'react-router-dom';
 
 import { MiniAppLayout } from '@/layouts/MiniAppLayout';
-import { AffiliatePage } from '@/pages/affiliate/AffiliatePage';
 import { BagPage } from '@/pages/bag/BagPage';
+import { EarnPage } from '@/pages/earn/EarnPage';
 import { GiftsPage } from '@/pages/gifts/GiftsPage';
 import { GirlPage } from '@/pages/girls/GirlPage';
 import { GirlsPage } from '@/pages/girls/GirlsPage';
@@ -28,7 +28,8 @@ export function AppRoutes() {
         <Route path="/my-girls/:id" element={<MyGirlPage />} />
         <Route path="/gifts" element={<GiftsPage />} />
         <Route path="/bag" element={<BagPage />} />
-        <Route path="/affiliate" element={<AffiliatePage />} />
+        <Route path="/earn" element={<EarnPage />} />
+        <Route path="/affiliate" element={<Navigate to="/earn" replace />} />
         <Route path="/store" element={<StorePage />} />
       </Route>
     </Routes>

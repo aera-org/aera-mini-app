@@ -1,0 +1,232 @@
+.page {
+  width: 100%;
+  min-height: calc(var(--vh, 1vh) * 100);
+  padding: 92px 16px 132px;
+  overflow-y: auto;
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+}
+
+.referralCard,
+.card {
+  width: 100%;
+  max-width: 390px;
+  margin: 0 auto;
+  border: 1px solid rgba(255, 255, 255, 0.14);
+  border-radius: 28px;
+  box-shadow:
+    0 18px 48px rgba(0, 0, 0, 0.28),
+    inset 0 1px 0 rgba(255, 255, 255, 0.08);
+  backdrop-filter: blur(18px);
+  -webkit-backdrop-filter: blur(18px);
+}
+
+.referralCard {
+  padding: 22px 18px 20px;
+  overflow: hidden;
+  background:
+    radial-gradient(
+      circle at 10% 0%,
+      rgba(255, 95, 155, 0.28),
+      transparent 38%
+    ),
+    radial-gradient(
+      circle at 88% 10%,
+      rgba(255, 212, 53, 0.16),
+      transparent 32%
+    ),
+    linear-gradient(180deg, rgba(255, 255, 255, 0.08) 0%, rgba(255, 255, 255, 0.03) 100%),
+    rgba(10, 7, 20, 0.78);
+  display: flex;
+  flex-direction: column;
+  gap: 20px;
+}
+
+.referralHeader {
+  display: flex;
+  align-items: flex-start;
+  justify-content: space-between;
+  gap: 14px;
+}
+
+.referralCopy {
+  min-width: 0;
+  flex: 1;
+}
+
+.referralTitle {
+  margin: 0;
+  color: #fff;
+  font-size: 25px;
+  line-height: 1.06;
+  letter-spacing: 0;
+}
+
+.referralBody {
+  margin: 14px 0 0;
+  color: rgba(255, 255, 255, 0.72);
+  line-height: 1.42;
+}
+
+.referralBody strong {
+  color: #fff;
+  font-weight: 700;
+}
+
+.inlineAirIcon {
+  width: 20px;
+  height: 20px;
+  margin: 0 3px;
+  object-fit: contain;
+  vertical-align: -4px;
+}
+
+.inviteButton {
+  flex: 0 0 auto;
+  min-height: 44px;
+  min-width: 112px;
+  border: 1px solid rgba(255, 255, 255, 0.62);
+  border-radius: 999px;
+  padding: 0 17px;
+  color: #180612;
+  background: #fff;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+  cursor: pointer;
+  font-family: var(--font-ui);
+  font-size: 16px;
+  font-weight: 700;
+  line-height: 1;
+  box-shadow: 0 12px 26px rgba(255, 63, 143, 0.16);
+}
+
+.inviteButton:disabled {
+  opacity: 0.56;
+  cursor: default;
+}
+
+.progressBlock {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+}
+
+.progressSegments {
+  display: grid;
+  grid-template-columns: repeat(10, minmax(0, 1fr));
+  gap: 6px;
+}
+
+.progressSegment {
+  height: 9px;
+  border-radius: 999px;
+  background: rgba(255, 255, 255, 0.14);
+  box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.08);
+}
+
+.progressSegmentFilled {
+  background: linear-gradient(90deg, #ff5f9b 0%, #ffd435 100%);
+  box-shadow: 0 0 14px rgba(255, 95, 155, 0.28);
+}
+
+.progressLabels {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 12px;
+}
+
+.progressLabel {
+  color: rgba(255, 255, 255, 0.68);
+  line-height: 1.2;
+}
+
+.progressLabel:last-child {
+  text-align: right;
+}
+
+.progressLabel strong {
+  color: #fff;
+  font-weight: 800;
+}
+
+.errorText {
+  margin: -2px 0 0;
+  color: rgba(255, 136, 166, 0.92);
+}
+
+.card {
+  padding: 28px 20px 22px;
+  background:
+    linear-gradient(180deg, rgba(255, 255, 255, 0.08) 0%, rgba(255, 255, 255, 0.03) 100%),
+    rgba(10, 7, 20, 0.72);
+  display: flex;
+  flex-direction: column;
+  gap: 28px;
+}
+
+.copy {
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+}
+
+.title {
+  margin: 0;
+  font-size: 30px;
+  line-height: 1.05;
+  letter-spacing: 0;
+}
+
+.text {
+  color: rgba(255, 255, 255, 0.82);
+  display: flex;
+  flex-direction: column;
+  gap: 14px;
+}
+
+.paragraph {
+  margin: 0;
+  line-height: 1.58;
+}
+
+.cta {
+  width: 100%;
+  min-height: 59px;
+  border: 1px solid rgba(255, 255, 255, 0.4);
+  border-radius: 30px;
+  padding: 0 22px;
+  background:
+    linear-gradient(0deg, rgba(0, 0, 0, 0.2), rgba(0, 0, 0, 0.2)),
+    linear-gradient(180deg, rgba(255, 212, 53, 0.1) 0%, #ffd435 100%);
+  color: #fff;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+  cursor: pointer;
+}
+
+.cta:disabled {
+  opacity: 0.55;
+  cursor: default;
+}
+
+.ctaText {
+  font-size: 20px;
+  line-height: 120%;
+  letter-spacing: 0;
+}
+
+@media (max-width: 360px) {
+  .referralHeader {
+    flex-direction: column;
+  }
+
+  .inviteButton {
+    width: 100%;
+  }
+}

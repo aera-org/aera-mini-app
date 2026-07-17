@@ -21,7 +21,8 @@ import { useLaunchParams } from '@/context/useLaunchParams';
 import { useUser } from '@/context/UserContext';
 
 const pageTitleMap: Record<string, string> = {
-  '/affiliate': 'Affiliate',
+  '/affiliate': 'Earn',
+  '/earn': 'Earn',
   '/girls': 'Girls',
   '/my-girls': 'Girls',
   '/gifts': 'Gifts',
@@ -114,7 +115,7 @@ export function MiniAppLayout() {
         ) : (
           <Navigation
             items={[
-              { label: 'Affiliate', path: '/affiliate', icon: affiliateIcon },
+              { label: 'Earn', path: '/earn', icon: affiliateIcon },
 
               { label: 'My Girl', path: '/my-girls', icon: myGirlIcon },
               { label: 'Girls', path: '/girls', icon: girlsIcon },
