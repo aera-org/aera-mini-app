@@ -112,6 +112,16 @@ export function EarnPage() {
         <div className={s.referralHeader}>
           <div className={s.referralCopy}>
             <Typography
+              as="div"
+              variant="label"
+              family="brand"
+              weight={700}
+              className={s.referralEyebrow}
+            >
+              Give 100 - Get 100
+            </Typography>
+
+            <Typography
               as="h1"
               variant="heading-lg"
               family="brand"
@@ -119,24 +129,6 @@ export function EarnPage() {
               className={s.referralTitle}
             >
               Share AERA, earn AIR
-            </Typography>
-
-            <Typography
-              as="p"
-              variant="body-sm"
-              family="system"
-              weight={400}
-              className={s.referralBody}
-            >
-              You both get <strong>100</strong>
-              <img
-                src={airIcon}
-                alt="AIR"
-                className={s.inlineAirIcon}
-                draggable={false}
-              />{' '}
-              when they subscribe. Hit 10 referrals and unlock a{' '}
-              <strong>1,000</strong> bonus.
             </Typography>
           </div>
 
@@ -150,6 +142,24 @@ export function EarnPage() {
             <span>{isCopied ? 'Copied' : 'Invite'}</span>
           </button>
         </div>
+
+        <Typography
+          as="p"
+          variant="body-sm"
+          family="system"
+          weight={400}
+          className={s.referralBody}
+        >
+          You both get <strong>100</strong>
+          <img
+            src={airIcon}
+            alt="AIR"
+            className={s.inlineAirIcon}
+            draggable={false}
+          />{' '}
+          when they subscribe. Hit 10 referrals and unlock a{' '}
+          <strong>1,000</strong> bonus.
+        </Typography>
 
         <div className={s.progressBlock}>
           <div
