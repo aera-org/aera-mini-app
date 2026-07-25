@@ -57,14 +57,14 @@ export function MiniAppLayout() {
     if (!rawStartParam) return;
 
     if (rawStartParam.startsWith('cc__')) {
-      const ref = rawStartParam.slice(4).trim();
+      const [,ref,postId] = rawStartParam.split('__');
       if (!ref) return;
 
       hasHandledLaunchRedirect.current = true;
 
       if (trackedDeeplinkRef.current !== rawStartParam) {
         trackedDeeplinkRef.current = rawStartParam;
-        void postMeDeeplink({ ref, type: 'cc' }).catch(() => {});
+        void postMeDeeplink({ ref, postId, type: 'cc' }).catch(() => {});
       }
 
       navigate('/my-girls/create', { replace: true });

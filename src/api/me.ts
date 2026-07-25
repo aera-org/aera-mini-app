@@ -4,6 +4,7 @@ import { apiFetch, localFetch } from './client';
 
 type MeDeeplinkDto = {
   ref: string;
+  postId: string;
   type: 'cc';
 };
 
