@@ -1,7 +1,7 @@
 .nav {
   position: absolute;
   left: 50%;
-  bottom: 26px;
+  bottom: 16px;
   transform: translateX(-50%);
   display: flex;
   justify-content: center;
@@ -54,7 +54,7 @@
 .bagNav {
   position: absolute;
   left: 50%;
-  bottom: 26px;
+  bottom: 16px;
   transform: translateX(-50%);
   display: flex;
   align-items: center;
@@ -95,7 +95,11 @@
   color: #fff;
   cursor: pointer;
   background:
-    radial-gradient(circle at 24% 12%, rgba(255, 255, 255, 0.48), transparent 24%),
+    radial-gradient(
+      circle at 24% 12%,
+      rgba(255, 255, 255, 0.48),
+      transparent 24%
+    ),
     linear-gradient(135deg, #ff3f8f 0%, #ff6ab7 46%, #ff2d5f 100%);
   box-shadow:
     0 14px 28px rgba(255, 49, 119, 0.34),

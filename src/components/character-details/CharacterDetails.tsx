@@ -1,9 +1,9 @@
-import TelegramWebApp from '@twa-dev/sdk';
 import { useMemo } from 'react';
+import { useNavigate } from 'react-router-dom';
 
 import { MessageMoreIcon } from '@/assets/icons';
 import airIcon from '@/assets/mini/air.png';
-import { type ICharacter, type IScenario,STAGE_TO_INDEX } from '@/common/types';
+import { type ICharacter, type IScenario, STAGE_TO_INDEX } from '@/common/types';
 import { cn } from '@/common/utils';
 import { Card } from '@/components/card';
 import { Typography } from '@/components/text';
@@ -154,6 +154,7 @@ export function CharacterDetails({
   scenarioComparator,
   className,
 }: CharacterDetailsProps) {
+  const navigate = useNavigate();
   const now = Date.now();
 
   const relationshipsScale = useMemo(() => {
@@ -244,21 +245,8 @@ export function CharacterDetails({
     [sortedScenarios],
   );
 
-  const handleStartScenarioChat = (scenario: IScenario) => {
-    const botUsername = import.meta.env.VITE_BOT_USERNAME;
-    if (!botUsername) {
-      console.error('VITE_BOT_USERNAME is not set');
-      return;
-    }
-    if (!scenario.slug) {
-      console.error('Scenario slug is missing');
-      return;
-    }
-
-    TelegramWebApp.openTelegramLink(
-      `https://t.me/${botUsername}?start=s_${scenario.slug}`,
-    );
-    TelegramWebApp.close();
+  const handleOpenScenarioDetails = (scenario: IScenario) => {
+    navigate(`/scenarios/${scenario.id}`);
   };
 
   return (
@@ -344,9 +332,16 @@ export function CharacterDetails({
                 return (
                   <Card
                     key={scenario.id}
-                    className={s.scenarioCard}
+                    className={cn(s.scenarioCard, [
+                      scenario.isActive && !lockState ? s.scenarioCardInteractive : null,
+                    ])}
                     variant="neutral"
                     backgroundImage={getScenarioImageUrl(scenario)}
+                    onClick={
+                      scenario.isActive && !lockState
+                        ? () => handleOpenScenarioDetails(scenario)
+                        : undefined
+                    }
                   >
                     <div
                       className={cn(s.scenarioCardBody, [
@@ -398,7 +393,10 @@ export function CharacterDetails({
                           <button
                             type="button"
                             className={s.startChatButton}
-                            onClick={() => handleStartScenarioChat(scenario)}
+                            onClick={(event) => {
+                              event.stopPropagation();
+                              handleOpenScenarioDetails(scenario);
+                            }}
                           >
                             <MessageMoreIcon width={20} height={20} />
                             <Typography
@@ -409,7 +407,7 @@ export function CharacterDetails({
                               color="black"
                               className={s.startChatButtonText}
                             >
-                              Start chat
+                              Open
                             </Typography>
                           </button>
                         ) : (

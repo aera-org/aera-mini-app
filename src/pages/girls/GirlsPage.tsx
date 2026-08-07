@@ -1,5 +1,4 @@
 import { keepPreviousData, useQuery } from '@tanstack/react-query';
-import TelegramWebApp from '@twa-dev/sdk';
 import { useNavigate, useSearchParams } from 'react-router-dom';
 
 import { getGirls } from '@/api/girls';
@@ -69,20 +68,7 @@ export function GirlsPage() {
   };
 
   const handleActiveScenarioClick = (scenario: IScenario) => {
-    const botUsername = import.meta.env.VITE_BOT_USERNAME;
-    if (!botUsername) {
-      console.error('VITE_BOT_USERNAME is not set');
-      return;
-    }
-    if (!scenario.slug) {
-      console.error('Scenario slug is missing');
-      return;
-    }
-
-    TelegramWebApp.openTelegramLink(
-      `https://t.me/${botUsername}?start=s_${scenario.slug}`,
-    );
-    TelegramWebApp.close();
+    navigate(`/scenarios/${scenario.id}`);
   };
 
   const featuredGirls = girls.filter((girl) => girl.isFeatured);

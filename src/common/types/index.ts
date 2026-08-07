@@ -4,4 +4,5 @@ export * from './gift.type';
 export * from './launch-params.type';
 export * from './plan.type';
 export * from './referral.types';
+export * from './scenario-content';
 export * from './user.type';

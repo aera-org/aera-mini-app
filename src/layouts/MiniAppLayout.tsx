@@ -43,10 +43,13 @@ export function MiniAppLayout() {
   const isGirlDetails =
     location.pathname.startsWith('/girls/') ||
     location.pathname.startsWith('/my-girls/');
+  const isScenarioDetails = location.pathname.startsWith('/scenarios/');
   const isBagPage = location.pathname === '/bag';
   const isStorePage = location.pathname === '/store';
 
-  const pageName = pageTitleMap[location.pathname] ?? 'Girls';
+  const pageName = isScenarioDetails
+    ? 'Scenario'
+    : pageTitleMap[location.pathname] ?? 'Girls';
   const appClassName = pageName;
 
   useEffect(() => {

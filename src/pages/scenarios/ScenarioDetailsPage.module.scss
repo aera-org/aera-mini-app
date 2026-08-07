@@ -1,0 +1,777 @@
+.page {
+  position: relative;
+  width: 100%;
+  height: 100%;
+  padding: 48px 0 132px;
+  overflow-y: auto;
+  overflow-x: hidden;
+  overscroll-behavior: contain;
+  background: linear-gradient(180deg, #09070f 0%, #05050a 42%, #030407 100%);
+  background-color: #030407;
+}
+
+.stateContainer {
+  min-height: 280px;
+  display: grid;
+  place-items: center;
+  padding: 24px;
+}
+
+.hero {
+  position: relative;
+  min-height: 520px;
+  display: flex;
+  align-items: flex-end;
+  padding: 0 12px 12px;
+}
+
+.heroImage {
+  position: absolute;
+  inset: 0 0 auto;
+  width: 100%;
+  height: 510px;
+  object-fit: cover;
+  opacity: 0.92;
+  -webkit-mask-image: linear-gradient(180deg, #000 54%, transparent 100%);
+  mask-image: linear-gradient(180deg, #000 54%, transparent 100%);
+}
+
+.heroGlow {
+  position: absolute;
+  inset: 292px 0 0;
+  background:
+    radial-gradient(
+      circle at 74% 20%,
+      rgba(255, 90, 180, 0.22),
+      transparent 30%
+    ),
+    linear-gradient(
+      180deg,
+      transparent 0%,
+      rgba(8, 6, 14, 0.76) 48%,
+      #07070d 100%
+    );
+}
+
+.profilePanel {
+  position: relative;
+  z-index: 1;
+  width: 100%;
+  max-width: 420px;
+  margin: 0 auto;
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+}
+
+.visualSpacer {
+  width: 100%;
+  height: 176px;
+}
+
+.copy {
+  display: flex;
+  flex-direction: column;
+  gap: 7px;
+}
+
+.title {
+  max-width: 100%;
+  margin: 0;
+  color: #fff;
+  font-size: 32px;
+  line-height: 0.96;
+  letter-spacing: 0;
+  text-shadow: 0 4px 22px rgba(0, 0, 0, 0.54);
+}
+
+.characterName {
+  color: rgba(255, 255, 255, 0.85);
+  font-size: 18px;
+  line-height: 1;
+}
+
+.metaRow {
+  display: grid;
+  grid-template-columns: minmax(0, auto) minmax(0, 1fr);
+  gap: 16px;
+  align-items: baseline;
+  justify-content: space-between;
+  color: rgba(255, 255, 255, 0.7);
+  font-family: var(--font-ui);
+  font-size: 14px;
+  line-height: 1.25;
+}
+
+.metaRow span {
+  min-width: 0;
+}
+
+.metaRow span:last-child {
+  text-align: right;
+}
+
+.description {
+  margin: 2px 0 0;
+  max-width: 360px;
+  color: rgba(255, 255, 255, 0.94);
+  font-size: 15px;
+  line-height: 1.32;
+  text-shadow: 0 2px 12px rgba(0, 0, 0, 0.52);
+}
+
+.unlockIntro {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+
+.actions {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) minmax(0, 1fr);
+  gap: 8px;
+}
+
+.chatButton,
+.generateButton,
+.unlockButton,
+.secondaryAction,
+.loadMoreButton,
+.bottomDockButton,
+.modalUnlockButton {
+  border: none;
+  font-family: var(--font-ui);
+  font-size: 13px;
+  font-weight: 700;
+  cursor: pointer;
+}
+
+.chatButton,
+.generateButton {
+  height: 40px;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 7px;
+  border-radius: 999px;
+}
+
+.chatButton svg,
+.generateButton svg {
+  width: 18px;
+  height: 18px;
+}
+
+.chatButton {
+  background: #fff;
+  color: #08080d;
+  box-shadow: 0 14px 30px rgba(255, 255, 255, 0.12);
+}
+
+.chatButton svg path {
+  stroke: #08080d;
+}
+
+.generateButton {
+  color: rgba(255, 255, 255, 0.44);
+  background: rgba(255, 255, 255, 0.14);
+  border: 1px solid rgba(255, 255, 255, 0.1);
+  cursor: not-allowed;
+}
+
+.unlockButton {
+  height: 40px;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+  border-radius: 24px;
+  color: #fff;
+  background:
+    radial-gradient(
+      circle at 22% 14%,
+      rgba(255, 255, 255, 0.48),
+      transparent 24%
+    ),
+    radial-gradient(
+      circle at 82% 74%,
+      rgba(217, 146, 254, 0.48),
+      transparent 34%
+    ),
+    linear-gradient(135deg, #ff3f8f 0%, #ff6ab7 48%, #ff2d5f 100%);
+  box-shadow:
+    0 14px 28px rgba(255, 49, 119, 0.34),
+    0 8px 22px rgba(217, 146, 254, 0.18),
+    inset 0 1px 0 rgba(255, 255, 255, 0.42),
+    inset 0 -1px 0 rgba(120, 0, 48, 0.22);
+}
+
+.unlockPrice {
+  display: inline-flex;
+  align-items: center;
+  gap: 4px;
+  padding: 0;
+  border: 0;
+  background: transparent;
+  color: inherit;
+  font-size: 13px;
+  font-weight: 700;
+  line-height: 1;
+}
+
+.unlockPrice img {
+  width: 15px;
+  height: 15px;
+}
+
+.unlockButton svg {
+  width: 18px;
+  height: 18px;
+}
+
+.mediaSection {
+  position: relative;
+  z-index: 1;
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+}
+
+.tabs {
+  width: min(100%, 208px);
+  scroll-margin-top: 54px;
+  align-self: center;
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 3px;
+  padding: 3px;
+  border-radius: 999px;
+  background: rgba(255, 255, 255, 0.045);
+  border: 1px solid rgba(255, 255, 255, 0.08);
+  backdrop-filter: blur(10px);
+  -webkit-backdrop-filter: blur(10px);
+}
+
+.tabButton {
+  height: 40px;
+  border: none;
+  border-radius: 999px;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 5px;
+  color: rgba(255, 255, 255, 0.5);
+  background: transparent;
+  font-family: var(--font-ui);
+  font-size: 13px;
+  font-weight: 700;
+  cursor: pointer;
+}
+
+.tabButtonActive {
+  color: #fff;
+  background: rgba(255, 255, 255, 0.12);
+  box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.08);
+}
+
+.grid {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 4px;
+}
+
+.tile {
+  position: relative;
+  display: block;
+  width: 100%;
+  aspect-ratio: 3 / 4;
+  overflow: hidden;
+  padding: 0;
+  border: 0;
+  border-radius: 0;
+  background: rgba(255, 255, 255, 0.08);
+  color: #fff;
+}
+
+.tile {
+  cursor: pointer;
+}
+
+.tileLocked {
+  cursor: pointer;
+}
+
+.tileMedia {
+  width: 100%;
+  height: 100%;
+  display: block;
+  object-fit: cover;
+}
+
+.tileMediaBlurred {
+  filter: blur(4px);
+  transform: scale(1.08);
+}
+
+.playBadge,
+.lockOverlay {
+  position: absolute;
+  inset: 0;
+  display: grid;
+  place-items: center;
+  pointer-events: none;
+}
+
+.playBadge {
+  color: #fff;
+  filter: drop-shadow(0 8px 18px rgba(0, 0, 0, 0.5));
+}
+
+.lockOverlay {
+  color: #fff;
+  background:
+    radial-gradient(circle at center, rgba(0, 0, 0, 0.2), transparent 30%),
+    rgba(0, 0, 0, 0.2);
+}
+
+.lockOverlay svg {
+  width: 38px;
+  height: 38px;
+  filter: drop-shadow(0 8px 18px rgba(0, 0, 0, 0.54));
+}
+
+.mediaMessage {
+  min-height: 170px;
+  display: grid;
+  place-items: center;
+  gap: 12px;
+  padding: 22px;
+  text-align: center;
+}
+
+.secondaryAction,
+.loadMoreButton {
+  height: 40px;
+  align-self: center;
+  padding: 0 18px;
+  border-radius: 999px;
+  color: #fff;
+  background: rgba(255, 255, 255, 0.14);
+  border: 1px solid rgba(255, 255, 255, 0.18);
+}
+
+.loadMoreButton {
+  margin-top: 6px;
+}
+
+.loadMoreButton:disabled {
+  opacity: 0.5;
+  cursor: wait;
+}
+
+.bottomDock {
+  position: fixed;
+  left: 50%;
+  bottom: 94px;
+  z-index: 4;
+  width: min(calc(100% - 28px), 390px);
+  max-width: 390px;
+  pointer-events: none;
+  transform: translate(-50%, 130%);
+  opacity: 0;
+  transition:
+    opacity 220ms ease,
+    transform 260ms cubic-bezier(0.22, 1, 0.36, 1);
+}
+
+.bottomDock[data-visible='true'] {
+  pointer-events: auto;
+  transform: translate(-50%, 0);
+  opacity: 1;
+}
+
+.bottomDockButton {
+  width: 100%;
+  height: 40px;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+  border-radius: 24px;
+  color: #fff;
+  background:
+    radial-gradient(
+      circle at 22% 14%,
+      rgba(255, 255, 255, 0.48),
+      transparent 24%
+    ),
+    radial-gradient(
+      circle at 82% 74%,
+      rgba(217, 146, 254, 0.48),
+      transparent 34%
+    ),
+    linear-gradient(135deg, #ff3f8f 0%, #ff6ab7 48%, #ff2d5f 100%);
+  box-shadow:
+    0 14px 28px rgba(255, 49, 119, 0.34),
+    0 8px 22px rgba(217, 146, 254, 0.18),
+    inset 0 1px 0 rgba(255, 255, 255, 0.42),
+    inset 0 -1px 0 rgba(120, 0, 48, 0.22);
+}
+
+.bottomDockButton .unlockPrice {
+  opacity: 0.9;
+}
+
+.modalOverlay {
+  position: fixed;
+  inset: 0;
+  z-index: 8;
+  display: grid;
+  place-items: center;
+  padding: 18px;
+  background: rgba(0, 0, 0, 0.72);
+  backdrop-filter: blur(10px);
+  -webkit-backdrop-filter: blur(10px);
+}
+
+.modal {
+  position: relative;
+  width: min(100%, 380px);
+  min-height: 540px;
+  overflow: hidden;
+  border-radius: 28px;
+  border: 1px solid rgba(255, 255, 255, 0.2);
+  background: #09070e;
+  box-shadow: 0 30px 80px rgba(0, 0, 0, 0.58);
+}
+
+.modalClose {
+  position: absolute;
+  top: 22px;
+  right: 22px;
+  z-index: 3;
+  width: 40px;
+  height: 40px;
+  display: grid;
+  place-items: center;
+  border: 0;
+  border-radius: 50%;
+  color: #fff;
+  background: rgba(18, 6, 12, 0.78);
+  backdrop-filter: blur(12px);
+  -webkit-backdrop-filter: blur(12px);
+  cursor: pointer;
+}
+
+.modalImage {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}
+
+.modalShade {
+  position: absolute;
+  inset: 0;
+  background:
+    linear-gradient(
+      180deg,
+      rgba(0, 0, 0, 0.06) 0%,
+      rgba(0, 0, 0, 0.28) 34%,
+      rgba(0, 0, 0, 0.58) 62%,
+      rgba(0, 0, 0, 0.96) 100%
+    ),
+    radial-gradient(
+      circle at 50% 52%,
+      rgba(0, 0, 0, 0.04) 0%,
+      rgba(0, 0, 0, 0.34) 78%
+    );
+}
+
+.modalContent {
+  position: absolute;
+  inset: auto 0 0;
+  z-index: 2;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 12px;
+  padding: 172px 32px 34px;
+  text-align: center;
+}
+
+.modalTitle {
+  margin: 0;
+  color: #fff;
+  font-size: 40px;
+  line-height: 1;
+  text-shadow: 0 8px 24px rgba(0, 0, 0, 0.5);
+}
+
+.modalDescription {
+  margin: 0;
+  max-width: 280px;
+  color: rgba(255, 255, 255, 0.78);
+  font-size: 16px;
+  line-height: 1.28;
+}
+
+.totalsRow {
+  display: grid;
+  width: min(280px, 100%);
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 18px;
+  margin-top: 6px;
+}
+
+.totalsRow span {
+  display: grid;
+  grid-template-columns: auto auto;
+  align-items: center;
+  justify-content: center;
+  gap: 2px 8px;
+  color: #fff;
+}
+
+.totalsRow svg {
+  width: 22px;
+  height: 22px;
+  color: #ff4fb0;
+}
+
+.totalsRow strong {
+  font-size: 30px;
+  font-weight: 800;
+  line-height: 0.95;
+}
+
+.totalsRow small {
+  grid-column: 2;
+  color: rgba(255, 255, 255, 0.76);
+  font-size: 11px;
+  font-weight: 800;
+  line-height: 1;
+  text-transform: uppercase;
+}
+
+.futureBadge {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  min-height: 24px;
+  padding: 0 11px;
+  border-radius: 999px;
+  color: #fff;
+  background:
+    radial-gradient(
+      circle at 22% 14%,
+      rgba(255, 255, 255, 0.28),
+      transparent 28%
+    ),
+    linear-gradient(135deg, #ff5fae 0%, #ff2aa0 100%);
+  font-size: 10px;
+  font-weight: 800;
+  line-height: 1;
+  text-transform: uppercase;
+  box-shadow: 0 6px 14px rgba(255, 49, 153, 0.18);
+}
+
+.unlockError {
+  color: rgba(255, 130, 166, 0.95);
+}
+
+.modalUnlockButton {
+  width: 100%;
+  height: 48px;
+  margin-top: 8px;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+  border-radius: 28px;
+  color: #fff;
+  font-size: 16px;
+  background:
+    radial-gradient(
+      circle at 22% 14%,
+      rgba(255, 255, 255, 0.48),
+      transparent 24%
+    ),
+    radial-gradient(
+      circle at 82% 74%,
+      rgba(217, 146, 254, 0.48),
+      transparent 34%
+    ),
+    linear-gradient(135deg, #ff3f8f 0%, #ff6ab7 48%, #ff2d5f 100%);
+  box-shadow:
+    0 14px 28px rgba(255, 49, 119, 0.34),
+    0 8px 22px rgba(217, 146, 254, 0.18),
+    inset 0 1px 0 rgba(255, 255, 255, 0.42),
+    inset 0 -1px 0 rgba(120, 0, 48, 0.22);
+}
+
+.modalUnlockButton svg {
+  width: 22px;
+  height: 22px;
+}
+
+.modalUnlockButton .unlockPrice {
+  font-size: 16px;
+}
+
+.modalUnlockButton .unlockPrice img {
+  width: 18px;
+  height: 18px;
+}
+
+.modalUnlockButton:disabled {
+  opacity: 0.7;
+  cursor: wait;
+}
+
+.videoUnlockOverlay {
+  position: fixed;
+  inset: 0;
+  z-index: 9;
+  display: grid;
+  place-items: center;
+  padding: 18px;
+  background: rgba(0, 0, 0, 0.76);
+  backdrop-filter: blur(10px);
+  -webkit-backdrop-filter: blur(10px);
+}
+
+.videoUnlockModal {
+  position: relative;
+  width: min(100%, 340px);
+  aspect-ratio: 3 / 4;
+  min-height: 430px;
+  overflow: hidden;
+  border-radius: 26px;
+  border: 1px solid rgba(255, 255, 255, 0.18);
+  background: #07060b;
+  box-shadow: 0 28px 76px rgba(0, 0, 0, 0.58);
+}
+
+.videoUnlockMedia {
+  position: absolute;
+  inset: -18px;
+  width: calc(100% + 36px);
+  height: calc(100% + 36px);
+  object-fit: cover;
+  filter: blur(4px) saturate(1.04) brightness(0.9);
+}
+
+// .videoUnlockShade {
+//   position: absolute;
+//   inset: 0;
+//   background:
+//     radial-gradient(
+//       circle at 50% 36%,
+//       rgba(255, 255, 255, 0.04),
+//       transparent 28%
+//     ),
+//     linear-gradient(
+//       180deg,
+//       rgba(0, 0, 0, 0.26) 0%,
+//       rgba(0, 0, 0, 0.48) 45%,
+//       rgba(0, 0, 0, 0.88) 100%
+//     );
+// }
+
+.videoUnlockContent {
+  position: absolute;
+  inset: 0;
+  z-index: 1;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: flex-end;
+  gap: 13px;
+  padding: 30px 26px 28px;
+  text-align: center;
+}
+
+.videoUnlockLock {
+  display: grid;
+  width: 68px;
+  height: 68px;
+  place-items: center;
+  margin-bottom: auto;
+  margin-top: 170px;
+  color: #fff;
+}
+
+.videoUnlockLock svg {
+  width: 32px;
+  height: 32px;
+}
+
+.videoUnlockTitle {
+  margin: 0;
+  color: #fff;
+  text-shadow: 0 8px 24px rgba(0, 0, 0, 0.52);
+}
+
+.videoUnlockButton {
+  width: 100%;
+  height: 48px;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+  border: 0;
+  border-radius: 28px;
+  color: #fff;
+  font-family: var(--font-ui);
+  font-size: 16px;
+  font-weight: 700;
+  background:
+    radial-gradient(
+      circle at 22% 14%,
+      rgba(255, 255, 255, 0.48),
+      transparent 24%
+    ),
+    radial-gradient(
+      circle at 82% 74%,
+      rgba(217, 146, 254, 0.48),
+      transparent 34%
+    ),
+    linear-gradient(135deg, #ff3f8f 0%, #ff6ab7 48%, #ff2d5f 100%);
+  box-shadow:
+    0 14px 28px rgba(255, 49, 119, 0.34),
+    0 8px 22px rgba(217, 146, 254, 0.18),
+    inset 0 1px 0 rgba(255, 255, 255, 0.42),
+    inset 0 -1px 0 rgba(120, 0, 48, 0.22);
+  cursor: pointer;
+}
+
+.videoUnlockButton svg {
+  width: 22px;
+  height: 22px;
+}
+
+.videoUnlockButton .unlockPrice {
+  font-size: 16px;
+}
+
+.videoUnlockButton .unlockPrice img {
+  width: 18px;
+  height: 18px;
+}
+
+.videoUnlockButton:disabled {
+  opacity: 0.7;
+  cursor: wait;
+}
+
+@media (max-width: 370px) {
+  .title {
+    font-size: 31px;
+  }
+
+  .hero {
+    min-height: 500px;
+  }
+}

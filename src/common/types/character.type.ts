@@ -76,6 +76,7 @@ export enum CustomCharacterStatus {
 export interface ICharacter {
   id: string;
   name: string;
+  age?: number;
   personality: CharacterPersonality[];
   description: string;
   avatarUrl: string;
@@ -131,6 +132,8 @@ export interface IScenario {
   isNew: boolean;
   createdAt: string;
   opensAfterId?: string;
+  character?: ICharacter;
+  isUnlocked?: boolean;
   scenarioProgress?: IScenarioProgress;
 }
 

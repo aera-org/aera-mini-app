@@ -10,6 +10,7 @@ import { CreateCharacterPage } from '@/pages/my-girls/CreateCharacterPage';
 import { CreateScenarioPage } from '@/pages/my-girls/CreateScenarioPage';
 import { MyGirlPage } from '@/pages/my-girls/MyGirlPage';
 import { MyGirlsPage } from '@/pages/my-girls/MyGirlsPage';
+import { ScenarioDetailsPage } from '@/pages/scenarios/ScenarioDetailsPage';
 import { StorePage } from '@/pages/store/StorePage';
 
 export function AppRoutes() {
@@ -30,6 +31,7 @@ export function AppRoutes() {
         <Route path="/bag" element={<BagPage />} />
         <Route path="/earn" element={<EarnPage />} />
         <Route path="/affiliate" element={<Navigate to="/earn" replace />} />
+        <Route path="/scenarios/:id" element={<ScenarioDetailsPage />} />
         <Route path="/store" element={<StorePage />} />
       </Route>
     </Routes>

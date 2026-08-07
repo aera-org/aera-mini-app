@@ -94,6 +94,15 @@
   );
 }
 
+.app.Scenario {
+  background: linear-gradient(180deg, #09070f 0%, #05050a 42%, #030407 100%);
+  background-color: #030407;
+}
+
+.app.Scenario .bottom-nav {
+  background-color: #030407;
+}
+
 .app.Guide,
 .app.Chat {
   justify-content: start;

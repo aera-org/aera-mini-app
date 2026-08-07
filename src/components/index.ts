@@ -11,5 +11,9 @@ export { default as Modal } from './modal';
 export { BackNavigation } from './navigation/BackNavigation';
 export { BagNavigation } from './navigation/BagNavigation';
 export { Navigation } from './navigation/Navigation';
+export {
+  ScenarioMediaGallery,
+  type ScenarioGalleryItem,
+} from './scenario-media-gallery';
 export { Skeleton } from './skeleton';
 export { Text, Typography } from './text';
