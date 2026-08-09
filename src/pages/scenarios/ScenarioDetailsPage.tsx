@@ -31,7 +31,6 @@ import {
 import airIcon from '@/assets/mini/air.png';
 import {
   ContentItemType,
-  type IScenarioDetails,
   type IScenarioMedia,
   type MediaQuery,
   type Paginated,
@@ -180,16 +179,7 @@ export function ScenarioDetailsPage() {
 
   const unlockMutation = useMutation({
     mutationFn: () => unlockScenario(id ?? ''),
-    onSuccess: async (response) => {
-      if (response && 'scenario' in response && response.scenario) {
-        queryClient.setQueryData(scenarioKeys.detail(id ?? ''), response.scenario);
-      } else if (response && 'id' in response) {
-        queryClient.setQueryData(
-          scenarioKeys.detail(id ?? ''),
-          response as IScenarioDetails,
-        );
-      }
-
+    onSuccess: async () => {
       setIsUnlockModalOpen(false);
       await Promise.all([
         queryClient.invalidateQueries({ queryKey: scenarioKeys.detail(id ?? '') }),

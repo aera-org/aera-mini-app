@@ -6,7 +6,6 @@ import type {
   Paginated,
   ScenarioMediaTotals,
   UnblurScenarioVideoResponse,
-  UnlockScenarioResponse,
 } from '@/common/types';
 
 import { apiFetch } from './client';
@@ -157,15 +156,19 @@ export async function getScenarioMediaTotals(
 
 export async function unlockScenario(
   id: string,
-): Promise<UnlockScenarioResponse | IScenarioDetails> {
+): Promise<void> {
   const response = await apiFetch(`${SCENARIOS_PATH}/${id}/unlock`, {
     method: 'POST',
   });
 
-  return readJson<UnlockScenarioResponse | IScenarioDetails>(
-    response,
-    'Failed to unlock scenario',
-  );
+  if (!response.ok) {
+    const text = await response.text();
+    throw new Error(
+      text
+        ? `${text} (${response.status})`
+        : `Failed to unlock scenario (${response.status})`,
+    );
+  }
 }
 
 export async function unblurScenarioVideo(
