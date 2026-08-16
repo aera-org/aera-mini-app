@@ -1,6 +1,7 @@
 import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query';
 import TelegramWebApp from '@twa-dev/sdk';
 import { useEffect, useState } from 'react';
+import { useTranslation } from 'react-i18next';
 import { useLocation, useNavigate } from 'react-router-dom';
 
 import { buyGift, getGifts, sendGift } from '@/api/gifts';
@@ -8,13 +9,14 @@ import { GiftIcon } from '@/assets/icons';
 import airIcon from '@/assets/mini/air.png';
 import type { IGift } from '@/common/types';
 import { Card, Loader, Typography } from '@/components';
-import { useUser } from '@/context/UserContext';
+import { useUser } from '@/context/user-context';
 
 import s from './GiftsPage.module.scss';
 
 type GiftAction = 'buy' | 'gift' | 'owned';
 
 export function GiftsPage() {
+  const { t } = useTranslation();
   const location = useLocation();
   const navigate = useNavigate();
   const { user } = useUser();
@@ -162,7 +164,11 @@ export function GiftsPage() {
       (sendGiftMutation.isPending && sendGiftMutation.variables === gift.id);
     const isDisabled = action === 'owned' || isPending;
     const buttonText =
-      action === 'buy' ? 'Buy' : action === 'gift' ? 'Gift' : 'Owned';
+      action === 'buy'
+        ? t('gifts.actions.buy')
+        : action === 'gift'
+          ? t('gifts.actions.gift')
+          : t('gifts.actions.owned');
 
     return (
       <Card
@@ -246,7 +252,7 @@ export function GiftsPage() {
       {isLoading ? <Loader /> : null}
       {isError ? (
         <Typography variant="body-md">
-          {error instanceof Error ? error.message : 'Failed to load gifts'}
+          {error instanceof Error ? error.message : t('gifts.errors.gifts')}
         </Typography>
       ) : null}
 
@@ -259,7 +265,7 @@ export function GiftsPage() {
           {gifts.some((gift) => gift.isBought) ? (
             <div className={s.ownedSection}>
               <Typography as="span" variant="heading-sm" className={s.ownedTitle}>
-                Owned
+                {t('gifts.owned')}
               </Typography>
               <div className={s.grid}>
                 {gifts.filter((gift) => gift.isBought).map(renderGiftCard)}

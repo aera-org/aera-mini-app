@@ -1,4 +1,5 @@
 import type { CSSProperties } from 'react';
+import { useTranslation } from 'react-i18next';
 
 import { CharacterType } from '@/common/types';
 import { cn } from '@/common/utils';
@@ -13,11 +14,11 @@ type CharacterTypeSwitchProps = {
 
 const OPTIONS = [
   {
-    label: 'Anime',
+    labelKey: 'common.anime',
     value: CharacterType.Anime,
   },
   {
-    label: 'Realistic',
+    labelKey: 'common.realistic',
     value: CharacterType.Realistic,
   },
 ] as const;
@@ -27,6 +28,7 @@ export function CharacterTypeSwitch({
   onChange,
   disabled = false,
 }: CharacterTypeSwitchProps) {
+  const { t } = useTranslation();
   const activeIndex = OPTIONS.findIndex((option) => option.value === value);
   const indicatorStyle = {
     transform: `translateX(${Math.max(activeIndex, 0) * 100}%)`,
@@ -36,7 +38,7 @@ export function CharacterTypeSwitch({
     <div
       className={cn(s.root, [disabled ? s.rootDisabled : null])}
       role="tablist"
-      aria-label="Character type"
+      aria-label={t('create.type')}
     >
       <div className={s.indicator} style={indicatorStyle} aria-hidden="true" />
       {OPTIONS.map((option) => {
@@ -52,7 +54,7 @@ export function CharacterTypeSwitch({
             disabled={disabled}
             onClick={() => onChange(option.value)}
           >
-            {option.label}
+            {t(option.labelKey)}
           </button>
         );
       })}

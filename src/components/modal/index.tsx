@@ -1,3 +1,5 @@
+import { useTranslation } from 'react-i18next';
+
 import { Typography } from '../text';
 import style from './index.module.css';
 
@@ -9,6 +11,7 @@ type ModalProps = {
 };
 
 const Modal = ({ children, title, onClose, isOpen }: ModalProps) => {
+  const { t } = useTranslation();
   const classes = [style.background, isOpen ? style.isOpen : null]
     .filter(Boolean)
     .join(' ');
@@ -26,7 +29,7 @@ const Modal = ({ children, title, onClose, isOpen }: ModalProps) => {
           <button
             className={style.closeButton}
             onClick={onClose}
-            aria-label="Close modal"
+            aria-label={t('common.close')}
           >
             <svg
               fill="#fff"

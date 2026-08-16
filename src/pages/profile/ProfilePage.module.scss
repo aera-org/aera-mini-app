@@ -8,8 +8,8 @@
   gap: 16px;
 }
 
-.referralCard,
-.card {
+.panel,
+.referralCard {
   width: 100%;
   max-width: 390px;
   margin: 0 auto;
@@ -20,6 +20,122 @@
     inset 0 1px 0 rgba(255, 255, 255, 0.08);
   backdrop-filter: blur(18px);
   -webkit-backdrop-filter: blur(18px);
+}
+
+.panel {
+  padding: 24px 18px;
+  background:
+    linear-gradient(
+      180deg,
+      rgba(255, 255, 255, 0.08) 0%,
+      rgba(255, 255, 255, 0.03) 100%
+    ),
+    rgba(10, 7, 20, 0.72);
+  display: flex;
+  flex-direction: column;
+  gap: 18px;
+}
+
+.title {
+  margin: 0;
+  color: #fff;
+  line-height: 1.06;
+}
+
+.rows {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+}
+
+.statusRow,
+.infoRow,
+.actionRow {
+  width: 100%;
+  min-height: 64px;
+  border: 1px solid rgba(255, 255, 255, 0.1);
+  border-radius: 18px;
+  padding: 13px 14px;
+  background: rgba(255, 255, 255, 0.055);
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 12px;
+}
+
+.actionRow {
+  color: #fff;
+  cursor: pointer;
+  font: inherit;
+  text-align: left;
+}
+
+.actionIcon {
+  width: 36px;
+  height: 36px;
+  border-radius: 14px;
+  background: rgba(255, 255, 255, 0.08);
+  color: #ffd435;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  flex: 0 0 auto;
+}
+
+.actionText {
+  min-width: 0;
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  gap: 3px;
+}
+
+.chevron {
+  color: rgba(255, 255, 255, 0.5);
+  flex: 0 0 auto;
+}
+
+.rowLabel,
+.rowMeta {
+  display: block;
+  color: rgba(255, 255, 255, 0.58);
+  line-height: 1.2;
+}
+
+.rowValue {
+  display: block;
+  color: #fff;
+  line-height: 1.2;
+}
+
+.rowMeta {
+  margin-top: 3px;
+}
+
+.subscribeButton {
+  min-height: 38px;
+  border: 0;
+  border-radius: 999px;
+  padding: 0 16px;
+  background: #ffd435;
+  color: #130b06;
+  cursor: pointer;
+  font-family: var(--font-ui);
+  font-size: 14px;
+  font-weight: 700;
+  line-height: 1;
+}
+
+.airValue {
+  display: inline-flex;
+  align-items: center;
+  gap: 7px;
+}
+
+.airValue img {
+  width: 22px;
+  height: 22px;
+  object-fit: contain;
 }
 
 .referralCard {
@@ -41,11 +157,6 @@
       circle at 96% 4%,
       rgba(255, 212, 53, 0.26),
       transparent 34%
-    ),
-    radial-gradient(
-      circle at 72% 110%,
-      rgba(133, 107, 255, 0.18),
-      transparent 42%
     ),
     linear-gradient(
       180deg,
@@ -202,71 +313,87 @@
   color: rgba(255, 136, 166, 0.92);
 }
 
-.card {
-  padding: 28px 20px 22px;
-  background:
-    linear-gradient(
-      180deg,
-      rgba(255, 255, 255, 0.08) 0%,
-      rgba(255, 255, 255, 0.03) 100%
-    ),
-    rgba(10, 7, 20, 0.72);
+.modalOverlay {
+  position: fixed;
+  inset: 0;
+  z-index: 20;
+  padding: 18px;
+  background: rgba(0, 0, 0, 0.72);
   display: flex;
-  flex-direction: column;
-  gap: 28px;
+  align-items: center;
+  justify-content: center;
 }
 
-.copy {
-  display: flex;
-  flex-direction: column;
-  gap: 16px;
+.modal {
+  width: min(100%, 360px);
+  border: 1px solid rgba(255, 255, 255, 0.14);
+  border-radius: 24px;
+  padding: 24px 18px 18px;
+  background: rgba(14, 10, 26, 0.96);
+  position: relative;
+  box-shadow: 0 24px 70px rgba(0, 0, 0, 0.42);
 }
 
-.title {
-  margin: 0;
-  font-size: 30px;
-  line-height: 1.05;
-  letter-spacing: 0;
-}
-
-.text {
-  color: rgba(255, 255, 255, 0.82);
-  display: flex;
-  flex-direction: column;
-  gap: 14px;
-}
-
-.paragraph {
-  margin: 0;
-  line-height: 1.58;
-}
-
-.cta {
-  width: 100%;
-  min-height: 59px;
-  border: 1px solid rgba(255, 255, 255, 0.4);
-  border-radius: 30px;
-  padding: 0 22px;
-  background:
-    linear-gradient(0deg, rgba(0, 0, 0, 0.2), rgba(0, 0, 0, 0.2)),
-    linear-gradient(180deg, rgba(255, 212, 53, 0.1) 0%, #ffd435 100%);
+.modalClose {
+  position: absolute;
+  top: 14px;
+  right: 14px;
+  width: 32px;
+  height: 32px;
+  border: 0;
+  border-radius: 50%;
   color: #fff;
+  background: rgba(255, 255, 255, 0.08);
   display: inline-flex;
   align-items: center;
   justify-content: center;
-  gap: 8px;
   cursor: pointer;
 }
 
-.cta:disabled {
-  opacity: 0.55;
+.modalClose:disabled {
+  opacity: 0.5;
   cursor: default;
 }
 
-.ctaText {
-  font-size: 20px;
-  line-height: 120%;
-  letter-spacing: 0;
+.modalTitle {
+  margin: 0 40px 18px 0;
+  color: #fff;
+}
+
+.languageList {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+
+.languageOption {
+  min-height: 48px;
+  border: 1px solid rgba(255, 255, 255, 0.1);
+  border-radius: 16px;
+  padding: 0 14px;
+  color: #fff;
+  background: rgba(255, 255, 255, 0.05);
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 10px;
+  font-family: var(--font-ui);
+  font-size: 15px;
+  font-weight: 600;
+}
+
+.languageOptionActive {
+  border-color: rgba(255, 212, 53, 0.7);
+  background: rgba(255, 212, 53, 0.12);
+}
+
+.languageOption:disabled {
+  cursor: default;
+}
+
+.saving {
+  color: rgba(255, 255, 255, 0.6);
 }
 
 @media (max-width: 360px) {

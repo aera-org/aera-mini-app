@@ -1,17 +1,11 @@
 import { useQuery } from '@tanstack/react-query';
-import { createContext, useContext, useEffect } from 'react';
+import { useEffect } from 'react';
 
 import { getMe, patchMeCountryOnce } from '@/api/me';
-import type { IUser } from '@/common/types';
+import i18n from '@/i18n/config';
 
-export type UserContextValue = {
-  user: IUser | null;
-  isLoading: boolean;
-  error: string | null;
-  refresh: () => Promise<void>;
-};
+import { UserContext } from './user-context';
 
-const UserContext = createContext<UserContextValue | undefined>(undefined);
 const countryPatchKey = 'country-patch-session-v1';
 
 export function UserProvider({ children }: { children: React.ReactNode }) {
@@ -26,6 +20,13 @@ export function UserProvider({ children }: { children: React.ReactNode }) {
     sessionStorage.setItem(countryPatchKey, '1');
     void patchMeCountryOnce().catch(() => {});
   }, []);
+
+  useEffect(() => {
+    if (!data?.languageUI) return;
+    if (i18n.language === data.languageUI) return;
+
+    void i18n.changeLanguage(data.languageUI);
+  }, [data?.languageUI]);
 
   const refresh = async () => {
     await refetch();
@@ -48,12 +49,4 @@ export function UserProvider({ children }: { children: React.ReactNode }) {
       {children}
     </UserContext.Provider>
   );
-}
-
-export function useUser() {
-  const context = useContext(UserContext);
-  if (!context) {
-    throw new Error('useUser must be used within a UserProvider');
-  }
-  return context;
 }

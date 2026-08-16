@@ -1,3 +1,5 @@
+import { useTranslation } from 'react-i18next';
+
 import heartIcon from '@/assets/mini/heart-white.png';
 import { cn } from '@/common/utils';
 import { Typography } from '@/components/text';
@@ -12,9 +14,11 @@ type CreatePendingProps = {
 
 export function CreatePending({
   title,
-  description = 'This may take a moment...',
+  description,
   className,
 }: CreatePendingProps) {
+  const { t } = useTranslation();
+
   return (
     <div className={cn(s.page, [className])}>
       <div className={s.content}>
@@ -38,7 +42,7 @@ export function CreatePending({
           family="system"
           className={s.text}
         >
-          {description}
+          {description ?? t('common.pendingDescription')}
         </Typography>
         <div className={s.dots} aria-hidden>
           <span />

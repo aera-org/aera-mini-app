@@ -1,4 +1,5 @@
 import { useQuery } from '@tanstack/react-query';
+import { useTranslation } from 'react-i18next';
 import { useNavigate } from 'react-router-dom';
 
 import { getCustomCharacters } from '@/api/girls';
@@ -6,13 +7,13 @@ import customCharacterImage from '@/assets/characters/custom.jpg';
 import { MessageIcon } from '@/assets/icons';
 import airIcon from '@/assets/mini/air.png';
 import type { ICharacter } from '@/common/types';
-import { CUSTOM_CHARACTER_CREATE_PRICE } from '@/consts';
-import { formatPersonality } from '@/common/utils';
 import { Card, IconButton, Loader, Typography } from '@/components';
+import { CUSTOM_CHARACTER_CREATE_PRICE } from '@/consts';
 
 import s from './MyGirlsPage.module.scss';
 
 export function MyGirlsPage() {
+  const { t } = useTranslation();
   const navigate = useNavigate();
   const {
     data: characters = [],
@@ -51,7 +52,9 @@ export function MyGirlsPage() {
               weight={400}
               className={s.description}
             >
-              {formatPersonality(character.personality)}
+              {character.personality
+                .map((personality) => t(`create.options.${personality}`))
+                .join(', ')}
             </Typography>
             <Typography
               as="span"
@@ -64,7 +67,7 @@ export function MyGirlsPage() {
             </Typography>
           </div>
           <IconButton
-            aria-label={`Open chat with ${character.name}`}
+            aria-label={t('girls.openChatWith', { name: character.name })}
             className={s.messageButton}
             onClick={(event) => {
               event.stopPropagation();
@@ -112,7 +115,7 @@ export function MyGirlsPage() {
                 weight={600}
                 className={s.heroTitle}
               >
-                Your Character
+                {t('girls.yourCharacter')}
               </Typography>
               <Typography
                 as="p"
@@ -121,7 +124,7 @@ export function MyGirlsPage() {
                 weight={400}
                 className={s.heroDescription}
               >
-                Create your own dream partner
+                {t('girls.createPartner')}
               </Typography>
             </div>
             <button
@@ -137,7 +140,7 @@ export function MyGirlsPage() {
                 color="black"
                 className={s.createButtonText}
               >
-                Create Her
+                {t('girls.createHer')}
               </Typography>
             </button>
           </div>
@@ -156,7 +159,7 @@ export function MyGirlsPage() {
           <Typography variant="body-md">
             {error instanceof Error
               ? error.message
-              : 'Failed to load custom characters'}
+              : t('girls.errors.customCharacters')}
           </Typography>
         </div>
       ) : null}
@@ -173,7 +176,7 @@ export function MyGirlsPage() {
                 weight={500}
                 className={s.emptyStateText}
               >
-                Your dream girl will appear here
+                {t('girls.dreamGirlEmpty')}
               </Typography>
             </div>
           )}

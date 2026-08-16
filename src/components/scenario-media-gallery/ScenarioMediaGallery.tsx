@@ -7,6 +7,7 @@ import {
   useState,
 } from 'react';
 import { createPortal } from 'react-dom';
+import { useTranslation } from 'react-i18next';
 
 import { LockIcon, PauseIcon, PlayIcon } from '@/assets/icons';
 import { cn } from '@/common/utils';
@@ -114,6 +115,7 @@ export function ScenarioMediaGallery({
   onActiveChange,
   onClose,
 }: ScenarioMediaGalleryProps) {
+  const { t } = useTranslation();
   const activeIndex = activeId
     ? items.findIndex((item) => item.id === activeId)
     : -1;
@@ -515,7 +517,7 @@ export function ScenarioMediaGallery({
 
   return createPortal(
     <div
-      aria-label="Media gallery"
+      aria-label={t('gallery.mediaGallery')}
       aria-modal="true"
       className={s.gallery}
       data-chrome-visible={isChromeVisible ? 'true' : 'false'}
@@ -562,7 +564,7 @@ export function ScenarioMediaGallery({
           >
             {activeItem.type === 'video' ? (
               <video
-                aria-label="Active video"
+                aria-label={t('gallery.activeVideo')}
                 autoPlay
                 className={cn(s.media, [], {
                   [s.mediaBlurred]: Boolean(activeItem.isBlurred),
@@ -624,7 +626,9 @@ export function ScenarioMediaGallery({
               <span className={s.videoControls}>
                 <button
                   aria-label={
-                    activeVideoState.paused ? 'Play video' : 'Pause video'
+                    activeVideoState.paused
+                      ? t('gallery.playVideo')
+                      : t('gallery.pauseVideo')
                   }
                   className={s.videoControlButton}
                   type="button"
@@ -637,7 +641,7 @@ export function ScenarioMediaGallery({
                   )}
                 </button>
                 <input
-                  aria-label="Video progress"
+                  aria-label={t('gallery.videoProgress')}
                   className={s.videoProgress}
                   defaultValue={0}
                   disabled={activeVideoState.duration <= 0}
@@ -661,7 +665,7 @@ export function ScenarioMediaGallery({
 
       {items.length > 1 ? (
         <aside
-          aria-label="Gallery thumbnails"
+          aria-label={t('gallery.thumbnails')}
           className={s.thumbnails}
           data-gallery-content="true"
           data-gallery-gesture-ignore="true"
@@ -671,7 +675,7 @@ export function ScenarioMediaGallery({
 
             return (
               <button
-                aria-label={`Open media ${index + 1}`}
+                aria-label={t('gallery.openMedia', { index: index + 1 })}
                 aria-current={active ? 'true' : undefined}
                 className={cn(s.thumbnail, [], {
                   [s.thumbnailActive]: active,

@@ -12,8 +12,8 @@ export { BackNavigation } from './navigation/BackNavigation';
 export { BagNavigation } from './navigation/BagNavigation';
 export { Navigation } from './navigation/Navigation';
 export {
-  ScenarioMediaGallery,
   type ScenarioGalleryItem,
+  ScenarioMediaGallery,
 } from './scenario-media-gallery';
 export { Skeleton } from './skeleton';
 export { Text, Typography } from './text';

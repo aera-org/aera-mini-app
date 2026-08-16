@@ -26,6 +26,10 @@ export function Navigation({ items }: NavigationProps) {
           item.path === '/girls'
             ? location.pathname === '/girls' ||
               location.pathname.startsWith('/girls/')
+            : item.path === '/profile'
+              ? location.pathname === '/profile' ||
+                location.pathname === '/affiliate' ||
+                location.pathname === '/earn'
             : location.pathname === item.path;
         return (
           <button

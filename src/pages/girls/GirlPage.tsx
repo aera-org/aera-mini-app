@@ -1,5 +1,6 @@
 import { useQuery, useQueryClient } from '@tanstack/react-query';
 import { useMemo } from 'react';
+import { useTranslation } from 'react-i18next';
 import { useParams, useSearchParams } from 'react-router-dom';
 
 import { getGirls } from '@/api/girls';
@@ -13,6 +14,7 @@ import { CharacterDetails, Loader, Typography } from '@/components';
 import s from '@/components/character-details/CharacterDetails.module.scss';
 
 export function GirlPage() {
+  const { t } = useTranslation();
   const { id } = useParams<{ id: string }>();
   const [searchParams] = useSearchParams();
   const queryClient = useQueryClient();
@@ -56,7 +58,7 @@ export function GirlPage() {
       <div className={s.page}>
         <div className={s.container}>
           <Typography variant="body-md">
-            {error instanceof Error ? error.message : 'Failed to load girl'}
+            {error instanceof Error ? error.message : t('girls.errors.girl')}
           </Typography>
         </div>
       </div>
@@ -67,7 +69,7 @@ export function GirlPage() {
     return (
       <div className={s.page}>
         <div className={s.container}>
-          <Typography variant="body-md">Girl not found</Typography>
+          <Typography variant="body-md">{t('girls.girlNotFound')}</Typography>
         </div>
       </div>
     );

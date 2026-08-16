@@ -1,3 +1,5 @@
+import { useTranslation } from 'react-i18next';
+
 import { ArrowLeftIcon, SparklesIcon } from '@/assets/icons';
 import { Typography } from '@/components/text';
 
@@ -9,12 +11,14 @@ type BagNavigationProps = {
 };
 
 export function BagNavigation({ onBack, onUpgrade }: BagNavigationProps) {
+  const { t } = useTranslation();
+
   return (
     <nav className={s.bagNav}>
       <button
         type="button"
         className={s.bagBackButton}
-        aria-label="Back"
+        aria-label={t('common.back')}
         onClick={onBack}
       >
         <ArrowLeftIcon width={20} height={20} />
@@ -28,7 +32,7 @@ export function BagNavigation({ onBack, onUpgrade }: BagNavigationProps) {
           weight={500}
           className={s.bagUpgradeText}
         >
-          Upgrade
+          {t('bag.upgrade')}
         </Typography>
       </button>
     </nav>

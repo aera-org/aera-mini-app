@@ -1,6 +1,7 @@
 import { useQuery, useQueryClient } from '@tanstack/react-query';
 import TelegramWebApp from '@twa-dev/sdk';
 import { useCallback, useEffect, useMemo, useState } from 'react';
+import { useTranslation } from 'react-i18next';
 import { useOutletContext } from 'react-router-dom';
 
 import { createPlanInvoice } from '@/api/payments';
@@ -12,12 +13,12 @@ import {
   TgStarWhiteIcon,
 } from '@/assets/icons';
 import airIcon from '@/assets/mini/air.png';
-import { PlanFeaturesA, PlanFeaturesB } from '@/common/consts';
 import { type IPlan, PlanPeriod, PlanType } from '@/common/types';
+import { getSubscriptionRemaining } from '@/common/utils';
 import { cn } from '@/common/utils';
 import { Card, Loader, Typography } from '@/components';
 import { useLaunchParams } from '@/context/useLaunchParams';
-import { useUser } from '@/context/UserContext';
+import { useUser } from '@/context/user-context';
 import { usePaywallOpenTracking } from '@/hooks/usePaywallOpenTracking';
 
 import s from './BagPage.module.scss';
@@ -30,41 +31,6 @@ const periodOrder: Record<PlanPeriod, number> = {
 
 function formatPeriod(plan: IPlan) {
   return `${plan.periodCount} ${plan.period}`;
-}
-
-function pluralize(count: number, one: string, many: string) {
-  return count === 1 ? one : many;
-}
-
-const PLAN_NAME = [
-  'Trial',
-  'Basic',
-  'Premium',
-  'Ultimate',
-]
-
-function getRemainingLabel(subscribedUntil?: string | null, now = Date.now()) {
-  if (!subscribedUntil) return { active: false, label: 'Free' };
-  const end = Date.parse(subscribedUntil);
-  if (Number.isNaN(end)) return { active: false, label: 'Free' };
-
-  const remainingMs = end - now;
-  if (remainingMs <= 0) return { active: false, label: 'Free' };
-
-  const remainingHours = remainingMs / 3_600_000;
-  if (remainingHours < 24) {
-    const hours = Math.max(1, Math.ceil(remainingHours));
-    return {
-      active: true,
-      label: `${hours} ${pluralize(hours, 'hour', 'hours')} left`,
-    };
-  }
-
-  const days = Math.max(1, Math.floor(remainingHours / 24));
-  return {
-    active: true,
-    label: `${days} ${pluralize(days, 'day', 'days')} left`,
-  };
 }
 
 function getDefaultPlan(plans: IPlan[]) {
@@ -118,6 +84,7 @@ type LayoutOutletContext = {
 };
 
 export function BagPage() {
+  const { t } = useTranslation();
   const { user } = useUser();
   const { setBagUpgradeAction } = useOutletContext<LayoutOutletContext>();
   const launchParams = useLaunchParams();
@@ -189,6 +156,8 @@ export function BagPage() {
   const activeFeatures = useMemo(() => {
     const activeA = new Set<number>();
     const activeB = new Set<number>();
+    const featuresA = t('bag.featuresA', { returnObjects: true }) as string[];
+    const featuresB = t('bag.featuresB', { returnObjects: true }) as string[];
 
     if (selectedPlanIndex === 0) {
       activeA.add(0);
@@ -212,15 +181,18 @@ export function BagPage() {
       activeB.add(3);
       activeB.add(4);
     } else {
-      PlanFeaturesA.forEach((_, index) => activeA.add(index));
-      PlanFeaturesB.forEach((_, index) => activeB.add(index));
+      featuresA.forEach((_, index) => activeA.add(index));
+      featuresB.forEach((_, index) => activeB.add(index));
     }
 
     return { activeA, activeB };
-  }, [selectedPlanIndex]);
+  }, [selectedPlanIndex, t]);
 
-  const remaining = getRemainingLabel(user?.subscribedUntil, now);
+  const remaining = getSubscriptionRemaining(user?.subscribedUntil, now);
   const firstDayOfferTimer = getFirstDayOfferTimer(user?.createdAt, now);
+  const planNames = t('bag.planNames', { returnObjects: true }) as string[];
+  const planFeaturesA = t('bag.featuresA', { returnObjects: true }) as string[];
+  const planFeaturesB = t('bag.featuresB', { returnObjects: true }) as string[];
 
   const handleSubscribe = useCallback(() => {
     if (!selectedPlan) return;
@@ -251,14 +223,14 @@ export function BagPage() {
         <Card className={s.statusCard}>
           <div>
             <Typography as="div" variant="body-sm" className={s.statusTitle}>
-              Your plan
+              {t('bag.statusTitle')}
             </Typography>
             <Typography as="div" variant="heading-sm" className={s.statusValue}>
-              {remaining.active ? 'Subscribed' : ''}
+              {t('bag.subscribed')}
             </Typography>
           </div>
           <Typography as="div" variant="body-sm" className={s.statusDate}>
-            {remaining.label}
+            {t(remaining.key, { count: remaining.count })}
           </Typography>
         </Card>
       )}
@@ -266,7 +238,7 @@ export function BagPage() {
       {isLoading ? <Loader /> : null}
       {isError ? (
         <Typography variant="body-md">
-          {error instanceof Error ? error.message : 'Failed to load plans'}
+          {error instanceof Error ? error.message : t('bag.errors.plans')}
         </Typography>
       ) : null}
 
@@ -280,7 +252,7 @@ export function BagPage() {
                 weight={700}
                 className={s.introEyebrow}
               >
-                SALE 50% OFF
+                {t('bag.introEyebrow')}
               </Typography>
               <Typography
                 as="div"
@@ -288,7 +260,9 @@ export function BagPage() {
                 weight={600}
                 className={s.introTitle}
               >
-                {firstDayOfferTimer ? 'First day offer' : 'Exclusive offer'}
+                {firstDayOfferTimer
+                  ? t('bag.firstDayOffer')
+                  : t('bag.exclusiveOffer')}
               </Typography>
             </div>
             {firstDayOfferTimer ? (
@@ -342,7 +316,7 @@ export function BagPage() {
                         weight={700}
                         className={s.planEyebrow}
                       >
-                        {PLAN_NAME[index]}
+                        {planNames[index] ?? planNames[0]}
                       </Typography>
                       <Typography
                         as="span"
@@ -410,7 +384,7 @@ export function BagPage() {
                           weight={700}
                           className={s.save}
                         >
-                          SAVE {savePercent}%
+                          {t('bag.savePercent', { percent: savePercent })}
                         </Typography>
                       </span>
                     ) : null}
@@ -423,7 +397,7 @@ export function BagPage() {
                         weight={700}
                         className={s.metaText}
                       >
-                        {dailyPriceLabel} / day
+                        {t('bag.dailyPrice', { price: dailyPriceLabel })}
                       </Typography>
                     </span>
                   </div>
@@ -436,7 +410,7 @@ export function BagPage() {
                         weight={500}
                         className={s.recommendedBadgeText}
                       >
-                        most popular
+                        {t('bag.mostPopular')}
                       </Typography>
                     </span>
                   ) : null}
@@ -448,7 +422,7 @@ export function BagPage() {
           {selectedPlan ? (
             <div className={s.featuresGrid}>
               <div className={s.featuresColumnA}>
-                {PlanFeaturesA.map((feature, index) => {
+                {planFeaturesA.map((feature, index) => {
                   const isActive = activeFeatures.activeA.has(index);
                   return (
                     <div
@@ -482,7 +456,7 @@ export function BagPage() {
                 })}
               </div>
               <div className={s.featuresColumnB}>
-                {PlanFeaturesB.map((feature, index) => {
+                {planFeaturesB.map((feature, index) => {
                   const isActive = activeFeatures.activeB.has(index);
                   return (
                     <div

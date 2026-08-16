@@ -8,6 +8,7 @@ import {
 } from '@tanstack/react-query';
 import TelegramWebApp from '@twa-dev/sdk';
 import { useEffect, useMemo, useRef, useState } from 'react';
+import { useTranslation } from 'react-i18next';
 import { useNavigate, useParams, useSearchParams } from 'react-router-dom';
 
 import {
@@ -37,14 +38,14 @@ import {
   SCENARIO_CONTENT_PRICE,
   VIDEO_PRICE,
 } from '@/common/types';
-import { capitalize, cn } from '@/common/utils';
+import { cn } from '@/common/utils';
 import {
   Loader,
   type ScenarioGalleryItem,
   ScenarioMediaGallery,
   Typography,
 } from '@/components';
-import { useUser } from '@/context/UserContext';
+import { useUser } from '@/context/user-context';
 
 import s from './ScenarioDetailsPage.module.scss';
 
@@ -55,9 +56,9 @@ type ScenarioMediaInfiniteData = InfiniteData<
 >;
 
 const MEDIA_TABS = [
-  { label: 'Images', value: ContentItemType.Image },
-  { label: 'Videos', value: ContentItemType.Video },
-] satisfies Array<{ label: string; value: ScenarioMediaTab }>;
+  { labelKey: 'scenario.images', value: ContentItemType.Image },
+  { labelKey: 'scenario.videos', value: ContentItemType.Video },
+] satisfies Array<{ labelKey: string; value: ScenarioMediaTab }>;
 
 const DOCK_SCROLL_THRESHOLD = 280;
 
@@ -73,12 +74,12 @@ function getMediaUrl(media: IScenarioMedia) {
   return media.url;
 }
 
-function getUnlockErrorMessage(error: unknown) {
+function getUnlockErrorMessage(error: unknown, fallback: string) {
   if (error instanceof Error) {
     return error.message;
   }
 
-  return 'Failed to unlock content';
+  return fallback;
 }
 
 function shouldRedirectToStore(error: unknown) {
@@ -120,6 +121,7 @@ function replaceScenarioMediaItem(
 }
 
 export function ScenarioDetailsPage() {
+  const { t } = useTranslation();
   const { id } = useParams<{ id: string }>();
   const navigate = useNavigate();
   const [searchParams, setSearchParams] = useSearchParams();
@@ -211,7 +213,7 @@ export function ScenarioDetailsPage() {
   const unblurVideoMutation = useMutation({
     mutationFn: (videoId: string) => {
       if (!id) {
-        throw new Error('Scenario id is missing');
+        throw new Error(t('scenario.errors.missingId'));
       }
 
       return unblurScenarioVideo(id, videoId);
@@ -289,12 +291,14 @@ export function ScenarioDetailsPage() {
   const heroImageUrl =
     scenario?.promoImgUrl || scenario?.openingImageUrl || scenario?.character.avatarUrl;
   const characterPersonality = scenario?.character.personality
-    ? scenario.character.personality.map(capitalize).join(', ')
+    ? scenario.character.personality
+        .map((personality) => t(`create.options.${personality}`))
+        .join(', ')
     : '';
   const mediaErrorMessage =
     mediaQuery.error instanceof Error
       ? mediaQuery.error.message
-      : 'Failed to load media';
+      : t('scenario.errors.media');
 
   useEffect(() => {
     if (!scenario || !id || !isScenarioMediaTab(tabParam)) return;
@@ -379,7 +383,7 @@ export function ScenarioDetailsPage() {
           <Typography variant="body-md">
             {scenarioQuery.error instanceof Error
               ? scenarioQuery.error.message
-              : 'Failed to load scenario'}
+              : t('scenario.errors.load')}
           </Typography>
         </div>
       </div>
@@ -429,11 +433,11 @@ export function ScenarioDetailsPage() {
           <div className={s.actions}>
             <button type="button" className={s.chatButton} onClick={handleStartChat}>
               <MessageIcon width={18} height={18} />
-              <span>Chat</span>
+              <span>{t('scenario.chat')}</span>
             </button>
             <button type="button" className={s.generateButton} disabled>
               <SparklesIcon width={18} height={18} />
-              <span>Generate</span>
+              <span>{t('scenario.generate')}</span>
             </button>
           </div>
 
@@ -441,7 +445,7 @@ export function ScenarioDetailsPage() {
             <div className={s.metaRow}>
               <span>
                 {typeof scenario.character.age === 'number'
-                  ? `Age: ${scenario.character.age}`
+                  ? `${t('scenario.age')}: ${scenario.character.age}`
                   : ''}
               </span>
               <span>{characterPersonality}</span>
@@ -464,7 +468,7 @@ export function ScenarioDetailsPage() {
               onClick={() => setIsUnlockModalOpen(true)}
             >
               <LockIcon />
-              <span>Unlock all</span>
+              <span>{t('scenario.unlockAll')}</span>
               <strong className={s.unlockPrice}>
                 <img src={airIcon} alt="" draggable={false} />
                 {SCENARIO_CONTENT_PRICE}
@@ -479,7 +483,7 @@ export function ScenarioDetailsPage() {
           className={s.tabs}
           ref={tabsRef}
           role="tablist"
-          aria-label="Scenario media"
+          aria-label={t('scenario.openMedia')}
         >
           {MEDIA_TABS.map((tab) => {
             const isActive = activeTab === tab.value;
@@ -498,7 +502,7 @@ export function ScenarioDetailsPage() {
                 ) : (
                   <VideoIcon width={14} height={14} />
                 )}
-                <span>{tab.label}</span>
+                <span>{t(tab.labelKey)}</span>
               </button>
             );
           })}
@@ -520,7 +524,7 @@ export function ScenarioDetailsPage() {
                 void mediaQuery.refetch();
               }}
             >
-              Retry
+              {t('common.retry')}
             </button>
           </div>
         ) : null}
@@ -528,7 +532,12 @@ export function ScenarioDetailsPage() {
         {!mediaQuery.isLoading && !mediaQuery.isError && !mediaItems.length ? (
           <div className={s.mediaMessage}>
             <Typography variant="body-md">
-              No {activeTab === ContentItemType.Image ? 'images' : 'videos'} yet
+              {t('scenario.noMedia', {
+                type:
+                  activeTab === ContentItemType.Image
+                    ? t('scenario.images').toLowerCase()
+                    : t('scenario.videos').toLowerCase(),
+              })}
             </Typography>
           </div>
         ) : null}
@@ -542,8 +551,8 @@ export function ScenarioDetailsPage() {
                 className={cn(s.tile, [], { [s.tileLocked]: media.isBlurred })}
                 aria-label={
                   media.isBlurred
-                    ? 'Unlock scenario media'
-                    : 'Open scenario media'
+                    ? t('scenario.unlockMedia')
+                    : t('scenario.openMedia')
                 }
                 onClick={() => {
                   if (media.isBlurred) {
@@ -603,7 +612,9 @@ export function ScenarioDetailsPage() {
               void mediaQuery.fetchNextPage();
             }}
           >
-            {mediaQuery.isFetchingNextPage ? 'Loading...' : 'Load more'}
+            {mediaQuery.isFetchingNextPage
+              ? t('common.loading')
+              : t('scenario.loadMore')}
           </button>
         ) : null}
       </section>
@@ -621,7 +632,7 @@ export function ScenarioDetailsPage() {
             onClick={() => setIsUnlockModalOpen(true)}
           >
             <LockIcon />
-            <span>Unlock all</span>
+            <span>{t('scenario.unlockAll')}</span>
             <strong className={s.unlockPrice}>
               <img src={airIcon} alt="" draggable={false} />
               {SCENARIO_CONTENT_PRICE}
@@ -642,7 +653,7 @@ export function ScenarioDetailsPage() {
             <button
               type="button"
               className={s.modalClose}
-              aria-label="Close unlock modal"
+              aria-label={t('scenario.closeUnlockModal')}
               onClick={() => setIsUnlockModalOpen(false)}
             >
               <CrossIcon width={18} height={18} />
@@ -673,24 +684,29 @@ export function ScenarioDetailsPage() {
                 family="system"
                 className={s.modalDescription}
               >
-                Unlock all content including future generations.
+                {t('scenario.unlockModalDescription')}
               </Typography>
               <div className={s.totalsRow}>
                 <span>
                   <ImageIcon width={18} height={18} />
                   <strong>{totalsQuery.data?.images ?? '-'}</strong>
-                  <small>Images</small>
+                  <small>{t('scenario.images')}</small>
                 </span>
                 <span>
                   <VideoIcon width={18} height={18} />
                   <strong>{totalsQuery.data?.videos ?? '-'}</strong>
-                  <small>Videos</small>
+                  <small>{t('scenario.videos')}</small>
                 </span>
               </div>
-              <span className={s.futureBadge}>+ all future content</span>
+              <span className={s.futureBadge}>
+                {t('scenario.allFutureContent')}
+              </span>
               {unlockMutation.isError ? (
                 <Typography variant="caption" className={s.unlockError}>
-                  {getUnlockErrorMessage(unlockMutation.error)}
+                  {getUnlockErrorMessage(
+                    unlockMutation.error,
+                    t('scenario.errors.unlock'),
+                  )}
                 </Typography>
               ) : null}
               <button
@@ -702,8 +718,8 @@ export function ScenarioDetailsPage() {
                 <LockIcon />
                 <span>
                   {unlockMutation.isPending
-                    ? 'Unlocking...'
-                    : 'Unlock all Content'}
+                    ? t('scenario.unlocking')
+                    : t('scenario.unlockAllContent')}
                 </span>
                 {!unlockMutation.isPending ? (
                   <strong className={s.unlockPrice}>
@@ -754,7 +770,10 @@ export function ScenarioDetailsPage() {
               </span>
               {unblurVideoMutation.isError ? (
                 <Typography variant="caption" className={s.unlockError}>
-                  {getUnlockErrorMessage(unblurVideoMutation.error)}
+                  {getUnlockErrorMessage(
+                    unblurVideoMutation.error,
+                    t('scenario.errors.unlock'),
+                  )}
                 </Typography>
               ) : null}
               <button
@@ -765,7 +784,9 @@ export function ScenarioDetailsPage() {
               >
                 <LockIcon />
                 <span>
-                  {unblurVideoMutation.isPending ? 'Unlocking...' : 'Unlock video'}
+                  {unblurVideoMutation.isPending
+                    ? t('scenario.unlocking')
+                    : t('scenario.unlockVideo')}
                 </span>
                 {!unblurVideoMutation.isPending ? (
                   <strong className={s.unlockPrice}>

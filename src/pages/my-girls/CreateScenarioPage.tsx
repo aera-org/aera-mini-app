@@ -1,5 +1,6 @@
 import { useMutation, useQueryClient } from '@tanstack/react-query';
 import { useState } from 'react';
+import { useTranslation } from 'react-i18next';
 import { useNavigate, useParams } from 'react-router-dom';
 
 import { createCustomScenario } from '@/api/girls';
@@ -15,17 +16,25 @@ import s from './CreateCharacterPage.module.scss';
 const CUSTOM_OPTION = 'custom';
 
 type ScenarioOption = {
+  description: string;
+  labelKey: string;
   value: CustomScenarioType | typeof CUSTOM_OPTION;
-  label: string;
 };
 
 const scenarioOptions: ScenarioOption[] = [
-  { value: CUSTOM_OPTION, label: 'Custom' },
+  { value: CUSTOM_OPTION, labelKey: 'create.custom', description: '' },
   ...Object.values(CustomScenarioType).map((value) => ({
     value,
-    label: formatScenarioTypeLabel(value),
+    labelKey: `create.scenarioTypes.${scenarioTypeTranslationKey(value)}`,
+    description: formatScenarioTypeLabel(value),
   })),
 ];
+
+function scenarioTypeTranslationKey(value: CustomScenarioType) {
+  return value.replace(/-([a-z])/g, (_match, part: string) =>
+    part.toUpperCase(),
+  );
+}
 
 function formatScenarioTypeLabel(value: CustomScenarioType) {
   if (value === CustomScenarioType.CEO) return 'CEO';
@@ -49,6 +58,7 @@ function getScenarioDto(description: string, clothes?: string, lingerie?: string
 }
 
 export function CreateScenarioPage() {
+  const { t } = useTranslation();
   const { id } = useParams<{ id: string }>();
   const navigate = useNavigate();
   const queryClient = useQueryClient();
@@ -66,7 +76,7 @@ export function CreateScenarioPage() {
 
   const createMutation = useMutation({
     mutationFn: (body: CustomScenarioCreateDto) => {
-      if (!id) throw new Error('Character id is missing');
+      if (!id) throw new Error(t('create.scenarioCharacterMissing'));
       return createCustomScenario(id, body);
     },
     onSuccess: (character) => {
@@ -113,11 +123,11 @@ export function CreateScenarioPage() {
     }
 
     if (!selectedOption || selectedOption.value === CUSTOM_OPTION) return;
-    createMutation.mutate(getScenarioDto(selectedOption.label));
+    createMutation.mutate(getScenarioDto(selectedOption.description));
   };
 
   if (createMutation.isPending) {
-    return <CreatePending title="Creating your scenario" />;
+    return <CreatePending title={t('create.creatingScenario')} />;
   }
 
   return (
@@ -133,7 +143,7 @@ export function CreateScenarioPage() {
           weight={400}
           className={s.title}
         >
-          Scenario
+          {t('create.scenario')}
         </Typography>
         <button type="button" className={s.closeButton} onClick={close}>
           <CrossIcon width={42} height={42} />
@@ -189,7 +199,7 @@ export function CreateScenarioPage() {
             weight={600}
             className={s.nextButtonText}
           >
-            Create
+            {t('common.create')}
           </Typography>
         </button>
       </div>
@@ -208,6 +218,8 @@ function ScenarioTypeStep({
   onOptionClick,
   error,
 }: ScenarioTypeStepProps) {
+  const { t } = useTranslation();
+
   return (
     <div className={s.optionsList}>
       {scenarioOptions.map((option) => {
@@ -232,7 +244,7 @@ function ScenarioTypeStep({
               family="system"
               className={s.optionLabel}
             >
-              {option.label}
+              {t(option.labelKey)}
             </Typography>
           </button>
         );
@@ -265,24 +277,26 @@ function CustomScenarioForm({
   onLingerieChange,
   error,
 }: CustomScenarioFormProps) {
+  const { t } = useTranslation();
+
   return (
     <div className={s.profileForm}>
       <label className={s.field}>
         <Typography as="span" variant="body-sm" className={s.fieldLabel}>
-          Description
+          {t('create.description')}
         </Typography>
         <textarea
           className={cn(s.input, [s.textArea])}
           rows={2}
           value={description}
-          placeholder="Megan Fox from Transformers/Lara Croft, Bella from Twilight"
+          placeholder={t('create.descriptionPlaceholder')}
           onChange={(event) => onDescriptionChange(event.target.value)}
         />
       </label>
 
       <label className={s.field}>
         <Typography as="span" variant="body-sm" className={s.fieldLabel}>
-          Clothes
+          {t('create.clothes')}
         </Typography>
         <textarea
           className={cn(s.input, [s.textArea, s.textAreaSmall])}
@@ -294,7 +308,7 @@ function CustomScenarioForm({
 
       <label className={s.field}>
         <Typography as="span" variant="body-sm" className={s.fieldLabel}>
-          Lingerie
+          {t('create.lingerie')}
         </Typography>
         <textarea
           className={cn(s.input, [s.textArea, s.textAreaSmall])}

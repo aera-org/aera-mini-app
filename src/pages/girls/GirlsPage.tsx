@@ -1,4 +1,5 @@
 import { keepPreviousData, useQuery } from '@tanstack/react-query';
+import { useTranslation } from 'react-i18next';
 import { useNavigate, useSearchParams } from 'react-router-dom';
 
 import { getGirls } from '@/api/girls';
@@ -34,6 +35,7 @@ type ScenarioWithGirl = {
 };
 
 export function GirlsPage() {
+  const { t } = useTranslation();
   const navigate = useNavigate();
   const [searchParams, setSearchParams] = useSearchParams();
   const rawType = searchParams.get('type') ?? '';
@@ -133,7 +135,7 @@ export function GirlsPage() {
             </Typography>
           </div>
           <IconButton
-            aria-label={`Open chat with ${character.name}`}
+            aria-label={t('girls.openChatWith', { name: character.name })}
             className={s.messageButton}
             onClick={(event) => {
               event.stopPropagation();
@@ -182,7 +184,7 @@ export function GirlsPage() {
               weight={400}
               className={s.description}
             >
-              Create your own dream partner
+          {t('girls.createPartner')}
             </Typography>
           </div>
           <button
@@ -200,7 +202,7 @@ export function GirlsPage() {
               weight={600}
               className={s.createCardButtonText}
             >
-              Try now
+              {t('girls.tryNow')}
             </Typography>
           </button>
         </div>
@@ -296,7 +298,7 @@ export function GirlsPage() {
                 weight={500}
                 className={s.comingSoonBadgeText}
               >
-                coming soon
+                {t('girls.comingSoon')}
               </Typography>
             </span>
           </div>
@@ -315,7 +317,7 @@ export function GirlsPage() {
       {isError ? (
         <div className={s.container}>
           <Typography variant="body-md">
-            {error instanceof Error ? error.message : 'Failed to load girls'}
+            {error instanceof Error ? error.message : t('girls.errors.girls')}
           </Typography>
         </div>
       ) : null}
@@ -328,10 +330,10 @@ export function GirlsPage() {
               onGiftClick={() => navigate('/gifts')}
               customSlide={{
                 backgroundImage: customCharacterImage,
-                title: 'Your Character',
-                description: 'Create your own dream partner',
+                title: t('girls.yourCharacter'),
+                description: t('girls.createPartner'),
                 priceAir: CUSTOM_CHARACTER_CREATE_PRICE,
-                actionLabel: 'Try now',
+                actionLabel: t('girls.tryNow'),
                 onActionClick: handleCreateCharacterClick,
               }}
             />
@@ -351,7 +353,7 @@ export function GirlsPage() {
                   weight={500}
                   className={s.newScenariosTitle}
                 >
-                  New scenarios
+                  {t('girls.newScenarios')}
                 </Typography>
                 <div className={s.newScenariosList}>
                   {newScenarios.map(renderScenarioItem)}
@@ -371,7 +373,7 @@ export function GirlsPage() {
                   weight={500}
                   className={s.comingSoonSectionTitle}
                 >
-                  Coming soon scenarios
+                  {t('girls.comingSoonScenarios')}
                 </Typography>
                 <div className={s.comingSoonList}>
                   {comingSoonScenarios.map(renderComingSoonScenario)}

@@ -1,4 +1,4 @@
-import type { IUser, PlanType } from '@/common/types';
+import type { IUser, Language, PlanType } from '@/common/types';
 
 import { apiFetch, localFetch } from './client';
 
@@ -11,6 +11,10 @@ type MeDeeplinkDto = {
 type PaywallOpenDto = {
   type: PlanType.Subscription | PlanType.Air;
   chatId: string;
+};
+
+type PatchMeDto = {
+  languageUI?: Language;
 };
 
 export async function getMe(): Promise<IUser> {
@@ -39,6 +43,21 @@ export async function postMeDeeplink(body: MeDeeplinkDto): Promise<void> {
   if (!response.ok) {
     const text = await response.text();
     throw new Error(text || 'Failed to post deeplink');
+  }
+}
+
+export async function patchMe(body: PatchMeDto): Promise<void> {
+  const response = await apiFetch('/me', {
+    method: 'PATCH',
+    headers: {
+      'Content-Type': 'application/json',
+    },
+    body: JSON.stringify(body),
+  });
+
+  if (!response.ok) {
+    const text = await response.text();
+    throw new Error(text || 'Failed to update user');
   }
 }
 

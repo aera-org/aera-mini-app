@@ -1,10 +1,11 @@
 import { useEffect, useRef, useState } from 'react';
+import { useTranslation } from 'react-i18next';
 import { Outlet, useLocation, useNavigate } from 'react-router-dom';
 
 import { postMeDeeplink } from '@/api/me';
 import { PlusIcon } from '@/assets/icons';
+import profileIcon from '@/assets/mini/airs.png';
 import airIcon from '@/assets/mini/air.png';
-import affiliateIcon from '@/assets/mini/airs.png';
 import bagIcon from '@/assets/mini/bag.png';
 import fuelIcon from '@/assets/mini/fuel.png';
 import giftsIcon from '@/assets/mini/gifts.png';
@@ -18,11 +19,12 @@ import {
   Navigation,
 } from '@/components';
 import { useLaunchParams } from '@/context/useLaunchParams';
-import { useUser } from '@/context/UserContext';
+import { useUser } from '@/context/user-context';
 
-const pageTitleMap: Record<string, string> = {
-  '/affiliate': 'Earn',
-  '/earn': 'Earn',
+const pageClassMap: Record<string, string> = {
+  '/affiliate': 'Profile',
+  '/earn': 'Profile',
+  '/profile': 'Profile',
   '/girls': 'Girls',
   '/my-girls': 'Girls',
   '/gifts': 'Gifts',
@@ -35,6 +37,7 @@ export function MiniAppLayout() {
   const navigate = useNavigate();
   const launchParams = useLaunchParams();
   const { user } = useUser();
+  const { t } = useTranslation();
   const hasHandledLaunchRedirect = useRef(false);
   const trackedDeeplinkRef = useRef<string | null>(null);
   const [bagUpgradeAction, setBagUpgradeAction] = useState<(() => void) | null>(
@@ -47,10 +50,9 @@ export function MiniAppLayout() {
   const isBagPage = location.pathname === '/bag';
   const isStorePage = location.pathname === '/store';
 
-  const pageName = isScenarioDetails
+  const appClassName = isScenarioDetails
     ? 'Scenario'
-    : pageTitleMap[location.pathname] ?? 'Girls';
-  const appClassName = pageName;
+    : pageClassMap[location.pathname] ?? 'Girls';
 
   useEffect(() => {
     if (hasHandledLaunchRedirect.current) return;
@@ -118,13 +120,13 @@ export function MiniAppLayout() {
         ) : (
           <Navigation
             items={[
-              { label: 'Earn', path: '/earn', icon: affiliateIcon },
+              { label: t('nav.profile'), path: '/profile', icon: profileIcon },
 
-              { label: 'My Girl', path: '/my-girls', icon: myGirlIcon },
-              { label: 'Girls', path: '/girls', icon: girlsIcon },
-              { label: 'Gifts', path: '/gifts', icon: giftsIcon },
+              { label: t('nav.myGirl'), path: '/my-girls', icon: myGirlIcon },
+              { label: t('nav.girls'), path: '/girls', icon: girlsIcon },
+              { label: t('nav.gifts'), path: '/gifts', icon: giftsIcon },
 
-              { label: 'Bag', path: '/bag', icon: bagIcon },
+              { label: t('nav.bag'), path: '/bag', icon: bagIcon },
 
             ]}
           />

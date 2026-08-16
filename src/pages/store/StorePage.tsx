@@ -1,6 +1,7 @@
 import { useQuery, useQueryClient } from '@tanstack/react-query';
 import TelegramWebApp from '@twa-dev/sdk';
 import { type KeyboardEvent, useEffect, useMemo } from 'react';
+import { useTranslation } from 'react-i18next';
 import { useLocation, useNavigate } from 'react-router-dom';
 
 import { createPlanInvoice } from '@/api/payments';
@@ -28,9 +29,8 @@ const airIcons = [air1, air2, air3, air4];
 const extraPercent = [
   0, 25, 40, 60
 ]
-const secondaryPlanLabels = ['one night', 'satisfaction', 'crazy & horny'];
-
 export function StorePage() {
+  const { t } = useTranslation();
   const location = useLocation();
   const navigate = useNavigate();
   const queryClient = useQueryClient();
@@ -74,6 +74,9 @@ export function StorePage() {
         : airPlanItems,
     [airPlanItems, featuredPlan],
   );
+  const secondaryPlanLabels = t('store.planLabels', {
+    returnObjects: true,
+  }) as string[];
 
   useEffect(() => {
     const handler = () => {
@@ -126,7 +129,7 @@ export function StorePage() {
       {isLoading ? <Loader /> : null}
       {isError ? (
         <Typography variant="body-md">
-          {error instanceof Error ? error.message : 'Failed to load plans'}
+          {error instanceof Error ? error.message : t('store.errors.plans')}
         </Typography>
       ) : null}
 
@@ -139,7 +142,7 @@ export function StorePage() {
               weight={700}
               className={s.offerEyebrow}
             >
-              AIR SALE
+              {t('store.airSale')}
             </Typography>
             <Typography
               as="div"
@@ -147,7 +150,7 @@ export function StorePage() {
               weight={600}
               className={s.offerTitle}
             >
-              Fulfill your wildest fantasies and hidden desires
+              {t('store.title')}
             </Typography>
             <Typography
               as="div"
@@ -155,7 +158,7 @@ export function StorePage() {
               weight={500}
               className={s.offerSubtitle}
             >
-              Use AIR for personal photos, explicit videos, gifts, or create your Dream Girlfriend.
+              {t('store.subtitle')}
             </Typography>
           </div>
 
@@ -177,7 +180,7 @@ export function StorePage() {
                   weight={700}
                   className={s.featuredBadge}
                 >
-                  best value
+                  {t('store.bestValue')}
                 </Typography>
                 <Typography
                   as="div"
@@ -193,7 +196,7 @@ export function StorePage() {
                   weight={600}
                   className={s.featuredBonus}
                 >
-                  +{featuredPlan.extra}% bonus included
+                  {t('store.bonusIncluded', { percent: featuredPlan.extra })}
                 </Typography>
                 <button
                   type="button"
@@ -264,7 +267,7 @@ export function StorePage() {
                         weight={700}
                         className={s.topChoiceBadge}
                       >
-                        popular
+                        {t('store.popular')}
                       </Typography>
                     ) : null}
                   </div>
@@ -322,10 +325,10 @@ export function StorePage() {
             />
             <div className={s.heroLeft}>
               <Typography as="div" variant="heading-lg" className={s.heroTitle}>
-                Want unlimited?
+                {t('store.wantUnlimited')}
               </Typography>
               <Typography as="div" variant="body-md" className={s.heroSubtitle}>
-                Endless chats and explicit photos.
+                {t('store.explicitPhotos')}
               </Typography>
             </div>
             <button
@@ -340,7 +343,7 @@ export function StorePage() {
                 weight={500}
                 className={s.heroButtonText}
               >
-                Upgrade
+                {t('store.upgrade')}
               </Typography>
             </button>
           </Card>

@@ -1,4 +1,5 @@
 import { useMemo } from 'react';
+import { useTranslation } from 'react-i18next';
 import { useNavigate } from 'react-router-dom';
 
 import { MessageMoreIcon } from '@/assets/icons';
@@ -10,7 +11,6 @@ import { Typography } from '@/components/text';
 
 import s from './CharacterDetails.module.scss';
 
-const GENERIC_UNLOCK_TEXT = 'Finish previous scenario to unlock';
 const INTIMACY_SEGMENTS = 8;
 
 type ScenarioLockState =
@@ -46,6 +46,7 @@ function getScenarioLockState(
   scenario: IScenario,
   scenarioNameById: Map<string, string>,
   now: number,
+  t: (key: string, options?: Record<string, unknown>) => string,
 ): ScenarioLockState {
   if (scenario.level <= 1) {
     return null;
@@ -58,7 +59,7 @@ function getScenarioLockState(
   if (timeUntilOpen) {
     return {
       kind: 'timer',
-      text: `Opens In ${timeUntilOpen}`,
+      text: t('scenario.opensIn', { time: timeUntilOpen }),
     };
   }
 
@@ -70,8 +71,8 @@ function getScenarioLockState(
     return {
       kind: 'prerequisite',
       text: prerequisiteName
-        ? `Finish "${prerequisiteName}" to unlock`
-        : GENERIC_UNLOCK_TEXT,
+        ? t('scenario.finishScenario', { name: prerequisiteName })
+        : t('scenario.finishPrevious'),
     };
   }
 
@@ -154,6 +155,7 @@ export function CharacterDetails({
   scenarioComparator,
   className,
 }: CharacterDetailsProps) {
+  const { t } = useTranslation();
   const navigate = useNavigate();
   const now = Date.now();
 
@@ -192,10 +194,10 @@ export function CharacterDetails({
       new Map(
         (character.scenarios ?? []).map((scenario) => [
           scenario.id,
-          getScenarioLockState(scenario, scenarioNameById, now),
+          getScenarioLockState(scenario, scenarioNameById, now, t),
         ]),
       ),
-    [character.scenarios, now, scenarioNameById],
+    [character.scenarios, now, scenarioNameById, t],
   );
 
   const sortedScenarios = useMemo(() => {
@@ -278,7 +280,7 @@ export function CharacterDetails({
                   weight={500}
                   className={s.badgeText}
                 >
-                  new scenario
+                  {t('girls.newScenario')}
                 </Typography>
               </span>
             ) : null}
@@ -301,7 +303,7 @@ export function CharacterDetails({
                 weight={500}
                 className={s.relationshipsLabel}
               >
-                Intimacy level
+                {t('scenario.intimacyLevel')}
               </Typography>
               <div className={s.relationshipsScale} aria-hidden>
                 {Array.from(
@@ -407,7 +409,7 @@ export function CharacterDetails({
                               color="black"
                               className={s.startChatButtonText}
                             >
-                              Open
+                              {t('scenario.open')}
                             </Typography>
                           </button>
                         ) : (
@@ -419,7 +421,7 @@ export function CharacterDetails({
                               weight={500}
                               className={s.comingSoonBadgeText}
                             >
-                              coming soon
+                              {t('girls.comingSoon')}
                             </Typography>
                           </span>
                         )}
@@ -524,7 +526,7 @@ export function CharacterDetails({
                           weight={500}
                           className={s.createScenarioButtonText}
                         >
-                          Create
+                          {t('common.create')}
                         </Typography>
                       </button>
                     </div>

@@ -1,5 +1,6 @@
 import useEmblaCarousel from 'embla-carousel-react';
 import { useCallback, useEffect, useState } from 'react';
+import { useTranslation } from 'react-i18next';
 
 import { GiftIcon, MessageIcon } from '@/assets/icons';
 import airIcon from '@/assets/mini/air.png';
@@ -31,6 +32,7 @@ export function FeaturedGirlsSlider({
   onGiftClick,
   customSlide,
 }: FeaturedGirlsSliderProps) {
+  const { t } = useTranslation();
   const [emblaRef, emblaApi] = useEmblaCarousel({
     align: 'start',
     loop: false,
@@ -91,7 +93,7 @@ export function FeaturedGirlsSlider({
                       weight={500}
                       className={s.badgeText}
                     >
-                      new scenario
+                      {t('girls.newScenario')}
                     </Typography>
                   </span>
                 ) : null}
@@ -121,12 +123,12 @@ export function FeaturedGirlsSlider({
                   color="black"
                   className={s.messageButtonText}
                 >
-                  Message
+                  {t('girls.message')}
                 </Typography>
               </button>
               <IconButton
                 className={s.giftButton}
-                aria-label={`Open gifts for ${girl.name}`}
+                aria-label={t('girls.openGiftsFor', { name: girl.name })}
                 onClick={() => onGiftClick(girl)}
               >
                 <GiftIcon width={20} height={20} />
@@ -221,7 +223,7 @@ export function FeaturedGirlsSlider({
             className={cn(s.indicatorItem, [
               selectedIndex === index ? s.indicatorItemActive : null,
             ])}
-            aria-label={`Go to slide ${index + 1}`}
+            aria-label={t('girls.goToSlide', { index: index + 1 })}
             onClick={() => emblaApi?.scrollTo(index)}
           />
         ))}

@@ -1,3 +1,5 @@
+import { useTranslation } from 'react-i18next';
+
 import { ArrowLeftIcon } from '@/assets/icons';
 import { Typography } from '@/components/text';
 
@@ -8,6 +10,8 @@ type BackNavigationProps = {
 };
 
 export function BackNavigation({ onBack }: BackNavigationProps) {
+  const { t } = useTranslation();
+
   return (
     <nav className={`${s.nav} ${s.backNav}`}>
       <button type="button" className={s.backButton} onClick={onBack}>
@@ -19,7 +23,7 @@ export function BackNavigation({ onBack }: BackNavigationProps) {
           weight={500}
           className={s.backLabel}
         >
-          Back
+          {t('common.back')}
         </Typography>
       </button>
     </nav>

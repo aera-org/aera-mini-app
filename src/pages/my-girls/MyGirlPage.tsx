@@ -1,18 +1,19 @@
 import { useQuery, useQueryClient } from '@tanstack/react-query';
 import { useMemo } from 'react';
+import { useTranslation } from 'react-i18next';
 import { useNavigate, useParams } from 'react-router-dom';
 
 import { getCustomCharacters } from '@/api/girls';
 import customScenarioImage from '@/assets/mini/custom-horizontal.png';
 import type { ICharacter } from '@/common/types';
-import { formatPersonality } from '@/common/utils';
 import { CharacterDetails, Loader, Typography } from '@/components';
 import s from '@/components/character-details/CharacterDetails.module.scss';
-import { useUser } from '@/context/UserContext';
+import { useUser } from '@/context/user-context';
 
 const SCENARIO_CREATE_PRICE = 39;
 
 export function MyGirlPage() {
+  const { t } = useTranslation();
   const { id } = useParams<{ id: string }>();
   const navigate = useNavigate();
   const { user } = useUser();
@@ -57,7 +58,7 @@ export function MyGirlPage() {
           <Typography variant="body-md">
             {error instanceof Error
               ? error.message
-              : 'Failed to load custom character'}
+              : t('girls.errors.customCharacter')}
           </Typography>
         </div>
       </div>
@@ -68,7 +69,7 @@ export function MyGirlPage() {
     return (
       <div className={s.page}>
         <div className={s.container}>
-          <Typography variant="body-md">Character not found</Typography>
+          <Typography variant="body-md">{t('girls.girlNotFound')}</Typography>
         </div>
       </div>
     );
@@ -92,13 +93,14 @@ export function MyGirlPage() {
       className={s.custom}
       character={character}
       heroImageUrl={character.avatarUrl}
-      description={formatPersonality(character.personality)}
+      description={character.personality
+        .map((personality) => t(`create.options.${personality}`))
+        .join(', ')}
       getScenarioImageUrl={(scenario) => scenario.openingImageUrl}
       createScenarioCard={{
         imageUrl: customScenarioImage,
-        title: '✨ Your Scenario',
-        description:
-          'Role, setting, lingerie... Whatever you wish.',
+        title: `✨ ${t('girls.yourScenario')}`,
+        description: t('girls.yourScenarioDescription'),
         priceAir: scenarioCreatePrice || undefined,
         onClick: handleCreateScenarioClick,
       }}

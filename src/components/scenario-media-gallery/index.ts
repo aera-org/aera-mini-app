@@ -1,4 +1,4 @@
 export {
-  ScenarioMediaGallery,
   type ScenarioGalleryItem,
+  ScenarioMediaGallery,
 } from './ScenarioMediaGallery';

@@ -1,5 +1,6 @@
 import { useMutation, useQueryClient } from '@tanstack/react-query';
 import { useEffect, useMemo, useRef, useState } from 'react';
+import { useTranslation } from 'react-i18next';
 import { useLocation, useNavigate } from 'react-router-dom';
 
 import { createCustomCharacter } from '@/api/girls';
@@ -12,17 +13,17 @@ import {
   CharacterEyeColor,
   CharacterHairColor,
   CharacterHairStyle,
-  type CustomCharacterCreateRouteState,
-  type CustomCharacterDraft,
   CharacterPersonality,
   CharacterType,
   type CustomCharacterCreateDto,
+  type CustomCharacterCreateRouteState,
+  type CustomCharacterDraft,
   type ICharacter,
 } from '@/common/types';
-import { CUSTOM_CHARACTER_CREATE_PRICE } from '@/consts';
-import { capitalize, cn, formatPersonality } from '@/common/utils';
+import { cn } from '@/common/utils';
 import { CreatePending, Typography } from '@/components';
-import { useUser } from '@/context/UserContext';
+import { CUSTOM_CHARACTER_CREATE_PRICE } from '@/consts';
+import { useUser } from '@/context/user-context';
 
 import s from './CreateCharacterPage.module.scss';
 
@@ -37,12 +38,12 @@ type SelectStepKey =
 
 type Option<T extends string> = {
   value: T;
-  label: string;
+  labelKey: string;
 };
 
 type SelectStep = {
   key: SelectStepKey;
-  title: string;
+  titleKey: string;
   options: Option<string>[];
   multi?: boolean;
 };
@@ -57,66 +58,66 @@ const initialDraft: CreateDraft = {
 };
 
 const typeStep = {
-  title: 'Create your dream AI-Girlfriend',
+  titleKey: 'create.title',
 };
 
 const profileStep = {
-  title: 'Profile',
+  titleKey: 'create.profile',
 };
 
 const selectSteps: SelectStep[] = [
   {
     key: 'personality',
-    title: 'Personality',
+    titleKey: 'create.personality',
     multi: true,
     options: enumOptions(CharacterPersonality),
   },
   {
     key: 'ethnicity',
-    title: 'Ethnicity',
+    titleKey: 'create.ethnicity',
     options: [
-      { value: CharacterEthnicity.Caucasian, label: 'Caucasian' },
-      { value: CharacterEthnicity.Latina, label: 'Latina' },
-      { value: CharacterEthnicity.Arabian, label: 'Arabian' },
-      { value: CharacterEthnicity.Asian, label: 'Asian' },
-      { value: CharacterEthnicity.Afro, label: 'Afro' },
-      { value: CharacterEthnicity.Indian, label: 'Indian' },
+      { value: CharacterEthnicity.Caucasian, labelKey: 'create.options.caucasian' },
+      { value: CharacterEthnicity.Latina, labelKey: 'create.options.latina' },
+      { value: CharacterEthnicity.Arabian, labelKey: 'create.options.arabian' },
+      { value: CharacterEthnicity.Asian, labelKey: 'create.options.asian' },
+      { value: CharacterEthnicity.Afro, labelKey: 'create.options.afro' },
+      { value: CharacterEthnicity.Indian, labelKey: 'create.options.indian' },
     ],
   },
   {
     key: 'hairColor',
-    title: 'Hair color',
+    titleKey: 'create.hairColor',
     options: enumOptions(CharacterHairColor),
   },
   {
     key: 'hairStyle',
-    title: 'Hair style',
+    titleKey: 'create.hairStyle',
     options: enumOptions(CharacterHairStyle),
   },
   {
     key: 'eyeColor',
-    title: 'Eye color',
+    titleKey: 'create.eyeColor',
     options: enumOptions(CharacterEyeColor),
   },
   {
     key: 'bodyType',
-    title: 'Body type',
+    titleKey: 'create.bodyType',
     options: enumOptions(CharacterBodyType),
   },
   {
     key: 'breastSize',
-    title: 'Breast size',
+    titleKey: 'create.breastSize',
     options: [
-      { value: CharacterBreastSize.Small, label: 'Small' },
-      { value: CharacterBreastSize.Medium, label: 'Medium' },
-      { value: CharacterBreastSize.Large, label: 'Large' },
-      { value: CharacterBreastSize.ExtraLarge, label: 'Extra large' },
+      { value: CharacterBreastSize.Small, labelKey: 'create.options.small' },
+      { value: CharacterBreastSize.Medium, labelKey: 'create.options.medium' },
+      { value: CharacterBreastSize.Large, labelKey: 'create.options.large' },
+      { value: CharacterBreastSize.ExtraLarge, labelKey: 'create.options.extraLarge' },
     ],
   },
 ];
 
 const reviewStep = {
-  title: 'Review',
+  titleKey: 'create.review',
 };
 
 const totalSteps = 1 + 1 + selectSteps.length + 1;
@@ -125,19 +126,18 @@ const reviewStepIndex = totalSteps - 1;
 function enumOptions<T extends Record<string, string>>(source: T): Option<string>[] {
   return Object.values(source).map((value) => ({
     value,
-    label: splitCamelCase(capitalize(value)),
+    labelKey: `create.options.${value}`,
   }));
 }
 
-function splitCamelCase(value: string) {
-  return value.replace(/([a-z])([A-Z])/g, '$1 $2');
+function formatValue(value: string | number, t: (key: string) => string) {
+  return typeof value === 'number' ? String(value) : t(`create.options.${value}`);
 }
 
-function formatValue(value: string | number) {
-  return typeof value === 'number' ? String(value) : splitCamelCase(capitalize(value));
-}
-
-function createDtoFromDraft(draft: CreateDraft): CustomCharacterCreateDto {
+function createDtoFromDraft(
+  draft: CreateDraft,
+  incompleteMessage: string,
+): CustomCharacterCreateDto {
   if (
     !draft.age ||
     !draft.type ||
@@ -149,7 +149,7 @@ function createDtoFromDraft(draft: CreateDraft): CustomCharacterCreateDto {
     !draft.breastSize ||
     draft.personality.length === 0
   ) {
-    throw new Error('Character draft is incomplete');
+    throw new Error(incompleteMessage);
   }
 
   return {
@@ -184,14 +184,15 @@ function isStepValid(stepIndex: number, draft: CreateDraft) {
   return Boolean(value);
 }
 
-function getStepTitle(stepIndex: number) {
-  if (stepIndex === 0) return typeStep.title;
-  if (stepIndex === 1) return profileStep.title;
-  if (stepIndex === totalSteps - 1) return reviewStep.title;
-  return selectSteps[stepIndex - 2].title;
+function getStepTitle(stepIndex: number, t: (key: string) => string) {
+  if (stepIndex === 0) return t(typeStep.titleKey);
+  if (stepIndex === 1) return t(profileStep.titleKey);
+  if (stepIndex === totalSteps - 1) return t(reviewStep.titleKey);
+  return t(selectSteps[stepIndex - 2].titleKey);
 }
 
 export function CreateCharacterPage() {
+  const { t } = useTranslation();
   const location = useLocation();
   const navigate = useNavigate();
   const queryClient = useQueryClient();
@@ -225,36 +226,39 @@ export function CreateCharacterPage() {
 
   const reviewItems = useMemo(
     () => [
-      { label: 'Name', value: draft.name.trim() },
-      { label: 'Age', value: draft.age ? formatValue(draft.age) : '' },
-      { label: 'Type', value: draft.type ? formatValue(draft.type) : '' },
-      { label: 'Personality', value: formatPersonality(draft.personality) },
+      { label: t('create.name'), value: draft.name.trim() },
+      { label: t('create.age'), value: draft.age ? formatValue(draft.age, t) : '' },
+      { label: t('create.type'), value: draft.type ? t(`common.${draft.type}`) : '' },
       {
-        label: 'Ethnicity',
-        value: draft.ethnicity ? formatValue(draft.ethnicity) : '',
+        label: t('create.personality'),
+        value: draft.personality.map((personality) => t(`create.options.${personality}`)).join(', '),
       },
       {
-        label: 'Hair color',
-        value: draft.hairColor ? formatValue(draft.hairColor) : '',
+        label: t('create.ethnicity'),
+        value: draft.ethnicity ? formatValue(draft.ethnicity, t) : '',
       },
       {
-        label: 'Hair style',
-        value: draft.hairStyle ? formatValue(draft.hairStyle) : '',
+        label: t('create.hairColor'),
+        value: draft.hairColor ? formatValue(draft.hairColor, t) : '',
       },
       {
-        label: 'Eye color',
-        value: draft.eyeColor ? formatValue(draft.eyeColor) : '',
+        label: t('create.hairStyle'),
+        value: draft.hairStyle ? formatValue(draft.hairStyle, t) : '',
       },
       {
-        label: 'Body type',
-        value: draft.bodyType ? formatValue(draft.bodyType) : '',
+        label: t('create.eyeColor'),
+        value: draft.eyeColor ? formatValue(draft.eyeColor, t) : '',
       },
       {
-        label: 'Breast size',
-        value: draft.breastSize ? formatValue(draft.breastSize) : '',
+        label: t('create.bodyType'),
+        value: draft.bodyType ? formatValue(draft.bodyType, t) : '',
+      },
+      {
+        label: t('create.breastSize'),
+        value: draft.breastSize ? formatValue(draft.breastSize, t) : '',
       },
     ],
-    [draft],
+    [draft, t],
   );
 
   const goBack = () => {
@@ -285,7 +289,9 @@ export function CreateCharacterPage() {
       return;
     }
 
-    createMutation.mutate(createDtoFromDraft(draft));
+    createMutation.mutate(
+      createDtoFromDraft(draft, t('create.characterDraftIncomplete')),
+    );
   };
 
   const updateDraft = (nextDraft: Partial<CreateDraft>) => {
@@ -329,18 +335,21 @@ export function CreateCharacterPage() {
     if ((user?.air ?? 0) < CUSTOM_CHARACTER_CREATE_PRICE) return;
 
     autoCreateTriggeredRef.current = true;
-    createMutation.mutate(createDtoFromDraft(draft));
+    createMutation.mutate(
+      createDtoFromDraft(draft, t('create.characterDraftIncomplete')),
+    );
   }, [
     createMutation,
     draft,
     isUserLoading,
     resumeState,
     stepIndex,
+    t,
     user?.air,
   ]);
 
   if (createMutation.isPending) {
-    return <CreatePending title="Creating your character" />;
+    return <CreatePending title={t('create.creatingCharacter')} />;
   }
 
   return (
@@ -357,7 +366,7 @@ export function CreateCharacterPage() {
             weight={400}
             className={s.title}
           >
-            {getStepTitle(stepIndex)}
+            {getStepTitle(stepIndex, t)}
           </Typography>
         )}
         <button type="button" className={s.closeButton} onClick={close}>
@@ -374,7 +383,14 @@ export function CreateCharacterPage() {
             weight={400}
             className={s.typeStepTitle}
           >
-            Create your dream <br /> AI-Girlfriend
+            {t('create.titleLineBreak')
+              .split('\n')
+              .map((line, index) => (
+                <span key={line}>
+                  {index > 0 ? <br /> : null}
+                  {line}
+                </span>
+              ))}
           </Typography>
         </div>
       ) : (
@@ -404,9 +420,9 @@ export function CreateCharacterPage() {
             >
               {isReviewStep
                 ? createMutation.isPending
-                  ? 'Creating...'
-                  : 'Create'
-                : 'Next'}
+                  ? t('common.creating')
+                  : t('common.create')
+                : t('common.next')}
             </Typography>
             {!isReviewStep ? (
               <ChevronRightIcon width={24} height={24} className={s.nextChevron} />
@@ -453,21 +469,23 @@ type TypeStepProps = {
 const typeOptions = [
   {
     type: CharacterType.Realistic,
-    label: 'Realistic',
+    labelKey: 'common.realistic',
     videoUrl: import.meta.env.VITE_CC_VIDEO_R?.trim(),
   },
   {
     type: CharacterType.Anime,
-    label: 'Anime',
+    labelKey: 'common.anime',
     videoUrl: import.meta.env.VITE_CC_VIDEO_A?.trim(),
   },
 ] satisfies Array<{
   type: CharacterType;
-  label: string;
+  labelKey: string;
   videoUrl?: string;
 }>;
 
 function TypeStep({ selectedType, onSelect }: TypeStepProps) {
+  const { t } = useTranslation();
+
   return (
     <div className={s.typeStep}>
       {typeOptions.map((option) => {
@@ -503,7 +521,7 @@ function TypeStep({ selectedType, onSelect }: TypeStepProps) {
               weight={600}
               className={s.typeCardLabel}
             >
-              {option.label}
+              {t(option.labelKey)}
             </Typography>
           </button>
         );
@@ -518,11 +536,13 @@ type ProfileStepProps = {
 };
 
 function ProfileStep({ draft, onChange }: ProfileStepProps) {
+  const { t } = useTranslation();
+
   return (
     <div className={s.profileForm}>
       <label className={s.field}>
         <Typography as="span" variant="body-sm" className={s.fieldLabel}>
-          Name
+          {t('create.name')}
         </Typography>
         <input
           className={s.input}
@@ -533,7 +553,7 @@ function ProfileStep({ draft, onChange }: ProfileStepProps) {
       </label>
 
       <ChoiceGroup
-        label="Age"
+        label={t('create.age')}
         options={ages.map((age) => ({ value: age, label: String(age) }))}
         value={draft.age}
         onChange={(age) => onChange({ age })}
@@ -588,6 +608,7 @@ type SelectStepViewProps = {
 };
 
 function SelectStepView({ step, draft, onChange }: SelectStepViewProps) {
+  const { t } = useTranslation();
   const value = draft[step.key];
   const selectedValues: string[] = Array.isArray(value)
     ? value
@@ -613,7 +634,7 @@ function SelectStepView({ step, draft, onChange }: SelectStepViewProps) {
     <div className={s.optionsList}>
       {step.multi ? (
         <Typography as="p" variant="body-md" className={s.stepHint}>
-          Pick 1-3
+          {t('create.pickOneToThree')}
         </Typography>
       ) : null}
       {step.options.map((option) => {
@@ -638,7 +659,7 @@ function SelectStepView({ step, draft, onChange }: SelectStepViewProps) {
               family="system"
               className={s.optionLabel}
             >
-              {option.label}
+              {t(option.labelKey)}
             </Typography>
           </button>
         );
@@ -653,6 +674,8 @@ type ReviewStepProps = {
 };
 
 function ReviewStep({ items, error }: ReviewStepProps) {
+  const { t } = useTranslation();
+
   return (
     <div className={s.review}>
       <Typography
@@ -661,7 +684,7 @@ function ReviewStep({ items, error }: ReviewStepProps) {
         family="system"
         className={s.reviewIntro}
       >
-        Check the details before creating your character.
+        {t('create.checkDetails')}
       </Typography>
       <div className={s.summaryGrid}>
         {items.map((item) => (
@@ -676,7 +699,7 @@ function ReviewStep({ items, error }: ReviewStepProps) {
               weight={500}
               className={s.summaryValue}
             >
-              {item.value || 'Not selected'}
+              {item.value || t('common.notSelected')}
             </Typography>
           </div>
         ))}
