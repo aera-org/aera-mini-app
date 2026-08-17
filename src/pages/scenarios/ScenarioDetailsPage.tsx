@@ -45,6 +45,7 @@ import {
   ScenarioMediaGallery,
   Typography,
 } from '@/components';
+import { useLaunchParams } from '@/context/useLaunchParams';
 import { useUser } from '@/context/user-context';
 
 import s from './ScenarioDetailsPage.module.scss';
@@ -126,6 +127,7 @@ export function ScenarioDetailsPage() {
   const navigate = useNavigate();
   const [searchParams, setSearchParams] = useSearchParams();
   const queryClient = useQueryClient();
+  const launchParams = useLaunchParams();
   const { refresh, user } = useUser();
   const tabsRef = useRef<HTMLDivElement | null>(null);
   const lastScrolledTabRef = useRef<string | null>(null);
@@ -225,6 +227,11 @@ export function ScenarioDetailsPage() {
       );
 
       setLockedVideo(null);
+      if (launchParams.scenarioId === id) {
+        TelegramWebApp.close();
+        return;
+      }
+
       setGalleryActiveId(video.id);
       await Promise.all([
         queryClient.invalidateQueries({ queryKey: scenarioKeys.mediaLists() }),
