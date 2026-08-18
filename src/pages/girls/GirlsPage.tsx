@@ -328,6 +328,7 @@ export function GirlsPage() {
               girls={featuredGirls}
               onMessageClick={(girl) => handleCardClick(girl)}
               onGiftClick={() => navigate('/gifts')}
+              onScenarioClick={handleActiveScenarioClick}
               customSlide={{
                 backgroundImage: customCharacterImage,
                 title: t('girls.yourCharacter'),

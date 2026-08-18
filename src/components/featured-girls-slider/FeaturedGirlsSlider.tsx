@@ -4,7 +4,7 @@ import { useTranslation } from 'react-i18next';
 
 import { GiftIcon, MessageIcon } from '@/assets/icons';
 import airIcon from '@/assets/mini/air.png';
-import type { ICharacter } from '@/common/types';
+import type { ICharacter, IScenario } from '@/common/types';
 import { cn } from '@/common/utils';
 import { IconButton, Typography } from '@/components';
 
@@ -23,13 +23,23 @@ type FeaturedGirlsSliderProps = {
   girls: ICharacter[];
   onMessageClick: (girl: ICharacter) => void;
   onGiftClick: (girl: ICharacter) => void;
+  onScenarioClick: (scenario: IScenario) => void;
   customSlide?: FeaturedGirlsCustomSlide;
 };
+
+function getSlideScenario(girl: ICharacter) {
+  return (
+    (girl.scenarios ?? []).find((scenario) => scenario.isTop && scenario.isActive) ??
+    (girl.scenarios ?? []).find((scenario) => scenario.isActive) ??
+    null
+  );
+}
 
 export function FeaturedGirlsSlider({
   girls,
   onMessageClick,
   onGiftClick,
+  onScenarioClick,
   customSlide,
 }: FeaturedGirlsSliderProps) {
   const { t } = useTranslation();
@@ -64,12 +74,36 @@ export function FeaturedGirlsSlider({
       (scenario) => scenario.isNew && scenario.isActive,
     );
     const backgroundImage = girl.promoImgUrl;
+    const slideScenario = getSlideScenario(girl);
 
     return (
       <div className={s.slide} key={girl.id}>
         <div
-          className={s.slideBackground}
+          className={cn(s.slideBackground, [
+            slideScenario ? s.slideBackgroundInteractive : null,
+          ])}
+          role={slideScenario ? 'button' : undefined}
           style={{ backgroundImage: `url(${backgroundImage})` }}
+          tabIndex={slideScenario ? 0 : undefined}
+          onClick={
+            slideScenario ? () => onScenarioClick(slideScenario) : undefined
+          }
+          onKeyDown={
+            slideScenario
+              ? (event) => {
+                  if (event.target !== event.currentTarget) {
+                    return;
+                  }
+
+                  if (event.key !== 'Enter' && event.key !== ' ') {
+                    return;
+                  }
+
+                  event.preventDefault();
+                  onScenarioClick(slideScenario);
+                }
+              : undefined
+          }
         >
           <div className={s.slideOverlay} />
           <div className={s.content}>
@@ -112,7 +146,10 @@ export function FeaturedGirlsSlider({
               <button
                 type="button"
                 className={s.messageButton}
-                onClick={() => onMessageClick(girl)}
+                onClick={(event) => {
+                  event.stopPropagation();
+                  onMessageClick(girl);
+                }}
               >
                 <MessageIcon width={20} height={20} />
                 <Typography
@@ -129,7 +166,10 @@ export function FeaturedGirlsSlider({
               <IconButton
                 className={s.giftButton}
                 aria-label={t('girls.openGiftsFor', { name: girl.name })}
-                onClick={() => onGiftClick(girl)}
+                onClick={(event) => {
+                  event.stopPropagation();
+                  onGiftClick(girl);
+                }}
               >
                 <GiftIcon width={20} height={20} />
               </IconButton>

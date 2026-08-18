@@ -72,6 +72,7 @@
     max(14px, env(safe-area-inset-left));
   z-index: 1;
   display: grid;
+  grid-template-rows: minmax(0, 1fr) auto minmax(0, 1fr);
   min-width: 0;
   min-height: 0;
   place-items: center;
@@ -81,6 +82,7 @@
 .mediaFrame {
   position: relative;
   display: flex;
+  grid-row: 2;
   max-width: min(100%, calc(92dvh * 1.35));
   max-height: 100%;
   min-height: 0;
@@ -113,14 +115,14 @@
   width: auto;
   height: auto;
   max-width: 100%;
-  max-height: calc(100dvh - (max(14px, env(safe-area-inset-top)) * 2));
+  max-height: calc(100dvh - (max(14px, env(safe-area-inset-top)) * 2) - 62px);
   object-fit: contain;
   background: #030407;
 }
 
 video.media {
   width: min(100%, calc(92dvh * 0.75));
-  height: min(92dvh, calc(100vw / 0.75));
+  height: min(calc(92dvh - 62px), calc(100vw / 0.75));
   object-fit: cover;
 }
 
@@ -260,6 +262,41 @@ video.media {
   font-variant-numeric: tabular-nums;
 }
 
+.closeButton {
+  z-index: 3;
+  display: inline-grid;
+  grid-row: 3;
+  width: 32px;
+  height: 32px;
+  align-self: end;
+  justify-self: center;
+  place-items: center;
+  padding: 0;
+  color: rgba(255, 255, 255, 0.72);
+  background: transparent;
+  border: 0;
+  cursor: pointer;
+  filter: drop-shadow(0 6px 16px rgba(0, 0, 0, 0.36));
+  opacity: 0.72;
+  transition:
+    opacity 160ms ease,
+    transform 160ms ease;
+}
+
+.closeButton svg {
+  width: 32px;
+  height: 32px;
+}
+
+.closeButton:hover,
+.closeButton:focus-visible {
+  opacity: 0.96;
+}
+
+.closeButton:active {
+  transform: scale(0.98);
+}
+
 .thumbnails {
   position: fixed;
   top: 0;
@@ -341,11 +378,15 @@ video.media {
     top: calc(max(12px, env(safe-area-inset-top)) + 60px + 12px);
   }
 
-  .mediaFrame,
+  .mediaFrame {
+    width: 100%;
+    max-width: 100%;
+  }
+
   .media {
     width: 100%;
     max-width: 100%;
-    max-height: calc(100dvh - 132px);
+    max-height: calc(100dvh - 190px);
   }
 
   .mediaShell {
@@ -355,7 +396,7 @@ video.media {
 
   video.media {
     width: 100%;
-    height: min(calc(100dvh - 132px), calc(100vw / 0.75));
+    height: min(calc(100dvh - 190px), calc(100vw / 0.75));
   }
 
   .thumbnails {
@@ -396,14 +437,16 @@ video.media {
   }
 
   .gallery[data-chrome-visible='false'] .thumbnails,
-  .gallery[data-chrome-visible='false'] .videoControls {
+  .gallery[data-chrome-visible='false'] .videoControls,
+  .gallery[data-chrome-visible='false'] .closeButton {
     pointer-events: none;
     opacity: 0;
   }
 }
 
 @media (prefers-reduced-motion: reduce) {
-  .videoControls {
+  .videoControls,
+  .closeButton {
     transition: none;
   }
 }

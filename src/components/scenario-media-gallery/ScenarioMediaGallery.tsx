@@ -9,7 +9,7 @@ import {
 import { createPortal } from 'react-dom';
 import { useTranslation } from 'react-i18next';
 
-import { LockIcon, PauseIcon, PlayIcon } from '@/assets/icons';
+import { CrossIcon, LockIcon, PauseIcon, PlayIcon } from '@/assets/icons';
 import { cn } from '@/common/utils';
 
 import s from './ScenarioMediaGallery.module.scss';
@@ -661,6 +661,16 @@ export function ScenarioMediaGallery({
             ) : null}
           </div>
         </div>
+        <button
+          aria-label={t('common.close')}
+          className={s.closeButton}
+          data-gallery-content="true"
+          data-gallery-gesture-ignore="true"
+          type="button"
+          onClick={closeGallery}
+        >
+          <CrossIcon aria-hidden="true" />
+        </button>
       </main>
 
       {items.length > 1 ? (

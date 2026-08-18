@@ -61,6 +61,10 @@
   align-items: flex-end;
 }
 
+.slideBackgroundInteractive {
+  cursor: pointer;
+}
+
 .slideOverlay {
   position: absolute;
   inset: 0;
