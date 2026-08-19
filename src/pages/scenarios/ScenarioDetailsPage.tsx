@@ -274,10 +274,17 @@ export function ScenarioDetailsPage() {
     setLockedVideo(null);
   };
 
-  const mediaItems = useMemo(
-    () => mediaQuery.data?.pages.flatMap((page) => page.data) ?? [],
-    [mediaQuery.data],
-  );
+  const mediaItems = useMemo(() => {
+    const items = mediaQuery.data?.pages.flatMap((page) => page.data) ?? [];
+
+    if (activeTab !== ContentItemType.Video) {
+      return items;
+    }
+
+    return [...items].sort(
+      (left, right) => Number(left.isBlurred) - Number(right.isBlurred),
+    );
+  }, [activeTab, mediaQuery.data]);
   const galleryItems = useMemo<ScenarioGalleryItem[]>(
     () =>
       mediaItems
