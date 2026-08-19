@@ -21,6 +21,7 @@ import {
   unlockScenario,
 } from '@/api/scenarios';
 import {
+  ChevronLeftIcon,
   CrossIcon,
   ImageIcon,
   LockIcon,
@@ -354,6 +355,26 @@ export function ScenarioDetailsPage() {
     setSearchParams(nextSearchParams);
   };
 
+  const handleBack = () => {
+    if (window.history.length > 1) {
+      navigate(-1);
+      return;
+    }
+
+    navigate('/girls');
+  };
+
+  const backButton = (
+    <button
+      aria-label={t('common.back')}
+      className={s.backButton}
+      type="button"
+      onClick={handleBack}
+    >
+      <ChevronLeftIcon aria-hidden="true" />
+    </button>
+  );
+
   const handleStartChat = () => {
     if (!scenario) return;
 
@@ -376,6 +397,7 @@ export function ScenarioDetailsPage() {
   if (scenarioQuery.isLoading) {
     return (
       <div className={s.page}>
+        {backButton}
         <div className={s.stateContainer}>
           <Loader />
         </div>
@@ -386,6 +408,7 @@ export function ScenarioDetailsPage() {
   if (scenarioQuery.isError || !scenario || !id) {
     return (
       <div className={s.page}>
+        {backButton}
         <div className={s.stateContainer}>
           <Typography variant="body-md">
             {scenarioQuery.error instanceof Error
@@ -404,6 +427,7 @@ export function ScenarioDetailsPage() {
         setIsDockVisible(event.currentTarget.scrollTop > DOCK_SCROLL_THRESHOLD);
       }}
     >
+      {backButton}
       <section className={s.hero}>
         {heroImageUrl ? (
           <img

@@ -17,6 +17,28 @@
   padding: 24px;
 }
 
+.backButton {
+  position: absolute;
+  top: 52px;
+  left: 8px;
+  z-index: 4;
+  display: inline-grid;
+  width: 44px;
+  height: 44px;
+  place-items: center;
+  padding: 0;
+  color: rgba(255, 255, 255, 0.78);
+  background: transparent;
+  border: 0;
+  cursor: pointer;
+  filter: drop-shadow(0 4px 10px rgba(0, 0, 0, 0.55));
+}
+
+.backButton svg {
+  width: 28px;
+  height: 28px;
+}
+
 .hero {
   position: relative;
   min-height: 520px;
