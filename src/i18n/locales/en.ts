@@ -202,6 +202,7 @@ export const en = {
       owned: 'Owned',
     },
     girls: {
+      characters: 'Characters',
       comingSoon: 'coming soon',
       comingSoonScenarios: 'Coming soon scenarios',
       createHer: 'Create Her',
@@ -215,7 +216,6 @@ export const en = {
       },
       girlNotFound: 'Girl not found',
       newScenario: 'new scenario',
-      newScenarios: 'New scenarios',
       openChatWith: 'Open chat with {{name}}',
       openGiftsFor: 'Open gifts for {{name}}',
       message: 'Message',

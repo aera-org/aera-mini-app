@@ -199,6 +199,7 @@ export const ru = {
       owned: 'Уже есть',
     },
     girls: {
+      characters: 'Персонажи',
       comingSoon: 'скоро',
       comingSoonScenarios: 'Сценарии скоро',
       createHer: 'Создать её',
@@ -212,7 +213,6 @@ export const ru = {
       },
       girlNotFound: 'Девушка не найдена',
       newScenario: 'новый сценарий',
-      newScenarios: 'Новые сценарии',
       openChatWith: 'Открыть чат с {{name}}',
       openGiftsFor: 'Открыть подарки для {{name}}',
       message: 'Сообщение',

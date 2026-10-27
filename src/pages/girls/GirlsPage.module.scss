@@ -24,33 +24,20 @@
   gap: 12px;
 }
 
-.featuredRow {
-  display: flex;
-  flex-wrap: nowrap;
-  gap: 10px;
-  overflow-x: auto;
-  flex-shrink: 0;
-  -webkit-overflow-scrolling: touch;
-}
-
-.featuredRow .card {
-  flex-shrink: 0;
-}
-
-.newScenariosSection {
+.charactersSection {
   display: flex;
   flex-direction: column;
   gap: 16px;
 }
 
-.newScenariosTitle {
+.charactersTitle {
   color: #fff;
   font-size: 18px;
   line-height: 100%;
   letter-spacing: -0.58px;
 }
 
-.newScenariosList {
+.charactersList {
   display: grid;
   grid-auto-flow: column;
   grid-template-rows: repeat(2, 80px);
@@ -147,7 +134,7 @@
   text-transform: lowercase;
 }
 
-.scenarioItem {
+.characterItem {
   width: 250px;
   height: 80px;
   display: flex;
@@ -160,7 +147,7 @@
   cursor: pointer;
 }
 
-.scenarioThumb {
+.characterThumb {
   width: 80px;
   height: 80px;
   display: flex;
@@ -170,12 +157,12 @@
   padding: 5px;
 }
 
-.scenarioMessageButton {
+.characterMessageButton {
   flex-shrink: 0;
   padding: 5px;
 }
 
-.scenarioMeta {
+.characterMeta {
   width: 148px;
   flex: 0 0 148px;
   display: flex;
@@ -185,7 +172,7 @@
   gap: 6px;
 }
 
-.scenarioName {
+.characterName {
   color: #fff;
   font-size: 18.88px;
   line-height: 100%;
@@ -195,7 +182,7 @@
   text-overflow: ellipsis;
 }
 
-.scenarioDescription {
+.characterDescription {
   color: rgba(255, 255, 255, 0.88);
   font-size: 14.16px;
   line-height: 120%;
@@ -212,6 +199,32 @@
   display: flex;
   align-items: flex-end;
   cursor: pointer;
+}
+
+.newBadge {
+  position: absolute;
+  top: 10px;
+  left: 10px;
+  z-index: 1;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  padding: 3px 7px;
+  border-radius: 20px;
+  background: rgba(217, 146, 254, 1);
+}
+
+.newBadgeText {
+  color: #fff;
+  font-size: 11px;
+  line-height: 100%;
+  letter-spacing: -0.3px;
+  text-transform: lowercase;
+  white-space: nowrap;
+}
+
+.scrollSentinel {
+  height: 1px;
 }
 
 .cardBody {
@@ -247,11 +260,14 @@
 
 .description {
   color: rgba(255, 255, 255, 0.92);
-  display: block;
+  display: -webkit-box;
   font-size: 12px;
   line-height: 120%;
   letter-spacing: -0.48px;
   text-shadow: 0 1px 2px rgba(0, 0, 0, 0.5);
+  -webkit-line-clamp: 4;
+  -webkit-box-orient: vertical;
+  overflow: hidden;
 }
 
 .messageButton {

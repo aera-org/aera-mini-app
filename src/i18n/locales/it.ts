@@ -194,6 +194,7 @@ export const it = {
       owned: 'Posseduto',
     },
     girls: {
+      characters: 'Personaggi',
       comingSoon: 'in arrivo',
       comingSoonScenarios: 'Scenari in arrivo',
       createHer: 'Creala',
@@ -207,7 +208,6 @@ export const it = {
       },
       girlNotFound: 'Ragazza non trovata',
       newScenario: 'nuovo scenario',
-      newScenarios: 'Nuovi scenari',
       openChatWith: 'Apri chat con {{name}}',
       openGiftsFor: 'Apri regali per {{name}}',
       message: 'Messaggio',

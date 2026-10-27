@@ -1,4 +1,5 @@
 import { keepPreviousData, useQuery } from '@tanstack/react-query';
+import { useEffect, useRef, useState } from 'react';
 import { useTranslation } from 'react-i18next';
 import { useNavigate, useSearchParams } from 'react-router-dom';
 
@@ -34,6 +35,8 @@ type ScenarioWithGirl = {
   scenario: IScenario;
 };
 
+const SCENARIOS_PAGE_SIZE = 10;
+
 export function GirlsPage() {
   const { t } = useTranslation();
   const navigate = useNavigate();
@@ -42,6 +45,11 @@ export function GirlsPage() {
   const selectedType = isCharacterType(rawType)
     ? rawType
     : CharacterType.Realistic;
+  const [scenarioPages, setScenarioPages] = useState({
+    type: selectedType,
+    pages: 1,
+  });
+  const scenariosSentinelRef = useRef<HTMLDivElement>(null);
   const {
     data: girls = [],
     isLoading,
@@ -84,15 +92,42 @@ export function GirlsPage() {
     return compareGirlsByTopScenarioAndName(a.girl, b.girl);
   };
 
-  const newScenarios = girls
+  const activeScenarios = girls
     .flatMap((girl) =>
       (girl.scenarios ?? []).map((scenario) => ({
         girl,
         scenario,
       })),
     )
-    .filter((item) => item.scenario.isNew && item.scenario.isActive === true)
+    .filter((item) => item.scenario.isActive === true)
     .sort(compareScenarioEntries);
+
+  // Switching the character type starts the list from the first page again
+  const loadedPages =
+    scenarioPages.type === selectedType ? scenarioPages.pages : 1;
+  const visibleScenarios = activeScenarios.slice(
+    0,
+    loadedPages * SCENARIOS_PAGE_SIZE,
+  );
+  const hasMoreScenarios = visibleScenarios.length < activeScenarios.length;
+
+  useEffect(() => {
+    const sentinel = scenariosSentinelRef.current;
+    if (!hasMoreScenarios || !sentinel) return;
+
+    const observer = new IntersectionObserver(
+      ([entry]) => {
+        if (!entry?.isIntersecting) return;
+        setScenarioPages({ type: selectedType, pages: loadedPages + 1 });
+      },
+      { rootMargin: '300px' },
+    );
+    observer.observe(sentinel);
+
+    return () => {
+      observer.disconnect();
+    };
+  }, [hasMoreScenarios, loadedPages, selectedType]);
 
   const comingSoonScenarios = girls
     .flatMap((girl) =>
@@ -104,14 +139,27 @@ export function GirlsPage() {
     .filter((item) => item.scenario.isNew && item.scenario.isActive === false)
     .sort(compareScenarioEntries);
 
-  const renderGirlCard = (character: ICharacter) => (
+  const renderScenarioCard = ({ girl, scenario }: ScenarioWithGirl) => (
     <Card
       className={s.card}
       variant="neutral"
-      backgroundImage={character.avatarUrl}
-      key={character.id}
-      onClick={() => handleCardClick(character)}
+      backgroundImage={scenario.promoImgUrl}
+      key={`${girl.id}-${scenario.id}`}
+      onClick={() => handleActiveScenarioClick(scenario)}
     >
+      {scenario.isNew ? (
+        <span className={s.newBadge}>
+          <Typography
+            as="span"
+            variant="caption"
+            family="brand"
+            weight={500}
+            className={s.newBadgeText}
+          >
+            {t('girls.newScenario')}
+          </Typography>
+        </span>
+      ) : null}
       <div className={s.cardBody}>
         <div className={s.contentRow}>
           <div className={s.textColumn}>
@@ -122,7 +170,7 @@ export function GirlsPage() {
               weight={400}
               className={s.description}
             >
-              {character.description}
+              {scenario.shortDescription}
             </Typography>
             <Typography
               as="span"
@@ -131,15 +179,15 @@ export function GirlsPage() {
               weight={600}
               className={s.name}
             >
-              {character.name}
+              {scenario.name}
             </Typography>
           </div>
           <IconButton
-            aria-label={t('girls.openChatWith', { name: character.name })}
+            aria-label={`Open scenario ${scenario.name}`}
             className={s.messageButton}
             onClick={(event) => {
               event.stopPropagation();
-              handleCardClick(character);
+              handleActiveScenarioClick(scenario);
             }}
           >
             <MessageIcon width={18} height={18} />
@@ -210,47 +258,47 @@ export function GirlsPage() {
     </Card>
   );
 
-  const renderScenarioItem = ({ girl, scenario }: ScenarioWithGirl) => (
+  const renderCharacterItem = (character: ICharacter) => (
     <button
       type="button"
-      className={s.scenarioItem}
-      key={`${girl.id}-${scenario.id}`}
-      onClick={() => handleActiveScenarioClick(scenario)}
+      className={s.characterItem}
+      key={character.id}
+      onClick={() => handleCardClick(character)}
     >
       <Card
-        className={s.scenarioThumb}
+        className={s.characterThumb}
         variant="neutral"
-        backgroundImage={scenario.promoImgUrl}
+        backgroundImage={character.avatarUrl}
       >
         <IconButton
-          aria-label={`Open scenario ${scenario.name}`}
-          className={s.scenarioMessageButton}
+          aria-label={t('girls.openChatWith', { name: character.name })}
+          className={s.characterMessageButton}
           onClick={(event) => {
             event.stopPropagation();
-            handleActiveScenarioClick(scenario);
+            handleCardClick(character);
           }}
         >
           <MessageMoreIcon width={12} height={12} />
         </IconButton>
       </Card>
-      <div className={s.scenarioMeta}>
+      <div className={s.characterMeta}>
         <Typography
           as="span"
           variant="body-sm"
           family="brand"
           weight={600}
-          className={s.scenarioName}
+          className={s.characterName}
         >
-          {scenario.name}
+          {character.name}
         </Typography>
         <Typography
           as="span"
           variant="body-md"
           family="system"
           weight={400}
-          className={s.scenarioDescription}
+          className={s.characterDescription}
         >
-          {scenario.shortDescription}
+          {character.description}
         </Typography>
       </div>
     </button>
@@ -345,27 +393,30 @@ export function GirlsPage() {
               onChange={handleTypeChange}
               disabled={isFetching}
             />
-            {newScenarios.length ? (
-              <section className={s.newScenariosSection}>
+            {girls.length ? (
+              <section className={s.charactersSection}>
                 <Typography
                   as="span"
                   variant="heading-sm"
                   family="brand"
                   weight={500}
-                  className={s.newScenariosTitle}
+                  className={s.charactersTitle}
                 >
-                  {t('girls.newScenarios')}
+                  {t('girls.characters')}
                 </Typography>
-                <div className={s.newScenariosList}>
-                  {newScenarios.map(renderScenarioItem)}
+                <div className={s.charactersList}>
+                  {girls.map(renderCharacterItem)}
                 </div>
               </section>
             ) : null}
             <div className={s.grid}>
               {renderCreateCharacterCard('grid-create-character')}
-              {girls.map(renderGirlCard)}
+              {visibleScenarios.map(renderScenarioCard)}
             </div>
-            {comingSoonScenarios.length ? (
+            {hasMoreScenarios ? (
+              <div ref={scenariosSentinelRef} className={s.scrollSentinel} />
+            ) : null}
+            {!hasMoreScenarios && comingSoonScenarios.length ? (
               <section className={s.comingSoonSection}>
                 <Typography
                   as="span"
