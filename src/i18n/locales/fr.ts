@@ -14,30 +14,58 @@ export const fr = {
     bag: {
       dailyPrice: '{{price}} / jour',
       errors: { plans: 'Impossible de charger les offres' },
-      featuresA: [
-        'Messages illimités',
-        'Photos NSFW illimitées',
-        'Vitesse de réponse premium',
-        'Mode immersion profonde',
-        'Sorties de personnages exclusives',
-        'Accès anticipé aux scénarios',
-      ],
-      featuresB: [
-        'Roleplay standard',
-        'Roleplay amélioré',
-        'Réponses instantanées',
-        'Réponses prioritaires',
-        'Scénarios cachés',
-        'Badge VIP',
-      ],
-      exclusiveOffer: 'Offre exclusive',
-      firstDayOffer: 'Offre du premier jour',
-      introEyebrow: '50% DE RÉDUCTION',
+      features: {
+        animations: {
+          description: 'Regardez-la prendre vie',
+          title: 'Animations gratuites chaque jour',
+        },
+        customCharacter: {
+          description: 'Créez votre propre personnage pour moins cher',
+          title: '-50% sur 1 personnage personnalisé',
+        },
+        deepImmersion: {
+          description: "Une expérience d'un autre niveau",
+          title: 'Mode immersion profonde',
+        },
+        fuel: {
+          description: 'Discutez autant que vous voulez',
+          title: 'Carburant illimité',
+        },
+        gifts: {
+          description: 'Économisez sur les cadeaux pour elle',
+          title: "Jusqu'à -60% sur les cadeaux",
+        },
+        hiddenScenarios: {
+          description: 'Contenu secret exclusif',
+          title: 'Scénarios cachés',
+        },
+        photos: {
+          description: "Voyez chaque photo qu'elle envoie",
+          title: 'Photos NSFW illimitées',
+        },
+        roleplay: {
+          description: 'Débloqué avec les offres plus longues',
+          title: 'Roleplay amélioré',
+        },
+        voice: {
+          description: 'Entendez sa voix',
+          title: 'Messages vocaux',
+        },
+      },
+      includedIn: 'Inclus dans {{period}}',
       mostPopular: 'le plus populaire',
-      planNames: ['Essai', 'Basique', 'Premium', 'Ultimate'],
+      periods: {
+        day: '{{count}} jour',
+        day_other: '{{count}} jours',
+        month: '{{count}} mois',
+        month_other: '{{count}} mois',
+        year: '{{count}} an',
+        year_other: '{{count}} ans',
+      },
       savePercent: 'ÉCONOMISEZ {{percent}}%',
       statusTitle: 'Votre offre',
       subscribed: 'Abonné',
+      summary: '{{period}} + {{air}} AIRS',
       upgrade: 'Upgrade',
     },
     common: {

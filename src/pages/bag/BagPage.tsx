@@ -1,5 +1,6 @@
 import { useQuery, useQueryClient } from '@tanstack/react-query';
 import TelegramWebApp from '@twa-dev/sdk';
+import type { TFunction } from 'i18next';
 import { useCallback, useEffect, useMemo, useState } from 'react';
 import { useTranslation } from 'react-i18next';
 import { useOutletContext } from 'react-router-dom';
@@ -8,15 +9,23 @@ import { createPlanInvoice } from '@/api/payments';
 import { getPlans } from '@/api/plans';
 import {
   CheckIcon,
-  MinusIcon,
+  ClapperboardIcon,
+  EyeOffIcon,
+  GiftYIcon,
+  ImageYIcon,
+  LayersYIcon,
+  MessageYIcon,
+  SparklesYIcon,
   TgStarIcon,
   TgStarWhiteIcon,
+  ZapIcon,
 } from '@/assets/icons';
 import airIcon from '@/assets/mini/air.png';
 import { type IPlan, PlanPeriod, PlanType } from '@/common/types';
 import { getSubscriptionRemaining } from '@/common/utils';
 import { cn } from '@/common/utils';
 import { Card, Loader, Typography } from '@/components';
+import type { BagSummary } from '@/components/navigation/BagNavigation';
 import { useLaunchParams } from '@/context/useLaunchParams';
 import { useUser } from '@/context/user-context';
 import { usePaywallOpenTracking } from '@/hooks/usePaywallOpenTracking';
@@ -29,8 +38,24 @@ const periodOrder: Record<PlanPeriod, number> = {
   [PlanPeriod.Year]: 2,
 };
 
-function formatPeriod(plan: IPlan) {
-  return `${plan.periodCount} ${plan.period}`;
+const savePercents = [0, 82, 88, 90];
+
+// Longer plans unlock extra features on top of the shorter ones
+const planFeatures = [
+  { key: 'fuel', Icon: ZapIcon, minPlanIndex: 0 },
+  { key: 'voice', Icon: MessageYIcon, minPlanIndex: 0 },
+  { key: 'photos', Icon: ImageYIcon, minPlanIndex: 0 },
+  { key: 'animations', Icon: ClapperboardIcon, minPlanIndex: 0 },
+  { key: 'gifts', Icon: GiftYIcon, minPlanIndex: 0 },
+  { key: 'customCharacter', Icon: GiftYIcon, minPlanIndex: 0 },
+  { key: 'roleplay', Icon: SparklesYIcon, minPlanIndex: 1 },
+  { key: 'hiddenScenarios', Icon: EyeOffIcon, minPlanIndex: 2 },
+  { key: 'deepImmersion', Icon: LayersYIcon, minPlanIndex: 3 },
+];
+
+function formatPeriod(plan: IPlan, t: TFunction) {
+  if (!plan.period) return '';
+  return t(`bag.periods.${plan.period}`, { count: plan.periodCount ?? 1 });
 }
 
 function getDefaultPlan(plans: IPlan[]) {
@@ -55,38 +80,16 @@ function getDailyPrice(plan: IPlan) {
   return plan.price / getPlanDays(plan);
 }
 
-function getFirstDayOfferTimer(userCreatedAt?: string, now = Date.now()) {
-  if (!userCreatedAt) return null;
-
-  const createdAt = Date.parse(userCreatedAt);
-  if (Number.isNaN(createdAt)) return null;
-
-  const remainingMs = createdAt + 24 * 3_600_000 - now;
-  if (remainingMs <= 0) return null;
-
-  const hours = Math.floor(remainingMs / 3_600_000);
-  const minutes = Math.floor((remainingMs % 3_600_000) / 60_000);
-  const seconds = Math.floor((remainingMs % 60_000) / 1000);
-
-  return {
-    label: [hours, minutes, seconds]
-      .map((part) => String(part).padStart(2, '0'))
-      .join(':'),
-  };
-}
-
-function getStandardAnchorPrice(price: number) {
-  return Math.round(price * 1.5);
-}
-
 type LayoutOutletContext = {
   setBagUpgradeAction: (action: (() => void) | null) => void;
+  setBagSummary: (summary: BagSummary | null) => void;
 };
 
 export function BagPage() {
   const { t } = useTranslation();
   const { user } = useUser();
-  const { setBagUpgradeAction } = useOutletContext<LayoutOutletContext>();
+  const { setBagUpgradeAction, setBagSummary } =
+    useOutletContext<LayoutOutletContext>();
   const launchParams = useLaunchParams();
   const queryClient = useQueryClient();
   const [selectedId, setSelectedId] = useState<string | null>(null);
@@ -153,46 +156,11 @@ export function BagPage() {
     const index = plans.findIndex((plan) => plan.id === selectedPlan.id);
     return index >= 0 ? index : 0;
   }, [plans, selectedPlan]);
-  const activeFeatures = useMemo(() => {
-    const activeA = new Set<number>();
-    const activeB = new Set<number>();
-    const featuresA = t('bag.featuresA', { returnObjects: true }) as string[];
-    const featuresB = t('bag.featuresB', { returnObjects: true }) as string[];
-
-    if (selectedPlanIndex === 0) {
-      activeA.add(0);
-      activeA.add(1);
-      activeB.add(0);
-      activeB.add(2);
-    } else if (selectedPlanIndex === 1) {
-      activeA.add(0);
-      activeA.add(1);
-      activeB.add(0);
-      activeB.add(1);
-      activeB.add(2);
-      activeB.add(3);
-    } else if (selectedPlanIndex === 2) {
-      activeA.add(0);
-      activeA.add(1);
-      activeA.add(2);
-      activeB.add(0);
-      activeB.add(1);
-      activeB.add(2);
-      activeB.add(3);
-      activeB.add(4);
-    } else {
-      featuresA.forEach((_, index) => activeA.add(index));
-      featuresB.forEach((_, index) => activeB.add(index));
-    }
-
-    return { activeA, activeB };
-  }, [selectedPlanIndex, t]);
+  const visibleFeatures = planFeatures.filter(
+    (feature) => feature.minPlanIndex <= selectedPlanIndex,
+  );
 
   const remaining = getSubscriptionRemaining(user?.subscribedUntil, now);
-  const firstDayOfferTimer = getFirstDayOfferTimer(user?.createdAt, now);
-  const planNames = t('bag.planNames', { returnObjects: true }) as string[];
-  const planFeaturesA = t('bag.featuresA', { returnObjects: true }) as string[];
-  const planFeaturesB = t('bag.featuresB', { returnObjects: true }) as string[];
 
   const handleSubscribe = useCallback(() => {
     if (!selectedPlan) return;
@@ -216,6 +184,23 @@ export function BagPage() {
       setBagUpgradeAction(null);
     };
   }, [handleSubscribe, setBagUpgradeAction]);
+
+  useEffect(() => {
+    if (!selectedPlan) {
+      setBagSummary(null);
+      return;
+    }
+    setBagSummary({
+      label: t('bag.summary', {
+        period: formatPeriod(selectedPlan, t),
+        air: selectedPlan.air,
+      }),
+      price: selectedPlan.price,
+    });
+    return () => {
+      setBagSummary(null);
+    };
+  }, [selectedPlan, setBagSummary, t]);
 
   return (
     <div className={s.container}>
@@ -244,254 +229,147 @@ export function BagPage() {
 
       {!isLoading && !isError ? (
         <>
-          <div className={s.introOffer}>
-            <div>
-              <Typography
-                as="div"
-                variant="label"
-                weight={700}
-                className={s.introEyebrow}
-              >
-                {t('bag.introEyebrow')}
-              </Typography>
-              <Typography
-                as="div"
-                variant="heading-sm"
-                weight={600}
-                className={s.introTitle}
-              >
-                {firstDayOfferTimer
-                  ? t('bag.firstDayOffer')
-                  : t('bag.exclusiveOffer')}
-              </Typography>
-            </div>
-            {firstDayOfferTimer ? (
-              <div className={s.introTimer}>
-                <Typography
-                  as="span"
-                  variant="body-md"
-                  weight={700}
-                  className={s.introTimerValue}
-                >
-                  {firstDayOfferTimer.label}
-                </Typography>
-              </div>
-            ) : null}
-          </div>
-
           <div className={s.plans}>
             {plans.map((plan, index) => {
-              const currentDailyPrice = getDailyPrice(plan);
+              const isSelected = plan.id === selectedPlan?.id;
               const dailyPriceLabel = Math.max(
                 1,
-                Math.round(currentDailyPrice),
+                Math.round(getDailyPrice(plan)),
               );
-              let savePercent = 0
-                if(index === 2) {
-                  savePercent = 50
-                }
-
-                if(index === 3) {
-                  savePercent = 70
-                }
-              const standardAnchorPrice = getStandardAnchorPrice(plan.price);
+              const savePercent = savePercents[index] ?? 0;
+              const StarIcon = isSelected ? TgStarIcon : TgStarWhiteIcon;
 
               return (
                 <Card
                   key={plan.id}
-                  className={cn(
-                    s.planCard,
-                    [plan.isRecommended ? s.recommendedPlan : null],
-                    { [s.selected]: plan.id === selectedId },
-                  )}
-                  variant={plan.isRecommended ? 'accent' : 'neutral'}
+                  className={cn(s.planCard, [], { [s.selected]: isSelected })}
                   onClick={() => setSelectedId(plan.id)}
                 >
-                  <div className={s.planHeader}>
-                    <div className={s.planTitle}>
-                      <Typography
-                        as="span"
-                        variant="label"
-                        family="system"
-                        weight={700}
-                        className={s.planEyebrow}
-                      >
-                        {planNames[index] ?? planNames[0]}
-                      </Typography>
-                      <Typography
-                        as="span"
-                        variant="body-sm"
-                        family="brand"
-                        weight={500}
-                        className={s.planPeriod}
-                      >
-                        {formatPeriod(plan)}
-                      </Typography>
-                    </div>
-                    <div className={s.planPrice}>
-                      <span className={s.priceTop}>
-                        <span className={s.oldPrice}>
-                          <TgStarIcon width={14} height={14} />
-                          <Typography
-                            as="span"
-                            variant="caption"
-                            family="system"
-                            weight={700}
-                            className={s.oldPriceAmount}
-                          >
-                            {standardAnchorPrice}
-                          </Typography>
-                        </span>
-                        <span className={s.currentPrice}>
-                          <TgStarIcon width={21} height={21} />
-                          <Typography
-                            as="span"
-                            variant="body-md"
-                            family="system"
-                            weight={700}
-                            className={s.priceAmount}
-                          >
-                            {plan.price}
-                          </Typography>
-                        </span>
-                      </span>
-                    </div>
-                  </div>
-                  <div className={s.planMeta}>
-                    <span className={s.metaPill}>
-                    <img
-                        className={s.airIcon}
-                        src={airIcon}
-                        alt="air"
-                        draggable={false}
-                      />
-                      <Typography
-                        as="span"
-                        variant="caption"
-                        family="system"
-                        weight={700}
-                        className={s.metaText}
-                      >
-                        +{plan.air} AIR
-                      </Typography>
-                    </span>
-                    {index > 1 ? (
-                      <span className={s.savePill}>
-                        <Typography
-                          as="span"
-                          variant="caption"
-                          family="system"
-                          weight={700}
-                          className={s.save}
-                        >
-                          {t('bag.savePercent', { percent: savePercent })}
-                        </Typography>
-                      </span>
-                    ) : null}
-                    <span className={`${s.metaPill} ${s.dailyPricePill}`}>
-                      <TgStarWhiteIcon width={15} height={15} />
-                      <Typography
-                        as="span"
-                        variant="caption"
-                        family="system"
-                        weight={700}
-                        className={s.metaText}
-                      >
-                        {t('bag.dailyPrice', { price: dailyPriceLabel })}
-                      </Typography>
-                    </span>
-                  </div>
                   {plan.isRecommended ? (
                     <span className={s.recommendedBadge}>
                       <Typography
                         as="span"
                         variant="caption"
-                        family="brand"
-                        weight={500}
+                        family="system"
+                        weight={700}
                         className={s.recommendedBadgeText}
                       >
                         {t('bag.mostPopular')}
                       </Typography>
                     </span>
                   ) : null}
+                  <span className={s.radio} aria-hidden />
+                  <Typography
+                    as="span"
+                    variant="body-sm"
+                    family="brand"
+                    weight={500}
+                    className={s.planPeriod}
+                  >
+                    {formatPeriod(plan, t)}
+                  </Typography>
+                  <span className={s.planAir}>
+                    <img
+                      className={s.airIcon}
+                      src={airIcon}
+                      alt=""
+                      draggable={false}
+                    />
+                    <Typography
+                      as="span"
+                      variant="caption"
+                      family="system"
+                      weight={600}
+                      className={s.planAirText}
+                    >
+                      {plan.air} AIRS
+                    </Typography>
+                  </span>
+                  <Typography
+                    as="span"
+                    variant="caption"
+                    family="system"
+                    weight={500}
+                    className={s.dailyPrice}
+                  >
+                    {t('bag.dailyPrice', { price: dailyPriceLabel })}
+                  </Typography>
+                  {savePercent > 0 ? (
+                    <Typography
+                      as="span"
+                      variant="caption"
+                      family="system"
+                      weight={700}
+                      className={s.save}
+                    >
+                      {t('bag.savePercent', { percent: savePercent })}
+                    </Typography>
+                  ) : null}
+                  <span className={s.planPrice}>
+                    <StarIcon width={15} height={15} />
+                    <Typography
+                      as="span"
+                      variant="body-md"
+                      family="system"
+                      weight={700}
+                      className={s.priceAmount}
+                    >
+                      {plan.price}
+                    </Typography>
+                  </span>
                 </Card>
               );
             })}
           </div>
 
           {selectedPlan ? (
-            <div className={s.featuresGrid}>
-              <div className={s.featuresColumnA}>
-                {planFeaturesA.map((feature, index) => {
-                  const isActive = activeFeatures.activeA.has(index);
-                  return (
-                    <div
-                      key={`feature-a-${index}`}
-                      className={`${s.featureItem} ${isActive ? s.featureActive : s.featureInactive}`}
-                    >
-                      {isActive ? (
-                        <CheckIcon
-                          width={16}
-                          height={16}
-                          className={s.featureIcon}
-                        />
-                      ) : (
-                        <MinusIcon
-                          width={16}
-                          height={16}
-                          className={s.featureIcon}
-                        />
-                      )}
+            <>
+              <Typography
+                as="div"
+                variant="caption"
+                family="system"
+                weight={500}
+                className={s.featuresTitle}
+              >
+                {t('bag.includedIn', {
+                  period: formatPeriod(selectedPlan, t),
+                })}
+              </Typography>
+              <div className={s.features}>
+                {visibleFeatures.map(({ key, Icon }) => (
+                  <div key={key} className={s.featureItem}>
+                    <span className={s.featureIconWrap}>
+                      <Icon width={20} height={20} />
+                    </span>
+                    <div className={s.featureCopy}>
                       <Typography
-                        as="span"
+                        as="div"
                         variant="body-md"
                         family="system"
-                        weight={600}
-                        className={s.featureText}
+                        weight={500}
+                        className={s.featureTitle}
                       >
-                        {feature}
+                        {t(`bag.features.${key}.title`)}
                       </Typography>
-                    </div>
-                  );
-                })}
-              </div>
-              <div className={s.featuresColumnB}>
-                {planFeaturesB.map((feature, index) => {
-                  const isActive = activeFeatures.activeB.has(index);
-                  return (
-                    <div
-                      key={`feature-b-${index}`}
-                      className={`${s.featureItem} ${isActive ? s.featureActive : s.featureInactive}`}
-                    >
-                      {isActive ? (
-                        <CheckIcon
-                          width={16}
-                          height={16}
-                          className={s.featureIcon}
-                        />
-                      ) : (
-                        <MinusIcon
-                          width={16}
-                          height={16}
-                          className={s.featureIcon}
-                        />
-                      )}
                       <Typography
-                        as="span"
-                        variant="body-md"
+                        as="div"
+                        variant="body-sm"
                         family="system"
-                        weight={600}
-                        className={s.featureText}
+                        className={s.featureDescription}
                       >
-                        {feature}
+                        {t(`bag.features.${key}.description`)}
                       </Typography>
                     </div>
-                  );
-                })}
+                    <CheckIcon
+                      width={18}
+                      height={18}
+                      className={s.featureCheck}
+                    />
+                  </div>
+                ))}
               </div>
-            </div>
+            </>
           ) : null}
-
         </>
       ) : null}
     </div>

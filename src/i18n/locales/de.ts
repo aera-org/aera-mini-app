@@ -14,30 +14,58 @@ export const de = {
     bag: {
       dailyPrice: '{{price}} / Tag',
       errors: { plans: 'Pläne konnten nicht geladen werden' },
-      featuresA: [
-        'Unbegrenzte Texte',
-        'Unbegrenzte NSFW-Fotos',
-        'Premium-Antwortgeschwindigkeit',
-        'Deep-Immersion-Modus',
-        'Exklusive Character-Drops',
-        'Frühzugang zu Szenarien',
-      ],
-      featuresB: [
-        'Standard-Roleplay',
-        'Verbessertes Roleplay',
-        'Sofortige Antworten',
-        'Priorisierte Antworten',
-        'Versteckte Szenarien',
-        'VIP-Badge',
-      ],
-      exclusiveOffer: 'Exklusives Angebot',
-      firstDayOffer: 'Angebot am ersten Tag',
-      introEyebrow: '50% RABATT',
+      features: {
+        animations: {
+          description: 'Sieh zu, wie sie lebendig wird',
+          title: 'Tägliche kostenlose Animationen',
+        },
+        customCharacter: {
+          description: 'Erstelle deinen eigenen Charakter günstiger',
+          title: '50% Rabatt auf 1 eigenen Charakter',
+        },
+        deepImmersion: {
+          description: 'Interaktion auf neuem Level',
+          title: 'Deep-Immersion-Modus',
+        },
+        fuel: {
+          description: 'Chatte so viel du willst',
+          title: 'Unbegrenzter Treibstoff',
+        },
+        gifts: {
+          description: 'Spare bei Geschenken für sie',
+          title: 'Bis zu 60% Rabatt auf Geschenke',
+        },
+        hiddenScenarios: {
+          description: 'Exklusive geheime Inhalte',
+          title: 'Versteckte Szenarien',
+        },
+        photos: {
+          description: 'Sieh jedes Foto, das sie schickt',
+          title: 'Unbegrenzte NSFW-Fotos',
+        },
+        roleplay: {
+          description: 'Mit längeren Plänen freigeschaltet',
+          title: 'Verbessertes Roleplay',
+        },
+        voice: {
+          description: 'Hör ihre Stimme',
+          title: 'Sprachnachrichten',
+        },
+      },
+      includedIn: 'Enthalten in {{period}}',
       mostPopular: 'am beliebtesten',
-      planNames: ['Test', 'Basic', 'Premium', 'Ultimate'],
+      periods: {
+        day: '{{count}} Tag',
+        day_other: '{{count}} Tage',
+        month: '{{count}} Monat',
+        month_other: '{{count}} Monate',
+        year: '{{count}} Jahr',
+        year_other: '{{count}} Jahre',
+      },
       savePercent: '{{percent}}% SPAREN',
       statusTitle: 'Dein Plan',
       subscribed: 'Abonniert',
+      summary: '{{period}} + {{air}} AIRS',
       upgrade: 'Upgrade',
     },
     common: {

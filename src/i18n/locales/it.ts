@@ -14,30 +14,58 @@ export const it = {
     bag: {
       dailyPrice: '{{price}} / giorno',
       errors: { plans: 'Impossibile caricare i piani' },
-      featuresA: [
-        'Messaggi illimitati',
-        'Foto NSFW illimitate',
-        'Velocità di risposta premium',
-        'Modalità immersione profonda',
-        'Drop esclusivi di personaggi',
-        'Accesso anticipato agli scenari',
-      ],
-      featuresB: [
-        'Roleplay standard',
-        'Roleplay migliorato',
-        'Risposte istantanee',
-        'Risposte prioritarie',
-        'Scenari nascosti',
-        'Badge VIP',
-      ],
-      exclusiveOffer: 'Offerta esclusiva',
-      firstDayOffer: 'Offerta del primo giorno',
-      introEyebrow: 'SCONTO 50%',
+      features: {
+        animations: {
+          description: 'Guardala prendere vita',
+          title: 'Animazioni gratuite ogni giorno',
+        },
+        customCharacter: {
+          description: 'Crea il tuo personaggio spendendo meno',
+          title: '50% di sconto su 1 personaggio personalizzato',
+        },
+        deepImmersion: {
+          description: 'Coinvolgimento di livello superiore',
+          title: 'Modalità immersione profonda',
+        },
+        fuel: {
+          description: 'Chatta quanto vuoi',
+          title: 'Carburante illimitato',
+        },
+        gifts: {
+          description: 'Risparmia sui regali per lei',
+          title: 'Fino al 60% di sconto sui regali',
+        },
+        hiddenScenarios: {
+          description: 'Contenuti segreti esclusivi',
+          title: 'Scenari nascosti',
+        },
+        photos: {
+          description: 'Vedi ogni foto che ti invia',
+          title: 'Foto NSFW illimitate',
+        },
+        roleplay: {
+          description: 'Sbloccato con i piani più lunghi',
+          title: 'Roleplay migliorato',
+        },
+        voice: {
+          description: 'Ascolta la sua voce',
+          title: 'Messaggi vocali',
+        },
+      },
+      includedIn: 'Cosa include {{period}}',
       mostPopular: 'più popolare',
-      planNames: ['Trial', 'Basic', 'Premium', 'Ultimate'],
+      periods: {
+        day: '{{count}} giorno',
+        day_other: '{{count}} giorni',
+        month: '{{count}} mese',
+        month_other: '{{count}} mesi',
+        year: '{{count}} anno',
+        year_other: '{{count}} anni',
+      },
       savePercent: 'RISPARMIA {{percent}}%',
       statusTitle: 'Il tuo piano',
       subscribed: 'Abbonato',
+      summary: '{{period}} + {{air}} AIRS',
       upgrade: 'Upgrade',
     },
     common: {

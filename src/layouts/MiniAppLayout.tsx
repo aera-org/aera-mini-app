@@ -4,8 +4,8 @@ import { Outlet, useLocation, useNavigate } from 'react-router-dom';
 
 import { postMeDeeplink } from '@/api/me';
 import { PlusIcon } from '@/assets/icons';
-import profileIcon from '@/assets/mini/airs.png';
 import airIcon from '@/assets/mini/air.png';
+import profileIcon from '@/assets/mini/airs.png';
 import bagIcon from '@/assets/mini/bag.png';
 import fuelIcon from '@/assets/mini/fuel.png';
 import giftsIcon from '@/assets/mini/gifts.png';
@@ -18,6 +18,7 @@ import {
   MiniAppShell,
   Navigation,
 } from '@/components';
+import type { BagSummary } from '@/components/navigation/BagNavigation';
 import { useLaunchParams } from '@/context/useLaunchParams';
 import { useUser } from '@/context/user-context';
 
@@ -43,6 +44,7 @@ export function MiniAppLayout() {
   const [bagUpgradeAction, setBagUpgradeAction] = useState<(() => void) | null>(
     null,
   );
+  const [bagSummary, setBagSummary] = useState<BagSummary | null>(null);
   const isGirlDetails =
     location.pathname.startsWith('/girls/') ||
     location.pathname.startsWith('/my-girls/');
@@ -108,6 +110,7 @@ export function MiniAppLayout() {
           />
         ) : isBagPage ? (
           <BagNavigation
+            summary={bagSummary}
             onBack={() => {
               if (window.history.length > 1) {
                 navigate(-1);
@@ -133,7 +136,7 @@ export function MiniAppLayout() {
         )
       }
     >
-      <Outlet context={{ setBagUpgradeAction }} />
+      <Outlet context={{ setBagUpgradeAction, setBagSummary }} />
     </MiniAppShell>
   );
 }

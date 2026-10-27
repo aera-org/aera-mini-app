@@ -14,30 +14,58 @@ export const es = {
     bag: {
       dailyPrice: '{{price}} / día',
       errors: { plans: 'No se pudieron cargar los planes' },
-      featuresA: [
-        'Textos ilimitados',
-        'Fotos NSFW ilimitadas',
-        'Velocidad premium de respuesta',
-        'Modo de inmersión profunda',
-        'Lanzamientos exclusivos de personajes',
-        'Acceso anticipado a escenarios',
-      ],
-      featuresB: [
-        'Roleplay estándar',
-        'Roleplay mejorado',
-        'Respuestas instantáneas',
-        'Respuestas prioritarias',
-        'Escenarios ocultos',
-        'Insignia VIP',
-      ],
-      exclusiveOffer: 'Oferta exclusiva',
-      firstDayOffer: 'Oferta del primer día',
-      introEyebrow: '50% DE DESCUENTO',
+      features: {
+        animations: {
+          description: 'Mira cómo cobra vida',
+          title: 'Animaciones gratis cada día',
+        },
+        customCharacter: {
+          description: 'Crea tu propio personaje por menos',
+          title: '50% de descuento en 1 personaje propio',
+        },
+        deepImmersion: {
+          description: 'Interacción de otro nivel',
+          title: 'Modo de inmersión profunda',
+        },
+        fuel: {
+          description: 'Chatea todo lo que quieras',
+          title: 'Combustible ilimitado',
+        },
+        gifts: {
+          description: 'Ahorra en regalos para ella',
+          title: 'Hasta 60% de descuento en regalos',
+        },
+        hiddenScenarios: {
+          description: 'Contenido secreto exclusivo',
+          title: 'Escenarios ocultos',
+        },
+        photos: {
+          description: 'Mira cada foto que te envía',
+          title: 'Fotos NSFW ilimitadas',
+        },
+        roleplay: {
+          description: 'Desbloqueado con planes más largos',
+          title: 'Roleplay mejorado',
+        },
+        voice: {
+          description: 'Escucha su voz',
+          title: 'Mensajes de voz',
+        },
+      },
+      includedIn: 'Qué incluye {{period}}',
       mostPopular: 'más popular',
-      planNames: ['Prueba', 'Básico', 'Premium', 'Ultimate'],
+      periods: {
+        day: '{{count}} día',
+        day_other: '{{count}} días',
+        month: '{{count}} mes',
+        month_other: '{{count}} meses',
+        year: '{{count}} año',
+        year_other: '{{count}} años',
+      },
       savePercent: 'AHORRA {{percent}}%',
       statusTitle: 'Tu plan',
       subscribed: 'Suscrito',
+      summary: '{{period}} + {{air}} AIRS',
       upgrade: 'Mejorar',
     },
     common: {

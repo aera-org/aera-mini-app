@@ -57,19 +57,86 @@
   bottom: 16px;
   transform: translateX(-50%);
   display: flex;
-  align-items: center;
-  gap: 14px;
+  flex-direction: column;
+  gap: 12px;
   z-index: 3;
   width: min(calc(100% - 32px), 390px);
-  justify-content: center;
+}
+
+.bagNav::before {
+  position: absolute;
+  left: 50%;
+  bottom: -16px;
+  z-index: -1;
+  width: 100vw;
+  max-width: 480px;
+  height: calc(100% + 56px);
+  content: '';
+  pointer-events: none;
+  background: linear-gradient(180deg, rgba(5, 7, 10, 0) 0%, #05070a 40%);
+  transform: translateX(-50%);
+}
+
+.bagSummary {
+  height: 36px;
+  padding: 0 14px;
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  border: 1px solid rgba(255, 255, 255, 0.15);
+  border-radius: 18px;
+  background: rgba(255, 255, 255, 0.05);
+  backdrop-filter: blur(14px);
+  -webkit-backdrop-filter: blur(14px);
+}
+
+.bagSummaryDot {
+  width: 6px;
+  height: 6px;
+  flex-shrink: 0;
+  border-radius: 50%;
+  background: #ffd435;
+}
+
+.bagSummaryLabel {
+  flex: 1;
+  min-width: 0;
+  overflow: hidden;
+  color: #fff;
+  font-family: var(--font-ui);
+  font-size: 13px;
+  line-height: 1;
+  white-space: nowrap;
+  text-overflow: ellipsis;
+}
+
+.bagSummaryPrice {
+  flex-shrink: 0;
+  display: inline-flex;
+  align-items: center;
+  gap: 4px;
+}
+
+.bagSummaryPriceText {
+  color: #ffd435;
+  font-family: var(--font-ui);
+  font-size: 15px;
+  line-height: 1;
+}
+
+.bagActions {
+  display: flex;
+  align-items: center;
+  gap: 10px;
 }
 
 .bagBackButton {
-  width: 48px;
-  height: 48px;
+  width: 59px;
+  height: 59px;
+  flex-shrink: 0;
   border-radius: 50%;
   border: 1px solid rgba(255, 255, 255, 0.28);
-  background: rgba(0, 0, 0, 0.38);
+  background: rgba(0, 0, 0, 0.6);
   backdrop-filter: blur(14px);
   -webkit-backdrop-filter: blur(14px);
   color: #fff;
@@ -82,41 +149,34 @@
 
 .bagUpgradeButton {
   height: 59px;
-  min-width: 214px;
   flex: 1 1 auto;
-  max-width: 278px;
-  border: 1px solid rgba(255, 190, 220, 0.7);
+  border: none;
   border-radius: 30px;
   padding: 0 30px;
   display: inline-flex;
   align-items: center;
   justify-content: center;
   gap: 8px;
-  color: #fff;
+  color: #1a1400;
   cursor: pointer;
-  background:
-    radial-gradient(
-      circle at 24% 12%,
-      rgba(255, 255, 255, 0.48),
-      transparent 24%
-    ),
-    linear-gradient(135deg, #ff3f8f 0%, #ff6ab7 46%, #ff2d5f 100%);
+  background: #f8d658;
   box-shadow:
-    0 14px 28px rgba(255, 49, 119, 0.34),
-    inset 0 1px 0 rgba(255, 255, 255, 0.42),
-    inset 0 -1px 0 rgba(120, 0, 48, 0.22);
+    0 14px 28px rgba(248, 214, 88, 0.16),
+    inset 0 1px 0 rgba(255, 255, 255, 0.4);
   animation: bagUpgradePulse 2.4s ease-in-out infinite;
 }
 
+.bagUpgradeButton svg path {
+  stroke: #1a1400;
+}
+
 .bagUpgradeText {
-  color: #fff;
+  color: #1a1400;
   font-family: var(--font-ui);
-  font-weight: 500;
   font-style: normal;
   font-size: 20px;
   line-height: 120%;
   letter-spacing: -0.48px;
-  text-align: right;
 }
 
 @keyframes bagUpgradePulse {

@@ -16,31 +16,59 @@ export const en = {
       errors: {
         plans: 'Failed to load plans',
       },
-      featuresA: [
-        'Unlimited texts',
-        'Unlimited NSFW photos',
-        'Premium response speed',
-        'Deep immersion mode',
-        'Exclusive character drops',
-        'Early Access to scenarios',
-      ],
-      featuresB: [
-        'Standard roleplay',
-        'Enhanced roleplay',
-        'Instant replies',
-        'Priority replies',
-        'Hidden scenarios',
-        'VIP badge',
-      ],
-      firstDayOffer: 'First day offer',
-      introEyebrow: 'SALE 50% OFF',
+      features: {
+        animations: {
+          description: 'Watch her come to life',
+          title: 'Daily free animations',
+        },
+        customCharacter: {
+          description: 'Create your own character for less',
+          title: '50% off for 1 Custom character',
+        },
+        deepImmersion: {
+          description: 'Next-level engagement',
+          title: 'Deep immersion mode',
+        },
+        fuel: {
+          description: 'Chat as much as you want',
+          title: 'Unlimited fuel',
+        },
+        gifts: {
+          description: 'Save on gifts for her',
+          title: 'Up to 60% off on Gifts',
+        },
+        hiddenScenarios: {
+          description: 'Exclusive secret content',
+          title: 'Hidden scenarios',
+        },
+        photos: {
+          description: 'See every photo she sends',
+          title: 'Unlimited NSFW photos',
+        },
+        roleplay: {
+          description: 'Unlocked with longer plans',
+          title: 'Enhanced roleplay',
+        },
+        voice: {
+          description: 'Hear her voice',
+          title: 'Voice messages',
+        },
+      },
+      includedIn: "What's included in {{period}}",
       mostPopular: 'most popular',
-      planNames: ['Trial', 'Basic', 'Premium', 'Ultimate'],
+      periods: {
+        day: '{{count}} day',
+        day_other: '{{count}} days',
+        month: '{{count}} month',
+        month_other: '{{count}} months',
+        year: '{{count}} year',
+        year_other: '{{count}} years',
+      },
+      savePercent: 'SAVE {{percent}}%',
       statusTitle: 'Your plan',
       subscribed: 'Subscribed',
+      summary: '{{period}} + {{air}} AIRS',
       upgrade: 'Upgrade',
-      exclusiveOffer: 'Exclusive offer',
-      savePercent: 'SAVE {{percent}}%',
     },
     common: {
       air: 'AIR',
