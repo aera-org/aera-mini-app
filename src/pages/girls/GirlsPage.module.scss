@@ -11,7 +11,6 @@
 .container {
   width: 100%;
   max-width: 390px;
-  padding: 0 16px;
   display: flex;
   flex-direction: column;
   gap: 30px;
@@ -19,9 +18,8 @@
 
 .grid {
   display: grid;
-  grid-template-columns: repeat(auto-fill, 170px);
-  justify-content: space-between;
-  gap: 12px;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 16px;
 }
 
 .charactersSection {
@@ -41,7 +39,7 @@
   display: grid;
   grid-auto-flow: column;
   grid-template-rows: repeat(2, 80px);
-  grid-auto-columns: 250px;
+  grid-auto-columns: 210px;
   gap: 10px;
   overflow-x: auto;
   overscroll-behavior-x: contain;
@@ -135,7 +133,7 @@
 }
 
 .characterItem {
-  width: 250px;
+  width: 100%;
   height: 80px;
   display: flex;
   align-items: flex-start;
@@ -163,8 +161,8 @@
 }
 
 .characterMeta {
-  width: 148px;
-  flex: 0 0 148px;
+  flex: 1;
+  min-width: 0;
   display: flex;
   flex-direction: column;
   align-items: flex-start;
@@ -194,8 +192,8 @@
 }
 
 .card {
-  width: 170px;
-  height: 170px;
+  width: 100%;
+  aspect-ratio: 1;
   display: flex;
   align-items: flex-end;
   cursor: pointer;
