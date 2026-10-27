@@ -147,19 +147,6 @@ export function GirlsPage() {
       key={`${girl.id}-${scenario.id}`}
       onClick={() => handleActiveScenarioClick(scenario)}
     >
-      {scenario.isNew ? (
-        <span className={s.newBadge}>
-          <Typography
-            as="span"
-            variant="caption"
-            family="brand"
-            weight={500}
-            className={s.newBadgeText}
-          >
-            {t('girls.newScenario')}
-          </Typography>
-        </span>
-      ) : null}
       <div className={s.cardBody}>
         <div className={s.contentRow}>
           <div className={s.textColumn}>
