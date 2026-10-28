@@ -1,6 +1,9 @@
 .header {
   position: absolute;
-  top: 0;
+  top: calc(
+    var(--tg-safe-area-inset-top, 0px) +
+      var(--tg-content-safe-area-inset-top, 0px)
+  );
   left: 0;
   width: 100%;
   padding: 8px 12px;

@@ -5,6 +5,7 @@ export { CreatePending } from './create-pending';
 export { FeaturedGirlsSlider } from './featured-girls-slider';
 export { Header } from './header/Header';
 export { IconButton } from './icon-button';
+export { IntimacyScale } from './intimacy-scale';
 export { Loader } from './loader/Loader';
 export { MiniAppShell } from './mini-app-shell';
 export { default as Modal } from './modal';

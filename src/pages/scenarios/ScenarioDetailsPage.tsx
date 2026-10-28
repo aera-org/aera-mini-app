@@ -37,10 +37,12 @@ import {
   type MediaQuery,
   type Paginated,
   SCENARIO_CONTENT_PRICE,
+  STAGE_TO_INDEX,
   VIDEO_PRICE,
 } from '@/common/types';
 import { cn } from '@/common/utils';
 import {
+  IntimacyScale,
   Loader,
   type ScenarioGalleryItem,
   ScenarioMediaGallery,
@@ -310,6 +312,9 @@ export function ScenarioDetailsPage() {
         .map((personality) => t(`create.options.${personality}`))
         .join(', ')
     : '';
+  const intimacyIndex = scenario?.scenarioProgress?.maxStage
+    ? STAGE_TO_INDEX[scenario.scenarioProgress.maxStage]
+    : null;
   const mediaErrorMessage =
     mediaQuery.error instanceof Error
       ? mediaQuery.error.message
@@ -487,6 +492,10 @@ export function ScenarioDetailsPage() {
                   : ''}
               </span>
               <span>{characterPersonality}</span>
+            </div>
+            <div className={s.intimacyBlock}>
+              <span className={s.intimacyLabel}>{t('scenario.intimacyLevel')}</span>
+              <IntimacyScale stageIndex={intimacyIndex} />
             </div>
             <Typography
               as="p"

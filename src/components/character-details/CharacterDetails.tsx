@@ -7,11 +7,10 @@ import airIcon from '@/assets/mini/air.png';
 import { type ICharacter, type IScenario, STAGE_TO_INDEX } from '@/common/types';
 import { cn } from '@/common/utils';
 import { Card } from '@/components/card';
+import { INTIMACY_SEGMENTS, IntimacyScale } from '@/components/intimacy-scale';
 import { Typography } from '@/components/text';
 
 import s from './CharacterDetails.module.scss';
-
-const INTIMACY_SEGMENTS = 8;
 
 type ScenarioLockState =
   | {
@@ -371,24 +370,10 @@ export function CharacterDetails({
                             {scenario.shortDescription}
                           </Typography>
                           {shouldShowIntimacy ? (
-                            <div className={s.intimacyScale} aria-hidden>
-                              {Array.from({ length: INTIMACY_SEGMENTS }, (_, index) => {
-                                const isActiveSegment =
-                                  intimacyIndex !== null && index <= intimacyIndex;
-                                const isCurrentSegment =
-                                  intimacyIndex !== null && index === intimacyIndex;
-
-                                return (
-                                  <span
-                                    key={`${scenario.id}-intimacy-${index}`}
-                                    className={cn(s.intimacySegment, [
-                                      isActiveSegment ? s.intimacySegmentActive : null,
-                                      isCurrentSegment ? s.intimacySegmentCurrent : null,
-                                    ])}
-                                  />
-                                );
-                              })}
-                            </div>
+                            <IntimacyScale
+                              stageIndex={intimacyIndex}
+                              className={s.intimacyScale}
+                            />
                           ) : null}
                         </div>
                         {lockState ? null : scenario.isActive ? (
