@@ -23,13 +23,13 @@
 
 .fuelBanner {
   position: relative;
-  min-height: 88px;
-  padding: 12px;
+  min-height: 96px;
+  padding: 12px 12px 12px 92px;
   display: flex;
   align-items: center;
   gap: 10px;
   flex-shrink: 0;
-  overflow: hidden;
+  overflow: visible;
   border-color: rgba(167, 110, 255, 0.55);
   background:
     radial-gradient(circle at 12% 50%, rgba(167, 110, 255, 0.35), transparent 40%),
@@ -37,14 +37,14 @@
   box-shadow: 0 10px 30px rgba(110, 58, 210, 0.2);
 }
 
-.fuelIcon {
-  width: 56px;
-  height: 56px;
-  flex-shrink: 0;
-  object-fit: contain;
+.fuelImage {
+  position: absolute;
+  top: 0;
+  left: -2px;
+  width: 104px;
+  height: 96px;
   pointer-events: none;
   user-select: none;
-  filter: drop-shadow(0 0 12px rgba(190, 140, 255, 0.55));
 }
 
 .fuelCopy {
@@ -93,7 +93,7 @@
 }
 
 .grid {
-  margin-top: 26px;
+  margin-top: 40px;
   display: grid;
   grid-template-columns: repeat(3, minmax(0, 1fr));
   gap: 10px;
@@ -134,28 +134,29 @@
 }
 
 .highlightedPlan {
-  border: 2px solid #ff74b7;
+  border-color: #ff74b7;
   background:
     radial-gradient(circle at 50% 25%, rgba(255, 116, 183, 0.3), transparent 50%),
     linear-gradient(180deg, rgba(214, 60, 140, 0.45) 0%, rgba(120, 20, 80, 0.35) 100%);
   box-shadow:
     0 0 24px rgba(255, 116, 183, 0.35),
+    inset 0 0 0 1px #ff74b7,
     inset 0 1px 0 rgba(255, 255, 255, 0.14);
 }
 
 .bestValueBadge {
   position: absolute;
-  top: -24px;
+  bottom: calc(100% + 8px);
   left: 50%;
   z-index: 3;
   transform: translateX(-50%);
-  padding: 4px 12px;
+  padding: 5px 14px;
   border: 2px solid #ff74b7;
   border-radius: 999px;
   color: #ffb3d6;
   background: #3a0a2a;
   font-family: var(--font-display);
-  font-size: 13px;
+  font-size: 16px;
   line-height: 1;
   letter-spacing: 0.06em;
   text-transform: uppercase;
@@ -184,12 +185,6 @@
   object-fit: contain;
   pointer-events: none;
   user-select: none;
-}
-
-.highlightedPlan .planIcon {
-  width: 80px;
-  height: 80px;
-  margin-top: -4px;
 }
 
 .planAir {
@@ -255,15 +250,32 @@
 }
 
 .infoIcon {
-  width: 52px;
-  height: 52px;
+  width: 56px;
+  height: 56px;
   flex-shrink: 0;
+  border: 1px solid rgba(255, 168, 219, 0.85);
   border-radius: 14px;
   display: grid;
   place-items: center;
   color: #fff;
-  background: linear-gradient(135deg, #ff4fa3 0%, #b32f86 100%);
-  box-shadow: 0 8px 20px rgba(255, 79, 163, 0.3);
+  background: linear-gradient(180deg, #ff389e 0%, #8729f2 100%);
+  box-shadow: 0 0 15px rgba(255, 46, 150, 0.45);
+}
+
+.infoIcon svg {
+  filter: drop-shadow(0 0 4px rgba(255, 255, 255, 0.75));
+}
+
+.infoBody {
+  min-width: 0;
+  display: flex;
+  align-items: flex-start;
+  gap: 6px;
+}
+
+.infoStar {
+  flex-shrink: 0;
+  color: #fff;
 }
 
 .infoCopy {

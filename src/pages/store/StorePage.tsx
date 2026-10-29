@@ -11,8 +11,8 @@ import air2 from '@/assets/air/air-3.png';
 import air3 from '@/assets/air/air-4.png';
 import air4 from '@/assets/air/air-5.png';
 import air5 from '@/assets/air/air-6.png';
-import { GiftIcon, TgStarIcon, ZapIcon } from '@/assets/icons';
-import fuelIcon from '@/assets/mini/fuel.png';
+import { GiftIcon, StarIcon, TgStarIcon, ZapIcon } from '@/assets/icons';
+import fuelExtra from '@/assets/mini/fuel-extra.png';
 import {
   type CustomCharacterCreateRouteState,
   type IPlan,
@@ -25,8 +25,7 @@ import { usePaywallOpenTracking } from '@/hooks/usePaywallOpenTracking';
 
 import s from './StorePage.module.scss';
 
-// TODO: separate icon for the 6th pack
-const airIcons = [air1, air2, air3, air4, air5, air5];
+const airIcons = [air1, air2, air5, air3, air4, air5];
 const extraPercent = [0, 40, 60, 85, 100, 125];
 const DEFAULT_HIGHLIGHTED_INDEX = 1;
 
@@ -126,9 +125,9 @@ export function StorePage() {
         <>
           <Card className={s.fuelBanner} variant="neutral">
             <img
-              src={fuelIcon}
+              src={fuelExtra}
               alt=""
-              className={s.fuelIcon}
+              className={s.fuelImage}
               aria-hidden
               draggable={false}
             />
@@ -247,15 +246,18 @@ export function StorePage() {
 
           <Card className={s.infoCard} variant="neutral">
             <span className={s.infoIcon} aria-hidden>
-              <GiftIcon width={26} height={26} />
+              <GiftIcon width={24} height={24} />
             </span>
-            <div className={s.infoCopy}>
-              <Typography as="div" variant="body-md" weight={600} className={s.infoTitle}>
-                <span aria-hidden>☆</span> {t('store.biggerPacks.title')}
-              </Typography>
-              <Typography as="div" variant="caption" className={s.infoSubtitle}>
-                {t('store.biggerPacks.subtitle')}
-              </Typography>
+            <div className={s.infoBody}>
+              <StarIcon width={16} height={16} className={s.infoStar} aria-hidden />
+              <div className={s.infoCopy}>
+                <Typography as="div" variant="body-md" weight={600} className={s.infoTitle}>
+                  {t('store.biggerPacks.title')}
+                </Typography>
+                <Typography as="div" variant="caption" className={s.infoSubtitle}>
+                  {t('store.biggerPacks.subtitle')}
+                </Typography>
+              </div>
             </div>
           </Card>
         </>
