@@ -24,7 +24,18 @@ export function Header({
   const fuelPercent = (normalizedFuel / fuelMax) * 100;
 
   return (
-    <header className={s.header}>
+    <header
+      className={s.header}
+      role="button"
+      tabIndex={0}
+      onClick={onActionClick}
+      onKeyDown={(event) => {
+        if (event.key === 'Enter' || event.key === ' ') {
+          event.preventDefault();
+          onActionClick();
+        }
+      }}
+    >
       <div className={s.statsRow}>
         <img className={s.fuelIcon} src={fuelIcon} alt="fuel" />
         <div className={s.fuelBar} aria-label={`Fuel ${fuelPercent}%`}>
@@ -42,9 +53,9 @@ export function Header({
         >
           {air} AIR
         </Typography>
-        <button type="button" className={s.iconButton} onClick={onActionClick}>
+        <span className={s.iconButton} aria-hidden>
           {actionIcon}
-        </button>
+        </span>
       </div>
     </header>
   );

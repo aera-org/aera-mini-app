@@ -282,18 +282,19 @@ export const es = {
       videos: 'Videos',
     },
     store: {
-      airSale: 'OFERTA AIR',
       bestValue: 'mejor valor',
-      bonusIncluded: '+{{percent}}% de bono incluido',
+      biggerPacks: {
+        subtitle:
+          'Cada nivel te da más AIR por Star. Usa AIR para fotos picantes, videos explícitos, mensajes de voz, regalos o crear tu Dream Girlfriend.',
+        title: 'Packs más grandes. Más valor.',
+      },
       errors: { plans: 'No se pudieron cargar los planes' },
-      explicitPhotos: 'Chats ilimitados y fotos explícitas.',
-      planLabels: ['una noche', 'satisfacción', 'loca y caliente'],
-      popular: 'popular',
-      subtitle:
-        'Usa AIR para fotos personales, videos explícitos, regalos o para crear tu Dream Girlfriend.',
-      title: 'Cumple tus fantasías más salvajes y deseos ocultos',
+      planLabels: ['una noche', 'toda tuya', 'enciéndeme', 'más salvaje', 'deseo profundo', 'sin límites'],
+      unlimitedFuel: {
+        subtitle: 'Sin límites. Conversaciones con IA infinitas y contenido picante',
+        title: '¿Quieres Fuel ilimitado?',
+      },
       upgrade: 'Mejorar',
-      wantUnlimited: '¿Quieres ilimitado?',
     },
     subscription: {
       daysLeft: '{{count}} día restante',

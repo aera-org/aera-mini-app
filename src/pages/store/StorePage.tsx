@@ -7,28 +7,29 @@ import { useLocation, useNavigate } from 'react-router-dom';
 import { createPlanInvoice } from '@/api/payments';
 import { getPlans } from '@/api/plans';
 import air1 from '@/assets/air/air-2.png';
-import air2 from '@/assets/air/air-4.png';
-import air3 from '@/assets/air/air-5.png';
-import air4 from '@/assets/air/air-6.png';
-// import air5 from '@/assets/air/air-5.png';
-// import air6 from '@/assets/air/air-6.png';
-import { SparklesIcon, TgStarIcon } from '@/assets/icons';
-import upgradeImage from '@/assets/mini/upgrade.png';
+import air2 from '@/assets/air/air-3.png';
+import air3 from '@/assets/air/air-4.png';
+import air4 from '@/assets/air/air-5.png';
+import air5 from '@/assets/air/air-6.png';
+import { GiftIcon, TgStarIcon, ZapIcon } from '@/assets/icons';
+import fuelIcon from '@/assets/mini/fuel.png';
 import {
   type CustomCharacterCreateRouteState,
   type IPlan,
   PlanType,
 } from '@/common/types';
+import { cn } from '@/common/utils';
 import { Card, Loader, Typography } from '@/components';
 import { useLaunchParams } from '@/context/useLaunchParams';
 import { usePaywallOpenTracking } from '@/hooks/usePaywallOpenTracking';
 
 import s from './StorePage.module.scss';
 
-const airIcons = [air1, air2, air3, air4];
-const extraPercent = [
-  0, 25, 40, 60
-]
+// TODO: separate icon for the 6th pack
+const airIcons = [air1, air2, air3, air4, air5, air5];
+const extraPercent = [0, 40, 60, 85, 100, 125];
+const DEFAULT_HIGHLIGHTED_INDEX = 1;
+
 export function StorePage() {
   const { t } = useTranslation();
   const location = useLocation();
@@ -47,34 +48,22 @@ export function StorePage() {
     queryFn: () => getPlans(PlanType.Air),
   });
 
-  const airPlans = useMemo(() => plans.slice(0, airIcons.length), [plans]);
   const airPlanItems = useMemo(
     () =>
-      airPlans.map((plan, index) => ({
+      plans.slice(0, airIcons.length).map((plan, index) => ({
         plan,
         index,
-        icon: airIcons[index % airIcons.length],
+        icon: airIcons[index],
         extra: extraPercent[index] ?? 0,
       })),
-    [airPlans],
+    [plans],
   );
-  const featuredPlan = useMemo(() => {
-    if (airPlanItems.length === 0) return null;
+  const highlightedPlanId = useMemo(() => {
     const recommendedPlan = airPlanItems.find((item) => item.plan.isRecommended);
-    if (recommendedPlan) return recommendedPlan;
 
-    return airPlanItems.reduce((best, item) =>
-      item.extra > best.extra ? item : best,
-    );
+    return (recommendedPlan ?? airPlanItems[DEFAULT_HIGHLIGHTED_INDEX])?.plan.id;
   }, [airPlanItems]);
-  const secondaryPlans = useMemo(
-    () =>
-      featuredPlan
-        ? airPlanItems.filter((item) => item.plan.id !== featuredPlan.plan.id)
-        : airPlanItems,
-    [airPlanItems, featuredPlan],
-  );
-  const secondaryPlanLabels = t('store.planLabels', {
+  const planLabels = t('store.planLabels', {
     returnObjects: true,
   }) as string[];
 
@@ -135,106 +124,49 @@ export function StorePage() {
 
       {!isLoading && !isError ? (
         <>
-          <div className={s.offerHeader}>
-            <Typography
-              as="div"
-              variant="label"
-              weight={700}
-              className={s.offerEyebrow}
+          <Card className={s.fuelBanner} variant="neutral">
+            <img
+              src={fuelIcon}
+              alt=""
+              className={s.fuelIcon}
+              aria-hidden
+              draggable={false}
+            />
+            <div className={s.fuelCopy}>
+              <Typography as="div" variant="body-md" weight={600} className={s.fuelTitle}>
+                {t('store.unlimitedFuel.title')}
+              </Typography>
+              <Typography as="div" variant="caption" className={s.fuelSubtitle}>
+                {t('store.unlimitedFuel.subtitle')}
+              </Typography>
+            </div>
+            <button
+              type="button"
+              className={s.upgradeButton}
+              onClick={() => navigate('/bag')}
             >
-              {t('store.airSale')}
-            </Typography>
-            <Typography
-              as="div"
-              variant="heading-lg"
-              weight={600}
-              className={s.offerTitle}
-            >
-              {t('store.title')}
-            </Typography>
-            <Typography
-              as="div"
-              variant="body-sm"
-              weight={500}
-              className={s.offerSubtitle}
-            >
-              {t('store.subtitle')}
-            </Typography>
-          </div>
-
-          {featuredPlan ? (
-            <Card
-              className={s.featuredPlanCard}
-              variant="accent"
-              role="button"
-              tabIndex={0}
-              onClick={() => handleBuy(featuredPlan.plan)}
-              onKeyDown={(event) =>
-                handlePlanCardKeyDown(event, featuredPlan.plan)
-              }
-            >
-              <div className={s.featuredCopy}>
-                <Typography
-                  as="span"
-                  variant="label"
-                  weight={700}
-                  className={s.featuredBadge}
-                >
-                  {t('store.bestValue')}
-                </Typography>
-                <Typography
-                  as="div"
-                  variant="heading-lg"
-                  weight={700}
-                  className={s.featuredAir}
-                >
-                  {featuredPlan.plan.air} AIR
-                </Typography>
-                <Typography
-                  as="div"
-                  variant="body-sm"
-                  weight={600}
-                  className={s.featuredBonus}
-                >
-                  {t('store.bonusIncluded', { percent: featuredPlan.extra })}
-                </Typography>
-                <button
-                  type="button"
-                  className={s.featuredButton}
-                  onClick={(event) => {
-                    event.stopPropagation();
-                    handleBuy(featuredPlan.plan);
-                  }}
-                >
-                  <TgStarIcon
-                    width={20}
-                    height={20}
-                    className={s.planStarIcon}
-                  />
-                  <span>{featuredPlan.plan.price}</span>
-                </button>
-              </div>
-              <img
-                src={featuredPlan.icon}
-                alt=""
-                className={s.featuredIcon}
-                aria-hidden
-                draggable={false}
-              />
-            </Card>
-          ) : null}
+              <ZapIcon width={16} height={16} />
+              <Typography
+                as="span"
+                variant="body-sm"
+                weight={600}
+                className={s.upgradeButtonText}
+              >
+                {t('store.upgrade')}
+              </Typography>
+            </button>
+          </Card>
 
           <div className={s.grid}>
-            {secondaryPlans.map(({ plan, icon, extra }, secondaryIndex) => {
-              const planLabel =
-                secondaryPlanLabels[secondaryIndex] ?? secondaryPlanLabels[0];
-              const toneClassName =
-                [s.budgetPlan, s.middlePlan, s.wildPlan][secondaryIndex] ??
-                s.budgetPlan;
+            {airPlanItems.map(({ plan, icon, extra, index }) => {
+              const isHighlighted = plan.id === highlightedPlanId;
 
               return (
                 <Card
-                  className={`${s.planCard} ${toneClassName}`}
+                  className={cn(s.planCard, [
+                    index === 0 ? s.budgetPlan : s.wildPlan,
+                    isHighlighted ? s.highlightedPlan : null,
+                  ])}
                   variant="accent"
                   key={plan.id}
                   role="button"
@@ -242,6 +174,16 @@ export function StorePage() {
                   onClick={() => handleBuy(plan)}
                   onKeyDown={(event) => handlePlanCardKeyDown(event, plan)}
                 >
+                  {isHighlighted ? (
+                    <Typography
+                      as="span"
+                      variant="label"
+                      weight={700}
+                      className={s.bestValueBadge}
+                    >
+                      {t('store.bestValue')}
+                    </Typography>
+                  ) : null}
                   {extra > 0 ? (
                     <Typography
                       as="span"
@@ -252,32 +194,20 @@ export function StorePage() {
                       +{extra}%
                     </Typography>
                   ) : null}
-                  <div className={s.planTop}>
-                    <img
-                      src={icon}
-                      alt=""
-                      className={s.planIcon}
-                      aria-hidden
-                      draggable={false}
-                    />
-                    {plan.isRecommended ? (
-                      <Typography
-                        as="span"
-                        variant="caption"
-                        weight={700}
-                        className={s.topChoiceBadge}
-                      >
-                        {t('store.popular')}
-                      </Typography>
-                    ) : null}
-                  </div>
+                  <img
+                    src={icon}
+                    alt=""
+                    className={s.planIcon}
+                    aria-hidden
+                    draggable={false}
+                  />
                   <Typography
                     as="div"
                     variant="body-sm"
                     weight={700}
                     className={s.planAir}
                   >
-                    {plan.air} AIR
+                    {plan.air.toLocaleString('en-US')} AIR
                   </Typography>
                   <Typography
                     as="div"
@@ -285,7 +215,7 @@ export function StorePage() {
                     weight={700}
                     className={s.extraText}
                   >
-                    {planLabel}
+                    {planLabels[index] ?? ''}
                   </Typography>
                   <button
                     type="button"
@@ -296,8 +226,8 @@ export function StorePage() {
                     }}
                   >
                     <TgStarIcon
-                      width={18}
-                      height={18}
+                      width={16}
+                      height={16}
                       className={s.planStarIcon}
                     />
                     <Typography
@@ -307,7 +237,7 @@ export function StorePage() {
                       weight={500}
                       className={s.planPrice}
                     >
-                      {plan.price}
+                      {plan.price.toLocaleString('en-US')}
                     </Typography>
                   </button>
                 </Card>
@@ -315,37 +245,18 @@ export function StorePage() {
             })}
           </div>
 
-          <Card className={s.heroCard} variant="neutral">
-            <img
-              src={upgradeImage}
-              alt=""
-              className={s.heroDecor}
-              aria-hidden
-              draggable={false}
-            />
-            <div className={s.heroLeft}>
-              <Typography as="div" variant="heading-lg" className={s.heroTitle}>
-                {t('store.wantUnlimited')}
+          <Card className={s.infoCard} variant="neutral">
+            <span className={s.infoIcon} aria-hidden>
+              <GiftIcon width={26} height={26} />
+            </span>
+            <div className={s.infoCopy}>
+              <Typography as="div" variant="body-md" weight={600} className={s.infoTitle}>
+                <span aria-hidden>☆</span> {t('store.biggerPacks.title')}
               </Typography>
-              <Typography as="div" variant="body-md" className={s.heroSubtitle}>
-                {t('store.explicitPhotos')}
+              <Typography as="div" variant="caption" className={s.infoSubtitle}>
+                {t('store.biggerPacks.subtitle')}
               </Typography>
             </div>
-            <button
-              type="button"
-              className={s.heroButton}
-              onClick={() => navigate('/bag')}
-            >
-              <SparklesIcon width={18} height={18} />
-              <Typography
-                as="span"
-                variant="body-sm"
-                weight={500}
-                className={s.heroButtonText}
-              >
-                {t('store.upgrade')}
-              </Typography>
-            </button>
           </Card>
         </>
       ) : null}

@@ -286,18 +286,19 @@ export const ru = {
       videos: 'Видео',
     },
     store: {
-      airSale: 'AIR SALE',
       bestValue: 'лучшая цена',
-      bonusIncluded: '+{{percent}}% бонусом',
+      biggerPacks: {
+        subtitle:
+          'Каждый следующий пакет даёт больше AIR за Star. Тратьте AIR на горячие фото, explicit-видео, голосовые, подарки или создание Dream Girlfriend.',
+        title: 'Больше пакет — выгоднее.',
+      },
       errors: { plans: 'Не удалось загрузить планы' },
-      explicitPhotos: 'Безлимитные чаты и explicit-фото.',
-      planLabels: ['одна ночь', 'удовлетворение', 'crazy & horny'],
-      popular: 'популярно',
-      subtitle:
-        'Используйте AIR для личных фото, explicit-видео, подарков или создания Dream Girlfriend.',
-      title: 'Исполняйте самые смелые фантазии и скрытые желания',
+      planLabels: ['одна ночь', 'вся твоя', 'заведи меня', 'всё жарче', 'тайное желание', 'без границ'],
+      unlimitedFuel: {
+        subtitle: 'Снимите ограничения. Бесконечные AI-чаты и горячий контент',
+        title: 'Хотите безлимитный Fuel?',
+      },
       upgrade: 'Улучшить',
-      wantUnlimited: 'Хотите безлимит?',
     },
     subscription: {
       daysLeft: '{{count}} день остался',
