@@ -1,6 +1,5 @@
 import { useQuery, useQueryClient } from '@tanstack/react-query';
 import TelegramWebApp from '@twa-dev/sdk';
-import type { TFunction } from 'i18next';
 import { useCallback, useEffect, useMemo, useState } from 'react';
 import { useTranslation } from 'react-i18next';
 import { useOutletContext } from 'react-router-dom';
@@ -22,7 +21,11 @@ import {
 } from '@/assets/icons';
 import airIcon from '@/assets/mini/air.png';
 import { type IPlan, PlanPeriod, PlanType } from '@/common/types';
-import { getSubscriptionRemaining } from '@/common/utils';
+import {
+  comparePlansByPeriod,
+  formatPlanPeriod,
+  getSubscriptionRemaining,
+} from '@/common/utils';
 import { cn } from '@/common/utils';
 import { Card, Loader, Typography } from '@/components';
 import type { BagSummary } from '@/components/navigation/BagNavigation';
@@ -31,12 +34,6 @@ import { useUser } from '@/context/user-context';
 import { usePaywallOpenTracking } from '@/hooks/usePaywallOpenTracking';
 
 import s from './BagPage.module.scss';
-
-const periodOrder: Record<PlanPeriod, number> = {
-  [PlanPeriod.Day]: 0,
-  [PlanPeriod.Month]: 1,
-  [PlanPeriod.Year]: 2,
-};
 
 const savePercents = [0, 82, 88, 90];
 
@@ -52,11 +49,6 @@ const planFeatures = [
   { key: 'hiddenScenarios', Icon: EyeOffIcon, minPlanIndex: 2 },
   { key: 'deepImmersion', Icon: LayersYIcon, minPlanIndex: 3 },
 ];
-
-function formatPeriod(plan: IPlan, t: TFunction) {
-  if (!plan.period) return '';
-  return t(`bag.periods.${plan.period}`, { count: plan.periodCount ?? 1 });
-}
 
 function getDefaultPlan(plans: IPlan[]) {
   return plans.find((plan) => plan.isRecommended) ?? plans[0];
@@ -104,14 +96,7 @@ export function BagPage() {
   } = useQuery({
     queryKey: ['plans', PlanType.Subscription],
     queryFn: () => getPlans(PlanType.Subscription),
-    select: (data) =>
-      [...data].sort((a, b) => {
-        const orderA = a.period ? periodOrder[a.period] : 0;
-        const orderB = b.period ? periodOrder[b.period] : 0;
-        const orderDiff = orderA - orderB;
-        if (orderDiff !== 0) return orderDiff;
-        return (a.periodCount ?? 0) - (b.periodCount ?? 0);
-      }),
+    select: (data) => [...data].sort(comparePlansByPeriod),
   });
 
   useEffect(() => {
@@ -192,7 +177,7 @@ export function BagPage() {
     }
     setBagSummary({
       label: t('bag.summary', {
-        period: formatPeriod(selectedPlan, t),
+        period: formatPlanPeriod(selectedPlan, t),
         air: selectedPlan.air,
       }),
       price: selectedPlan.price,
@@ -266,7 +251,7 @@ export function BagPage() {
                     weight={500}
                     className={s.planPeriod}
                   >
-                    {formatPeriod(plan, t)}
+                    {formatPlanPeriod(plan, t)}
                   </Typography>
                   <span className={s.planAir}>
                     <img
@@ -332,7 +317,7 @@ export function BagPage() {
                 className={s.featuresTitle}
               >
                 {t('bag.includedIn', {
-                  period: formatPeriod(selectedPlan, t),
+                  period: formatPlanPeriod(selectedPlan, t),
                 })}
               </Typography>
               <div className={s.features}>

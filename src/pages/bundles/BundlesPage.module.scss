@@ -1,0 +1,349 @@
+$accent: #ef0856;
+$accent-gradient: linear-gradient(90deg, #ef0856 0%, #fb2f7a 100%);
+$discount-gradient: linear-gradient(90deg, #e0305f 0%, #e8457f 100%);
+
+.page {
+  flex: 1;
+  min-height: 0;
+  width: 100%;
+  display: flex;
+  flex-direction: column;
+  color: #fff;
+  background: #0a0a0a;
+}
+
+.state {
+  flex: 1;
+  padding: 16px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.content {
+  flex: 1;
+  min-height: 0;
+  padding: 32px 12px 16px;
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+  overflow-y: auto;
+}
+
+.timerCard {
+  position: relative;
+  flex-shrink: 0;
+  padding: 30px 12px 16px;
+  border: 1px solid rgba(255, 255, 255, 0.14);
+  border-radius: 22px;
+  background: rgba(255, 255, 255, 0.03);
+}
+
+.timerBadge {
+  position: absolute;
+  top: 0;
+  left: 50%;
+  padding: 7px 26px;
+  border-radius: 999px;
+  background: $accent-gradient;
+  transform: translate(-50%, -50%);
+  white-space: nowrap;
+}
+
+.timerBadgeText {
+  display: block;
+  color: #fff;
+  font-size: 15px;
+  line-height: 1;
+  letter-spacing: 0.02em;
+  text-transform: uppercase;
+}
+
+.timer {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) 24px minmax(0, 1fr) 24px minmax(0, 1fr);
+}
+
+.timerColon {
+  color: #f06aa5;
+  font-size: 24px;
+  font-weight: 600;
+  line-height: 78px;
+  text-align: center;
+}
+
+.timerUnit {
+  min-width: 0;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 10px;
+}
+
+.timerValue {
+  width: 100%;
+  height: 78px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border-radius: 14px;
+  color: #fff;
+  background: rgba(255, 255, 255, 0.08);
+  font-size: 44px;
+  line-height: 1;
+  letter-spacing: -0.02em;
+}
+
+.timerLabel {
+  color: rgba(255, 255, 255, 0.5);
+  font-size: 11px;
+  line-height: 1;
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
+}
+
+.columns {
+  flex-shrink: 0;
+  display: flex;
+  align-items: flex-start;
+  gap: 9px;
+}
+
+.column {
+  flex: 1;
+  min-width: 0;
+  display: flex;
+  flex-direction: column;
+  gap: 9px;
+}
+
+.card {
+  position: relative;
+  width: 100%;
+  padding: 0;
+  display: block;
+  overflow: hidden;
+  border: 1px solid rgba(255, 255, 255, 0.14);
+  border-radius: 16px;
+  color: #fff;
+  background: rgba(255, 255, 255, 0.03);
+  text-align: left;
+  cursor: pointer;
+  transition: border-color 0.2s ease;
+}
+
+.cardSelected {
+  border-color: $accent;
+  background: linear-gradient(
+    90deg,
+    rgba(239, 8, 86, 0.22) 0%,
+    rgba(239, 8, 86, 0.04) 100%
+  );
+}
+
+.cardBanner {
+  padding: 8px 6px;
+  color: #fff;
+  background: rgba(239, 8, 86, 0.32);
+  font-size: 13px;
+  line-height: 1.2;
+  text-align: center;
+}
+
+.cardBody {
+  padding: 7px;
+  display: flex;
+  flex-direction: column;
+  gap: 7px;
+}
+
+.row {
+  min-height: 54px;
+  padding: 8px 4px 8px 8px;
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  border-radius: 10px;
+  background: rgba(255, 255, 255, 0.07);
+}
+
+.rowIcon {
+  width: 30px;
+  height: 30px;
+  flex-shrink: 0;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.rowImage {
+  width: 30px;
+  height: 30px;
+  object-fit: contain;
+  pointer-events: none;
+  user-select: none;
+}
+
+.rowCopy {
+  flex: 1;
+  min-width: 0;
+  display: flex;
+  flex-direction: column;
+  gap: 3px;
+}
+
+.rowTitle {
+  color: #fff;
+  font-size: 13px;
+  line-height: 1.2;
+  letter-spacing: -0.3px;
+}
+
+.rowTitlePremium {
+  color: #f7bfd9;
+  font-size: 14px;
+}
+
+.rowDescription {
+  color: rgba(255, 255, 255, 0.5);
+  font-size: 11px;
+  line-height: 1.25;
+  letter-spacing: -0.1px;
+}
+
+.rowTextSingleLine {
+  overflow: hidden;
+  white-space: nowrap;
+  text-overflow: ellipsis;
+}
+
+.cardPrice {
+  padding: 10px 2px 26px;
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 2px 7px;
+  border-top: 1px solid rgba(255, 255, 255, 0.1);
+}
+
+.oldPrice {
+  color: rgba(255, 255, 255, 0.5);
+  font-size: 12px;
+  line-height: 1;
+  text-decoration: line-through;
+}
+
+.price {
+  color: #fff;
+  font-size: 19px;
+  line-height: 1;
+}
+
+.star {
+  flex-shrink: 0;
+}
+
+.discount {
+  position: absolute;
+  right: -30px;
+  bottom: 8px;
+  width: 112px;
+  padding: 5px 0;
+  color: #fff;
+  background: $discount-gradient;
+  font-size: 12px;
+  font-weight: 600;
+  line-height: 1;
+  text-align: center;
+  transform: rotate(-45deg);
+  pointer-events: none;
+}
+
+.footer {
+  flex-shrink: 0;
+  padding: 16px 12px calc(16px + var(--tg-safe-area-inset-bottom, 0px));
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+  border-top: 1px solid rgba(255, 255, 255, 0.08);
+  background: #0a0a0a;
+}
+
+.footerTitle {
+  color: #fff;
+  font-size: 20px;
+  line-height: 1.2;
+}
+
+.footerRow {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 10px;
+}
+
+.summary {
+  flex: 1;
+  min-width: 0;
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 2px 4px;
+}
+
+.summaryText {
+  color: rgba(255, 255, 255, 0.5);
+  font-size: 12px;
+  line-height: 1.25;
+}
+
+.save {
+  display: inline-flex;
+  align-items: center;
+  gap: 2px;
+}
+
+.saveText {
+  color: #ff5c9a;
+  font-size: 12px;
+  line-height: 1.25;
+  white-space: nowrap;
+}
+
+.footerPrice {
+  flex-shrink: 0;
+  display: inline-flex;
+  align-items: center;
+  gap: 7px;
+}
+
+.buyButton {
+  width: 100%;
+  height: 50px;
+  margin-top: 6px;
+  border: none;
+  border-radius: 16px;
+  background: $accent-gradient;
+  cursor: pointer;
+}
+
+.buyButtonText {
+  color: #fff;
+  font-size: 17px;
+  line-height: 1;
+}
+
+@media (max-width: 360px) {
+  .timerBadge {
+    padding: 7px 16px;
+  }
+
+  .timerBadgeText {
+    font-size: 13px;
+  }
+
+  // Narrow cards push the price star towards the discount ribbon
+  .cardPrice {
+    padding-bottom: 36px;
+  }
+}

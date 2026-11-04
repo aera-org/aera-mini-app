@@ -3,6 +3,7 @@ import { Navigate, Route, Routes } from 'react-router-dom';
 import { MiniAppLayout } from '@/layouts/MiniAppLayout';
 import { AffiliatePage } from '@/pages/affiliate/AffiliatePage';
 import { BagPage } from '@/pages/bag/BagPage';
+import { BundlesPage } from '@/pages/bundles/BundlesPage';
 import { GiftsPage } from '@/pages/gifts/GiftsPage';
 import { GirlPage } from '@/pages/girls/GirlPage';
 import { GirlsPage } from '@/pages/girls/GirlsPage';
@@ -17,6 +18,7 @@ import { StorePage } from '@/pages/store/StorePage';
 export function AppRoutes() {
   return (
     <Routes>
+      <Route path="/bundles" element={<BundlesPage />} />
       <Route element={<MiniAppLayout />}>
         <Route path="/" element={<Navigate to="/girls" replace />} />
         <Route path="/girls" element={<GirlsPage />} />

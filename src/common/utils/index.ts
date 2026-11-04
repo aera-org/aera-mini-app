@@ -9,4 +9,5 @@ export {
   sortGirlsForCatalog,
   sortScenarios,
 } from './girls-sort';
+export { comparePlansByPeriod, formatPlanPeriod } from './plans';
 export { getSubscriptionRemaining } from './subscription';

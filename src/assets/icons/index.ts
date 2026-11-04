@@ -29,6 +29,7 @@ export { default as MinusIcon } from './minus.svg?react';
 export { default as NewspaperIcon } from './newspaper.svg?react';
 export { default as PauseIcon } from './pause.svg?react';
 export { default as PencilLineIcon } from './pencil-line.svg?react';
+export { default as PixelHeartIcon } from './pixel-heart.svg?react';
 export { default as PlayIcon } from './play.svg?react';
 export { default as PlusIcon } from './plus.svg?react';
 export { default as RadioIcon } from './radio.svg?react';
