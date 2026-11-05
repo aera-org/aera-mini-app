@@ -99,7 +99,7 @@ export function GirlsPage() {
         scenario,
       })),
     )
-    .filter((item) => item.scenario.isActive === true)
+    .filter((item) => item.scenario.isActive === true && item.scenario.level === 1)
     .sort(compareScenarioEntries);
 
   // Switching the character type starts the list from the first page again
